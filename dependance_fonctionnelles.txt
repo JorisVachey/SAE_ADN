@@ -1,0 +1,14 @@
+nomPlateforme |--> nomLab, typeHab
+
+nomPlateforme, date |--> numCampagne
+
+idP, date |--> numCampagne
+
+numCampagne |--> numPlateforme
+
+idp |--> typeHab
+
+numEchantillon |--> idP, numCampagne
+
+numCampagne, idP |--> numEchantillon
+
