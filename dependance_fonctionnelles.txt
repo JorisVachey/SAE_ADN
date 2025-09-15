@@ -4,11 +4,10 @@ nomPlateforme, date |--> numCampagne
 
 idP, date |--> numCampagne
 
-numCampagne |--> numPlateforme
+numCampagne |--> nomPlateforme, nomL 
 
 idp |--> typeHab
 
 numEchantillon |--> idP, numCampagne
 
-numCampagne, idP |--> numEchantillon
 
