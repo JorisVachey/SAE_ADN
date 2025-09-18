@@ -1,9 +1,5 @@
 nomPlateforme |--> nomLab, typeHab
 
-nomPlateforme, date |--> numCampagne
-
-idP, date |--> numCampagne
-
 numCampagne |--> nomPlateforme, nomL 
 
 idp |--> typeHab
