@@ -150,3 +150,23 @@ begin
     end if;
 end |
 delimiter ;
+
+
+delimiter |
+create or replace trigger VerifierDisponibilitePersonne before insert on PARTICIPER for each row
+begin
+    declare dateDebut date;
+    declare dateFin date;
+
+    select dateCamp, dateCamp + duree - 1 into dateDebut, dateFin
+    from CAMPAGNEFOUILLE where numCamp = NEW.numCamp;
+
+    if exists (
+        select 1 from PARTICIPER natural join CAMPAGNEFOUILLE
+        where idPers = NEW.idPers and dateCamp <= dateFin and dateCamp + duree - 1 >= dateDebut
+    ) then
+        SIGNAL SQLSTATE '45000' 
+        set MESSAGE_TEXT = 'Cette personne est déjà mobilisée sur une autre campagne à cette période';
+    end if;
+end |
+delimiter ;
