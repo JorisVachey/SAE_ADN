@@ -114,6 +114,7 @@ alter table FICHIER add foreign key (numEchant) references ECHANTILLON(numEchant
 alter table ECHANTILLON add foreign key (numCampagne) references CAMPAGNEFOUILLE(numCamp);
 alter table ECHANTILLON add foreign key (idPers) references PERSONNE(idPers);
 
+
 delimiter |
 create or replace trigger PersonnePossedeLesBonnesHabilitations before insert on PARTICIPER for each row
 begin
@@ -131,6 +132,21 @@ begin
     if nb_possedees < nb_requises then
         signal SQLSTATE '45000' 
         set MESSAGE_TEXT = 'Vous ne pouvez mettre que des personnes qui possède les mêmes habilitations que la plateforme de la campagne demmande.';
+    end if;
+end |
+delimiter ;
+
+
+delimiter |
+create or replace trigger VerifierDisponibilitePlateforme before insert on CAMPAGNEFOUILLE for each row
+begin
+    if exists (
+        select 1 from CAMPAGNEFOUILLE 
+        where nomPlat = NEW.nomPlat and dateCamp <= NEW.dateCamp + NEW.duree - 1
+        and dateCamp + duree - 1 >= NEW.dateCamp
+    ) then
+        SIGNAL SQLSTATE '45000' 
+        set MESSAGE_TEXT = 'La plateforme est déjà mobilisée sur une autre campagne à cette période';
     end if;
 end |
 delimiter ;
