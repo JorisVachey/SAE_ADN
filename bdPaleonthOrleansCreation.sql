@@ -58,7 +58,7 @@ create table PERSONNE (
 
 create table POSSEDER (
     idPers int,
-    typeHab varchar(50),
+    typeHab ENUM('BIOLOGIQUE','ELECTRIQUE','RADIOACTIVE','CHIMIQUE'),
     primary key (idPers, typeHab)
 );
 
