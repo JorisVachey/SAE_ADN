@@ -5,5 +5,3 @@ numCampagne |--> nomPlateforme, nomL
 idp |--> typeHab
 
 numEchantillon |--> idP, numCampagne
-
-

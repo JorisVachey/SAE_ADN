@@ -8,4 +8,3 @@
 <h2>Dépendances fonctionnelles</h2>
 
 <h2> Maquette</h2>
-
