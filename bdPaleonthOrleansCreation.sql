@@ -40,12 +40,12 @@ create table CONTENIR (
 );
 
 create table HABILITATION (
-    typeHab varchar(50) primary key
+    typeHab ENUM('BIOLOGIQUE','ELECTRIQUE','RADIOACTIVE','CHIMIQUE') primary key
 );
 
 create table NECESSITER (
     nomPlat varchar(100),
-    typeHab varchar(50),
+    typeHab ENUM('BIOLOGIQUE','ELECTRIQUE','RADIOACTIVE','CHIMIQUE'),
     primary key (nomPlat, typeHab)
 );
 
