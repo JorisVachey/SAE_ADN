@@ -1,17 +1,16 @@
 drop table if exists FICHIER;
-drop table if exists CAMPAGNEFOUILLE;
+drop table if exists ECHANTILLON;
 drop table if exists PARTICIPER;
 drop table if exists POSSEDER;
 drop table if exists NECESSITER;
-drop table if exists HABILITATION;
 drop table if exists CONTENIR;
+drop table if exists HABILITATION;
 drop table if exists EQUIPEMENT;
+drop table if exists CAMPAGNEFOUILLE;
 drop table if exists PLATEFORMEFOUILLE;
-drop table if exists LABORATOIRE;
 drop table if exists PERSONNE;
 drop table if exists LIEU;
-drop table if exists ECHANTILLON;
-
+drop table if exists LABORATOIRE;
 
 create table LABORATOIRE (
     nomLab varchar(100) primary key,
@@ -80,18 +79,17 @@ create table CAMPAGNEFOUILLE (
     nomL varchar(100)
 );
 
-create table FICHIER (
-    idFichier int primary key,
-    numEchant int
-);
-
 create table ECHANTILLON (
     numEchant int primary key,
     espece varchar(100),
     commentaire text,
     numCampagne int,
-    idFichier int,
     idPers int
+);
+
+create table FICHIER (
+    idFichier int primary key,
+    numEchant int
 );
 
 alter table PLATEFORMEFOUILLE add foreign key (nomLab) references LABORATOIRE(nomLab);
@@ -114,5 +112,25 @@ alter table CAMPAGNEFOUILLE add foreign key (nomL) references LIEU(nomL);
 alter table FICHIER add foreign key (numEchant) references ECHANTILLON(numEchant);
 
 alter table ECHANTILLON add foreign key (numCampagne) references CAMPAGNEFOUILLE(numCamp);
-alter table ECHANTILLON add foreign key (idFichier) references FICHIER(idFichier);
 alter table ECHANTILLON add foreign key (idPers) references PERSONNE(idPers);
+
+delimiter |
+create or replace trigger PersonnePossedeLesBonnesHabilitations before insert on PARTICIPER for each row
+begin
+    declare nb_requises int;
+    declare nb_possedees int;
+    
+    select  count(*) into nb_requises from NECESSITER
+    natural join PLATEFORMEFOUILLE natural join CAMPAGNEFOUILLE 
+    where numCamp = NEW.numCamp;
+
+    select count(*) into nb_possedees from POSSEDER
+    natural join CAMPAGNEFOUILLE natural join PLATEFORMEFOUILLE natural join NECESSITER
+    where idPers = NEW.idPers and numCamp = NEW.numCamp;
+
+    if nb_possedees < nb_requises then
+        signal SQLSTATE '45000' 
+        set MESSAGE_TEXT = 'Vous ne pouvez mettre que des personnes qui possède les mêmes habilitations que la plateforme de la campagne demmande.';
+    end if;
+end |
+delimiter ;
