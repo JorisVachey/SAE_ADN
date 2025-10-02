@@ -24,10 +24,12 @@ Dans le trigger nous vérifions que la personne qui sera inscrite dans la platef
 
 
 
-Pour utiliser une plateforme il faut que celle ci soit disponible c'est à dire qu'elle ne soit pas utilisée dans une autre campagne au moment où nous voulons l'utiliser. Pour vérifier cela nous avons créé un trigger "VerifierDisponibilitePlateforme".
+Pour utiliser une plateforme il faut que celle ci soit disponible c'est à dire qu'elle ne soit pas utilisée dans une autre campagne au moment où nous voulons l'utiliser. Pour vérifier cela nous avons créé un trigger "VerifierDisponibilitePlateforme".</br>
+Dans le trigger nous vérifions que la plateforme n'est pas utilisée durant la période à laquelle on veut l'assigner et qu'elle a eu un jour de maintenance avant le début de la nouvelle campagne.
 
 
-Dans le même principe, une personne ne peut être dans deux campagnes en même temps, nous vérifions donc que ce n'est pas le cas avec le trigger "VerifierDisponibilitePersonne".
+Dans le même principe, une personne ne peut être dans deux campagnes en même temps, nous vérifions donc que ce n'est pas le cas avec le trigger "VerifierDisponibilitePersonne".</br>
+Dans le trigger nous vérifions que la personne n'est pas prise durant la période à laquelle on veut l'assigner.
 
 
 <h2> Maquette</h2>
