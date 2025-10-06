@@ -15,13 +15,13 @@ drop table if exists LABORATOIRE;
 create table LABORATOIRE (
     nomLab varchar(100) primary key,
     adresse varchar(255),
-    budget INT
+    budget float
 );
 
 create table PLATEFORMEFOUILLE (
     nomPlat varchar(100) primary key,
     nbPers int,
-    coutJournal decimal(10,2),
+    coutJournal float,
     interMaint int,
     dernMaint date,
     nomLab varchar(100)
