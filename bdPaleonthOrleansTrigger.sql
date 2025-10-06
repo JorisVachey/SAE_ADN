@@ -96,7 +96,7 @@ begin
     set budgetCampagne = coutJournalTemp * dureeCamp;
     if budgetCampagne > budgetLabo then
         SIGNAL SQLSTATE '45000'
-        set MESSAGE_TEXT = 'Le budget nécessaire pour la campagne, dépasse le budget total mensuel de la campagne';
+        set MESSAGE_TEXT = 'Le budget nécessaire pour la campagne, dépasse le budget total mensuel du laboratoire';
     else
         set budgetLabo = budgetLabo - budgetCampagne;
 
@@ -104,4 +104,15 @@ begin
         where nomLab = (select nomLab from PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat);
     end if;
 END |
+delimiter ;
+
+
+delimiter |
+create or replace trigger VerifierSiDateDejaPassé before insert on CAMPAGNEFOUILLE for each row
+begin
+    if new.datecamp < curdate() then
+        signal sqlstate '45000'
+        set message_text = 'La date de début de la campagne est déjà passée';
+    end if;
+end |
 delimiter ;
