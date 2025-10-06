@@ -56,9 +56,9 @@ insert into POSSEDER values (3, 'RADIOACTIVE');
 -- --------------------------
 -- 8. CAMPAGNES
 -- --------------------------
-insert into CAMPAGNEFOUILLE values (1, '2025-03-10', 5, 'Plateforme A', 'Site Orléans');
-insert into CAMPAGNEFOUILLE values (2, '2025-03-20', 3, 'Plateforme A', 'Site Orléans');
-insert into CAMPAGNEFOUILLE values (3, '2025-03-12', 4, 'Plateforme B', 'Site Tours');
+insert into CAMPAGNEFOUILLE values (1, '2025-01-10', 5, 'Plateforme A', 'Site Orléans');
+insert into CAMPAGNEFOUILLE values (2, '2025-01-20', 3, 'Plateforme A', 'Site Orléans');
+insert into CAMPAGNEFOUILLE values (3, '2025-01-12', 4, 'Plateforme B', 'Site Tours');
 
 -- --------------------------
 -- 9. PARTICIPATION
@@ -75,16 +75,19 @@ insert into PARTICIPER values (2, 3);
 -- ❌ Erreur : PersonnePossedeLesBonnesHabilitations
 
 -- Créer une campagne sur Plateforme A qui chevauche la campagne 1 (10-14 mars)
-insert into CAMPAGNEFOUILLE values (4, '2025-03-12', 3, 'Plateforme A', 'Site Orléans');
+insert into CAMPAGNEFOUILLE values (4, '2025-01-12', 3, 'Plateforme A', 'Site Orléans');
 -- ❌ Erreur : VerifierDisponibilitePlateforme
 
 -- Alice (id 1) participe à une nouvelle campagne (3) qui chevauche sa participation à la campagne 1
 insert into PARTICIPER values (1, 3);
 -- ❌ Erreur : VerifierDisponibilitePersonne
 
--- PlateformeA : dernière maintenance 01/08/2025, intervalle 30 jours → date limite 31/08/2025
--- On essaie une campagne le 05/09/2025 → dépasse l’intervalle
-INSERT INTO CAMPAGNEFOUILLE (numCamp, dateCamp, duree, nomPlat, nomL)
-VALUES (200, '2025-09-05', 3, 'Plateforme A', 'Site1');
--- Échec : La plateforme nécessite une maintenance avant cette campagne
+-- La plateforme nécessite une maintenance avant cette campagne
+insert into CAMPAGNEFOUILLE (numCamp, dateCamp, duree, nomPlat, nomL)
+values (200, '2025-09-05', 3, 'Plateforme A', 'Site1');
+-- ❌ Erreur : VerifierMaintenancePlateforme
+
+-- La plateforme nécessite une maintenance car elle va arriver pendant la camapgnes
+insert into CAMPAGNEFOUILLE 
+values (300, DATE '2025-01-29', 5, 'Plateforme A', 'Site Orléans');
 -- ❌ Erreur : VerifierMaintenancePlateforme

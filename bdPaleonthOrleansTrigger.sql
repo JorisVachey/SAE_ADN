@@ -62,7 +62,7 @@ begin
     declare intervalMaintenance int;
 
     select dernMaint, interMaint into derniereMaintenance, intervalMaintenance 
-    from CAMPAGNEFOUILLE natural join PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat;
+    from PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat;
 
     if NEW.dateCamp > derniereMaintenance + INTERVAL intervalMaintenance DAY then
         SIGNAL SQLSTATE '45000'
