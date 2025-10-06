@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-10-06T12:00:00.000Z" agent="5.0" etag="drawio" version="21.6.8" type="device">
+  <diagram name="Diagramme de cas d'utilisation" id="cas-utilisation">
+    <mxGraphModel dx="1422" dy="843" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Système boundary -->
+        <mxCell id="system-boundary" value="Système de gestion des fouilles paléontologiques" style="swimlane;whiteSpace=wrap;html=1;strokeWidth=2;strokeColor=#000000;fillColor=#E1D5E7;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="420" y="30" width="650" height="750" as="geometry"/>
+        </mxCell>
+        
+        <!-- Use Cases -->
+        <mxCell id="uc-connexion" value="Se Connecter" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="100" y="30" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-inscrire" value="s'inscrire" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="120" y="100" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-habilitations" value="sélectionner ces habilitations" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="270" y="150" width="150" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-planifier" value="planifier une fouille" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="80" y="250" width="140" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-choisir-infos-chercheur" value="choisir des infos(date, durée, personnes,...)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="270" y="220" width="180" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-choisir-infos-admin" value="choisir les infos(date,durée,personnes,...)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="470" y="280" width="180" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-infos-plateformes" value="voir les infos des plate-formes" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="50" y="180" width="150" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-enregistrer-adn" value="enregistrer des traces ADN" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="80" y="320" width="150" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-acceder-adn" value="accéder aux traces ADN" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="80" y="400" width="150" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-choisir-fouille" value="choisir une fouille précise" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="320" y="440" width="150" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-changement-personnel" value="enregistrer changement du personnel" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="60" y="480" width="180" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-changement-materiel" value="enregistrer changement du matériel" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="50" y="550" width="180" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-probleme-technique" value="signaler un problème technique" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="280" y="580" width="180" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-maintenance" value="prévoit et valide les opérations de maintenance" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="60" y="630" width="220" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="uc-budget" value="fixer le budget" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="system-boundary">
+          <mxGeometry x="120" y="710" width="120" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Actors -->
+        <mxCell id="actor-personne" value="personne" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="250" y="80" width="30" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actor-chercheur" value="chercheur" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="250" y="280" width="30" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actor-admin" value="personnel admi." style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="250" y="480" width="30" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actor-technique" value="personnel technique" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="250" y="620" width="30" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actor-direction" value="la direction" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="250" y="740" width="30" height="60" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actor-bdd" value="base de données" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1120" y="350" width="30" height="60" as="geometry"/>
+        </mxCell>
+        
+        <!-- Associations -->
+        <mxCell id="assoc-personne-connexion" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-personne" target="uc-connexion">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="200" as="sourcePoint"/>
+            <mxPoint x="400" y="150" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-personne-inscrire" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-personne" target="uc-inscrire">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="200" as="sourcePoint"/>
+            <mxPoint x="400" y="150" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-chercheur-planifier" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-chercheur" target="uc-planifier">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="300" as="sourcePoint"/>
+            <mxPoint x="400" y="250" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-chercheur-infos" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-chercheur" target="uc-infos-plateformes">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="300" as="sourcePoint"/>
+            <mxPoint x="400" y="250" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-chercheur-adn" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-chercheur" target="uc-enregistrer-adn">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="350" as="sourcePoint"/>
+            <mxPoint x="400" y="300" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-chercheur-acceder" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-chercheur" target="uc-acceder-adn">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="350" as="sourcePoint"/>
+            <mxPoint x="400" y="300" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-admin-personnel" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-admin" target="uc-changement-personnel">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="500" as="sourcePoint"/>
+            <mxPoint x="400" y="450" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-technique-materiel" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-technique" target="uc-changement-materiel">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="650" as="sourcePoint"/>
+            <mxPoint x="400" y="600" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-technique-probleme" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-technique" target="uc-probleme-technique">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="650" as="sourcePoint"/>
+            <mxPoint x="400" y="600" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-technique-maintenance" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-technique" target="uc-maintenance">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="650" as="sourcePoint"/>
+            <mxPoint x="400" y="600" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-direction-budget" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-direction" target="uc-budget">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="750" as="sourcePoint"/>
+            <mxPoint x="400" y="700" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="assoc-bdd-adn" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="actor-bdd" target="uc-enregistrer-adn">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1100" y="400" as="sourcePoint"/>
+            <mxPoint x="1000" y="350" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Include relationships -->
+        <mxCell id="include-habilitations" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="uc-inscrire" target="uc-habilitations">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="350" y="300" as="sourcePoint"/>
+            <mxPoint x="510" y="300" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="include-infos-chercheur" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="uc-planifier" target="uc-choisir-infos-chercheur">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="350" y="300" as="sourcePoint"/>
+            <mxPoint x="510" y="300" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="include-infos-admin" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="uc-planifier" target="uc-choisir-infos-admin">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="350" y="350" as="sourcePoint"/>
+            <mxPoint x="510" y="350" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Extend relationship -->
+        <mxCell id="extend-fouille" value="&amp;lt;&amp;lt;extend&amp;gt;&amp;gt;" style="endArrow=open;endSize=12;dashed=1;html=1;rounded=0;" edge="1" parent="1" source="uc-choisir-fouille" target="uc-acceder-adn">
+          <mxGeometry width="160" relative="1" as="geometry">
+            <mxPoint x="350" y="450" as="sourcePoint"/>
+            <mxPoint x="510" y="450" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Inheritance relationships -->
+        <mxCell id="inherit-chercheur" value="" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;" edge="1" parent="1" source="actor-chercheur" target="actor-personne">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="350" y="300" as="sourcePoint"/>
+            <mxPoint x="510" y="300" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="inherit-admin" value="" style="endArrow=block;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=top;rounded=0;" edge="1" parent="1" source="actor-admin" target="actor-personne">
+          <mxGeometry x="-1" relative="1" as="geometry">
+            <mxPoint x="350" y="500" as="sourcePoint"/>
+            <mxPoint x="510" y="500" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
