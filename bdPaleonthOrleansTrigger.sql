@@ -76,3 +76,32 @@ begin
     end if;
 END |
 delimiter ;
+
+
+delimiter |
+create or replace trigger VerifierSiBudgetSuffisantPourNouvelleCampagne before insert on CAMPAGNEFOUILLE for each row
+begin
+    declare budgetLabo float;
+    declare coutJournalTemp float;
+    declare dureeCamp int;
+    declare budgetCampagne float;
+
+    select budget into budgetLabo from LABORATOIRE
+    where nomLab = (select nomLab from PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat);
+
+    select coutJournal into coutJournalTemp from PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat;
+
+    set dureeCamp = NEW.duree;
+
+    set budgetCampagne = coutJournalTemp * dureeCamp;
+    if budgetCampagne > budgetLabo then
+        SIGNAL SQLSTATE '45000'
+        set MESSAGE_TEXT = 'Le budget nécessaire pour la campagne, dépasse le budget total mensuel de la campagne';
+    else
+        set budgetLabo = budgetLabo - budgetCampagne;
+
+        update LABORATOIRE set budget = budgetLabo
+        where nomLab = (select nomLab from PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat);
+    end if;
+END |
+delimiter ;

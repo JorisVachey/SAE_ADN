@@ -1,7 +1,7 @@
 -- --------------------------
 -- 1. LABORATOIRE
 -- --------------------------
-insert into LABORATOIRE values ('Lab Orléans', '1 rue des Fossiles', 500000);
+insert into LABORATOIRE values ('Lab Orléans', '1 rue des Fossiles', 20000);
 
 -- --------------------------
 -- 2. HABILITATIONS
@@ -20,7 +20,7 @@ insert into LIEU values ('Site Tours');
 -- --------------------------
 -- 4. PLATEFORMES
 -- --------------------------
-insert into PLATEFORMEFOUILLE values ('Plateforme A', 5, 1000.00, 30, '2025-01-01', 'Lab Orléans');
+insert into PLATEFORMEFOUILLE values ('Plateforme A', 5, 1500.00, 30, '2025-01-01', 'Lab Orléans');
 insert into PLATEFORMEFOUILLE values ('Plateforme B', 3, 800.00, 25, '2025-02-01', 'Lab Orléans');
 
 -- --------------------------
@@ -68,7 +68,6 @@ insert into PARTICIPER values (2, 1);
 insert into PARTICIPER values (3, 3);
 
 
-
 -- Bob (id 2) participe à Plateforme B (nécessite BIOLOGIQUE + RADIOACTIVE)
 -- Bob n'a pas RADIOACTIVE
 insert into PARTICIPER values (2, 3);
@@ -83,11 +82,14 @@ insert into PARTICIPER values (1, 3);
 -- ❌ Erreur : VerifierDisponibilitePersonne
 
 -- La plateforme nécessite une maintenance avant cette campagne
-insert into CAMPAGNEFOUILLE (numCamp, dateCamp, duree, nomPlat, nomL)
-values (200, '2025-09-05', 3, 'Plateforme A', 'Site1');
+insert into CAMPAGNEFOUILLE values (200, '2025-09-05', 3, 'Plateforme A', 'Site Orléans');
 -- ❌ Erreur : VerifierMaintenancePlateforme
 
 -- La plateforme nécessite une maintenance car elle va arriver pendant la camapgnes
-insert into CAMPAGNEFOUILLE 
-values (300, DATE '2025-01-29', 5, 'Plateforme A', 'Site Orléans');
+insert into CAMPAGNEFOUILLE values (300, DATE '2025-01-29', 3, 'Plateforme A', 'Site Orléans');
 -- ❌ Erreur : VerifierMaintenancePlateforme
+
+-- Le budget restant du laboratoire est de 4800€
+-- La nouvelle campagne demmande 1500*4 = 6000€
+insert into CAMPAGNEFOUILLE values (100, '2025-01-25', 4, 'Plateforme A', 'Site Tours');
+-- ❌ Erreur : VerifierSiBudgetSuffisantPourNouvelleCampagne
