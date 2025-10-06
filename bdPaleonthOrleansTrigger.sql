@@ -25,8 +25,8 @@ create or replace trigger VerifierDisponibilitePlateforme before insert on CAMPA
 begin
     if exists (
         select 1 from CAMPAGNEFOUILLE 
-        where nomPlat = NEW.nomPlat and dateCamp <= NEW.dateCamp + NEW.duree - 1
-        and dateCamp + duree - 1 >= NEW.dateCamp
+        where nomPlat = NEW.nomPlat and dateCamp <= (NEW.dateCamp + NEW.duree - 1) + 1
+        and (dateCamp + duree - 1) + 1 >= NEW.dateCamp
     ) then
         SIGNAL SQLSTATE '45000' 
         set MESSAGE_TEXT = 'La plateforme est déjà mobilisée sur une autre campagne à cette période';
@@ -52,4 +52,27 @@ begin
         set MESSAGE_TEXT = 'Cette personne est déjà mobilisée sur une autre campagne à cette période';
     end if;
 end |
+delimiter ;
+
+
+delimiter |
+create or replace trigger VerifierMaintenancePlateforme before insert on CAMPAGNEFOUILLE for each row
+begin
+    declare derniereMaintenance date;
+    declare intervalMaintenance int;
+
+    select dernMaint, interMaint into derniereMaintenance, intervalMaintenance 
+    from PLATEFORMEFOUILLE where nomPlat = NEW.nomPlat;
+
+    if NEW.dateCamp > derniereMaintenance + INTERVAL intervalMaintenance DAY then
+        SIGNAL SQLSTATE '45000'
+        set MESSAGE_TEXT = 'La plateforme nécessite une maintenance avant cette campagne';
+    end if;
+    if NEW.dateCamp <= derniereMaintenance + INTERVAL intervalMaintenance DAY and
+    derniereMaintenance + INTERVAL intervalMaintenance DAY <= NEW.dateCamp + INTERVAL NEW.duree - 1 DAY then
+        SIGNAL SQLSTATE '45000'
+        set MESSAGE_TEXT = 'La Maintenance de la plateforme arrive pendant la campagne, vous devait
+        la faire avant de lancer une nouvelle campagne';
+    end if;
+END |
 delimiter ;
