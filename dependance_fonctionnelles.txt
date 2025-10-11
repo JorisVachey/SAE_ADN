@@ -1,7 +1,0 @@
-nomPlateforme |--> nomLab, typeHab
-
-numCampagne |--> nomPlateforme, nomL 
-
-idp |--> typeHab
-
-numEchantillon |--> idP, numCampagne
