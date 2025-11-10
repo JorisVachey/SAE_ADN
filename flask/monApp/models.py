@@ -110,3 +110,80 @@ class Participer(db.Model):
 
     def __repr__(self):
         return "<La personne (%i) participe à la campagne : %i>" % ( self.idP,self.numCampagne ) 
+    
+class Habilitation(db.Model):
+    __tablename__ ='habilitation'
+    type =  db.Column(db.Enum("Électrique", "Chimique", "Biologique", "Radiations", name="Type"), primary_key=True)
+
+    def __init__(self,type):
+        self.type= type
+
+    def __repr__(self):
+        return "<%s>" % ( self.type ) 
+    
+
+class Posseder(db.Model):
+    __tablename__ ='posseder'
+    type = db.Column( db.Integer, db.ForeignKey ("habilitation.type"), primary_key =True)
+    habilitation = db.relationship ("Habilitation", backref =db.backref ("posseder", lazy="dynamic") )
+    idP = db.Column( db.Integer , db.ForeignKey ("personne.idP"), primary_key =True)
+    personne = db.relationship ("Personne", backref =db.backref ("posseder", lazy="dynamic") )  
+
+    def __init__(self,type,idP):
+        self.type= type
+        self.idP= idP
+
+    def __repr__(self):
+        return "<La personne (%i) possede %s>" % ( self.idP,self.type ) 
+    
+class Necessite(db.Model):
+    __tablename__ ='necessite'
+    type = db.Column( db.Integer, db.ForeignKey ("habilitation.type"), primary_key =True)
+    habilitation = db.relationship ("Habilitation", backref =db.backref ("necessite", lazy="dynamic") )
+    nomPlateforme = db.Column( db.String(255), db.ForeignKey ("plateforme.nomPlateforme"), primary_key =True)
+    plateforme = db.relationship ("Plateforme", backref =db.backref ("necessite", lazy="dynamic") )
+
+
+    def __init__(self,type,nomPlateforme):
+        self.type= type
+        self.nomPlateforme= nomPlateforme
+
+    def __repr__(self):
+        return "<La plateforme (%s) à besoin de lhabilitation %s>" % ( self.nomPlateforme,self.type ) 
+
+class Fichier(db.Model):
+    __tablename__ = 'fichier'
+    idFichier = db.Column( db.Integer, primary_key=True )
+    nomFichier = db.Column(db.String(255))
+    
+    def __init__(self,nomFichier):
+            self.nomFichier= nomFichier
+
+    def __repr__(self):
+            return "<le fichier %s (%i) >" % (self.nomFichier, self.idFichier)
+    
+class Echantillon(db.Model):
+    __tablename__ = 'echantillon'
+    numEchantillon = db.Column( db.Integer, primary_key=True )
+    typeE = db.Column( db.String(255))
+    nomSpecifique = db.Column(db.String(255))
+    commentaire = db.Column( db.String(500))
+    numCampagne = db.Column( db.Integer, db.ForeignKey ("campagne.numCampagne"))
+    campagne = db.relationship ("Campagne", backref =db.backref ("echantillons", lazy="dynamic") )
+    idP = db.Column( db.Integer , db.ForeignKey ("personne.idP"))
+    personne = db.relationship ("Personne", backref =db.backref ("echantillons", lazy="dynamic") )  
+    idFichier = db.Column (db.Integer, db.ForeignKey("fichier.idFichier"), nullable = True)
+    fichier = db.relationship ("Fichier", backref =db.backref ("echantillons", lazy="dynamic") )  
+
+
+    def __init__(self,typeE,nomSpecifique,commentaire,numCampagne,idP):
+        self.typeE= typeE
+        self.nomSpecifique= nomSpecifique
+        self.commentaire= commentaire
+        self.numCampagne= numCampagne
+        self.idP= idP
+        self.idFichier =None
+
+    def __repr__(self):
+        return "<l Echantillon (%i) de type %s, %s sur la campagne %i par la personne %i. ID Fichier :%i>" % (self.numEchantillon , self.typeE, self.nomSpecifique, self.numCampagne, self.idP, self.idFichier)
+    
