@@ -54,18 +54,50 @@ insert into POSSEDER values (3, 'BIOLOGIQUE');
 insert into POSSEDER values (3, 'RADIOACTIVE');
 
 -- --------------------------
--- 8. CAMPAGNES
+-- 8. ÉQUIPEMENTS
+-- --------------------------
+insert into EQUIPEMENT values (1, 'Foreuse portative');
+insert into EQUIPEMENT values (2, 'Analyseur chimique');
+insert into EQUIPEMENT values (3, 'Détecteur de radiation');
+insert into EQUIPEMENT values (4, 'Microscope de terrain');
+
+-- --------------------------
+-- 9. CONTENIR (équipements présents sur plateformes)
+-- --------------------------
+insert into CONTENIR values (1, 'Plateforme A');
+insert into CONTENIR values (2, 'Plateforme A');
+insert into CONTENIR values (4, 'Plateforme A');
+
+insert into CONTENIR values (3, 'Plateforme B');
+insert into CONTENIR values (4, 'Plateforme B');
+
+-- --------------------------
+-- 10. CAMPAGNES
 -- --------------------------
 insert into CAMPAGNEFOUILLE values (1, '2026-01-10', 5, 'Plateforme A', 'Site Orléans');
 insert into CAMPAGNEFOUILLE values (2, '2026-01-20', 3, 'Plateforme A', 'Site Orléans');
 insert into CAMPAGNEFOUILLE values (3, '2026-01-12', 4, 'Plateforme B', 'Site Tours');
 
 -- --------------------------
--- 9. PARTICIPATION
+-- 11. PARTICIPATION
 -- --------------------------
-insert into PARTICIPER values (1, 1);
-insert into PARTICIPER values (2, 1);
-insert into PARTICIPER values (3, 3);
+insert into PARTICIPER values (1, 1);  -- Alice sur la campagne 1
+insert into PARTICIPER values (2, 1);  -- Bob sur la campagne 1
+insert into PARTICIPER values (3, 3);  -- Clara sur la campagne 3
+
+-- --------------------------
+-- 12. ÉCHANTILLONS
+-- --------------------------
+insert into ECHANTILLON values (1, 'Fossile A1', 'Os trouvé en couche sédimentaire', 1, 1);
+insert into ECHANTILLON values (2, 'Fossile A2', 'Fragment d’outil en silex', 1, 2);
+insert into ECHANTILLON values (3, 'Échantillon B1', 'Résidu organique analysé', 3, 3);
+
+-- --------------------------
+-- 13. FICHIERS
+-- --------------------------
+insert into FICHIER values (1, 1);
+insert into FICHIER values (2, 2);
+insert into FICHIER values (3, 3);
 
 
 -- Bob (id 2) participe à Plateforme B (nécessite BIOLOGIQUE + RADIOACTIVE)
@@ -86,7 +118,7 @@ insert into CAMPAGNEFOUILLE values (200, '2026-09-05', 3, 'Plateforme A', 'Site 
 -- ❌ Erreur : VerifierMaintenancePlateforme
 
 -- La plateforme nécessite une maintenance car elle va arriver pendant la camapgnes
-insert into CAMPAGNEFOUILLE values (300, DATE '2026-01-29', 3, 'Plateforme A', 'Site Orléans');
+insert into CAMPAGNEFOUILLE values (300, '2026-01-29', 3, 'Plateforme A', 'Site Orléans');
 -- ❌ Erreur : VerifierMaintenancePlateforme
 
 -- Le budget restant du laboratoire est de 4800€
