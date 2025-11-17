@@ -1,0 +1,43 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+header{
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+    width: 100%;
+    box-shadow: 3px;
+}
+
+.inside{
+    margin: 10px;
+}
+
+body{
+    background-color: wheat;
+    margin:0,0,0,0;
+}
+
+ul{
+    display: flex;
+    padding-left: 75em;
+
+}
+li{
+    margin-right: 0.8em;
+    list-style-type: none;
+
+}
+h1{
+    margin-left: 1.5em;
+}
+img {
+  width: 5em;
+  height: 5em;
+  object-fit: cover;
+}
