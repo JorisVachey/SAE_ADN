@@ -38,17 +38,33 @@ def login():
             return redirect(next)
     return render_template('connexion.html',form=unForm)
 
+@app.route('/logout/')
+def logout():
+    """
+    Déconnecte l'utilisateur actuel.
+
+    :returns: Redirection vers la page de connexion ('login').
+    """
+    logout_user()
+    return redirect(url_for('login'))
+
 
 @app.route('/accueil/')
+@login_required
 def accueil():
     pers = Personne.query.get_or_404(current_user.idP)
     participer = Participer.query.filter(Participer.idP == pers.idP).one()
-    camp = Campagne.query.filter(Campagne.numCampagne== participer.numCampagne).one()
-    lab = Laboratoire.query.filter(Laboratoire.nomLab == Plateforme.query.filter(Plateforme.nomPlateforme == camp.nomPlateforme).one().lab_id).one()
-    print(lab)
-    toutesPlat = Plateforme.query.filter(Plateforme.lab_id == lab.nomLab).order_by(Plateforme.nomPlateforme).all()
-    print(toutesPlat)
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).one().lab_id).one()
+
+    toutesPlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).order_by(
+            Plateforme.nomPlateforme).all()
     nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
-    toutesCamp = Campagne.query.filter(Campagne.nomPlateforme.in_(nomsPlat)).all()
-    print(toutesCamp)
-    return render_template('base.html' )
+    toutesCamp = Campagne.query.filter(
+        Campagne.nomPlateforme.in_(nomsPlat)).all()
+    return render_template('base.html')
