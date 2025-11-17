@@ -81,20 +81,30 @@ class Campagne(db.Model):
     def __repr__(self):
         return "<La campagne %i à partir du %s pendant %i jour(s) sur la plateforme %s>" % (self.numCampagne , self.date, self.duree, self.nomPlateforme)
     
-class Personne(db.Model):
+class Personne(UserMixin,db.Model):
     __tablename__ = 'personne'
     idP = db.Column( db.Integer, primary_key=True )
     nom = db.Column( db.String(255))
     prenom = db.Column(db.String(255))
     poste = db.Column( db.String(255))
+    mdp = db.Column(db.String(255))
 
-    def __init__(self,nom,prenom,poste):
+    def __init__(self,nom,prenom,poste,mdp):
         self.nom= nom
         self.prenom= prenom
         self.poste= poste
+        self.mdp=mdp
 
     def __repr__(self):
         return "<%s %s (%i) au poste %s>" % (self.nom , self.prenom, self.idP, self.poste)
+
+    def get_id(self):
+        return self.id_pers
+    
+from .app import login_manager
+@login_manager.user_loader
+def load_user(id_pers):
+    return Personne.query.get(id_pers)
     
 
 class Participer(db.Model):

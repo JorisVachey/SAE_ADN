@@ -14,6 +14,25 @@ def init_db():
             db.session.rollback()
             print(f"Erreur lors de la création de l'administrateur : {e}")
 
+@app.cli.command()
+@click.argument('prenom')
+@click.argument('nom')
+@click.argument('poste')
+@click.argument('pwd')
+def newuser (prenom, nom,poste,pwd):
+    '''Adds a new user'''
+    from . models import Personne
+    from hashlib import sha256
+    m = sha256()
+    m.update(pwd.encode())
+    unUser = Personne(prenom=prenom ,nom=nom,poste=poste,mdp =m.hexdigest())
+    db.session.add(unUser)
+    db.session.commit()
+    lg.warning('User ' + prenom+ nom + ' created!')
+
+#flask newuser Jean Dupont directeur 123456 
+#flask newuser Joris Vachey chercheur azerty 
+#flask newuser Nolan Morain chercheur aaa 
 
 @app.cli.command("seed-db")
 def seed_db():
@@ -73,23 +92,16 @@ def seed_db():
         db.session.add_all([camp1, camp2])
         db.session.commit() # Commit intermédiaire pour avoir les IDs des campagnes
 
-        # --- 8. Personnes ---
-        p1 = Personne(nom="Dupont", prenom="Alice", poste="Chercheuse")
-        p2 = Personne(nom="Martin", prenom="Bob", poste="Technicien")
-        p3 = Personne(nom="Lefevre", prenom="Claire", poste="Stagiaire")
-        db.session.add_all([p1, p2, p3])
-        db.session.commit() # Commit intermédiaire pour avoir les IDs des personnes
-
         # --- 9. Posséder (Personne -> Habilitation) ---
-        pos1 = Posseder(type=h1.type, idP=p1.idP)
-        pos2 = Posseder(type=h2.type, idP=p2.idP)
-        pos3 = Posseder(type=h2.type, idP=p1.idP)
+        pos1 = Posseder(type=h1.type, idP=1)
+        pos2 = Posseder(type=h2.type, idP=2)
+        pos3 = Posseder(type=h2.type, idP=1)
         db.session.add_all([pos1, pos2,pos3])
 
         # --- 10. Participer (Campagne -> Personne) ---
-        part1 = Participer(numCampagne=camp1.numCampagne, idP=p1.idP)
-        part2 = Participer(numCampagne=camp1.numCampagne, idP=p2.idP)
-        part3 = Participer(numCampagne=camp2.numCampagne, idP=p3.idP)
+        part1 = Participer(numCampagne=camp1.numCampagne, idP=1)
+        part2 = Participer(numCampagne=camp1.numCampagne, idP=2)
+        part3 = Participer(numCampagne=camp2.numCampagne, idP=3)
         db.session.add_all([part1, part2, part3])
 
         # --- 11. Fichiers ---
@@ -98,8 +110,8 @@ def seed_db():
         db.session.commit()
 
         # --- 12. Échantillons ---
-        ech1 = Echantillon(typeE="Polymère", nomSpecifique="PPC-1", commentaire="Test initial", numCampagne=camp1.numCampagne, idP=p1.idP)
-        ech2 = Echantillon(typeE="Métal", nomSpecifique="Acier C40", commentaire="Échantillon de référence", numCampagne=camp2.numCampagne, idP=p3.idP)
+        ech1 = Echantillon(typeE="Polymère", nomSpecifique="PPC-1", commentaire="Test initial", numCampagne=camp1.numCampagne, idP=1)
+        ech2 = Echantillon(typeE="Métal", nomSpecifique="Acier C40", commentaire="Échantillon de référence", numCampagne=camp2.numCampagne, idP=3)
 
         # Ajoutez les échantillons à la session IMMÉDIATEMENT
         db.session.add_all([ech1, ech2]) 
