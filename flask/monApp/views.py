@@ -64,7 +64,22 @@ def accueil():
     toutesPlat = Plateforme.query.filter(
         Plateforme.lab_id == lab.nomLab).order_by(
             Plateforme.nomPlateforme).all()
+    infos_plat = list()
+    for plat in toutesPlat:
+        infos = dict()
+        infos['nom'] = plat.nomPlateforme
+        infos["maint"] = plat.derniereMaintenance
+        infos["lieu"] = plat.lieu
+        infos_plat.append(infos)
+
     nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
-    toutesCamp = Campagne.query.filter(
-        Campagne.nomPlateforme.in_(nomsPlat)).all()
+    toutesCamp = Campagne.query.filter(Campagne.nomPlateforme.in_(nomsPlat)).all()
+
+    infos_camp = list()
+    for camp in toutesCamp:
+        infos = dict()
+        infos['num'] = camp.numCampagne
+        infos["date"] = camp.date
+        infos["duree"] = camp.duree
+        infos_camp.append(infos)
     return render_template('base.html')
