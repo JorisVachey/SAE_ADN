@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block main %}
+<form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('login') }}">
+{{ form.hidden_tag() }}
+<div class="content">
+
+    <div class="formulaire">
+        <h1>Se connecter</h1>
+
+        <div class="elt-form">
+            <label for="email" class ="col-sm-2 control-label">{{ form.Login.label }}</label >
+            {{ form.Login }}
+        </div>
+
+        <div class="elt-form">
+            <label for="password">{{ form.Password.label }}</label>
+            {{ form.Password }}
+        </div>
+
+        <button class ="connexion" type="submit" >Se connecter</button>        
+    </div>
+</div>
+</form>
+{% endblock %}

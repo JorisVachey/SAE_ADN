@@ -99,12 +99,12 @@ class Personne(UserMixin,db.Model):
         return "<%s %s (%i) au poste %s>" % (self.nom , self.prenom, self.idP, self.poste)
 
     def get_id(self):
-        return self.id_pers
+        return self.idP
     
 from .app import login_manager
 @login_manager.user_loader
-def load_user(id_pers):
-    return Personne.query.get(id_pers)
+def load_user(idP):
+    return Personne.query.get(idP)
     
 
 class Participer(db.Model):

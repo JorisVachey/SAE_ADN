@@ -5,7 +5,7 @@ from flask_login import login_required, login_user, logout_user, login_manager, 
 from .forms import LoginForm
 from monApp.models import *
 from monApp.forms import *
-from sqlalchemy import desc
+from sqlalchemy import desc,func
 from datetime import date, datetime
 
 @app.route('/')
@@ -25,7 +25,7 @@ def login():
               ou le formulaire de connexion.
     """
     if current_user.is_authenticated:
-        return redirect(url_for('vue_dashboard'))
+        return redirect(url_for('accueil'))
     unForm = LoginForm ()
     unUser=None
     if not unForm.is_submitted():
@@ -34,7 +34,21 @@ def login():
         unUser = unForm.get_authenticated_user()
         if unUser:
             login_user(unUser)
-            next = unForm.next.data or url_for("vue_dashboard")
+            next = unForm.next.data or url_for("accueil")
             return redirect(next)
     return render_template('connexion.html',form=unForm)
 
+
+@app.route('/accueil/')
+def accueil():
+    pers = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == pers.idP).one()
+    camp = Campagne.query.filter(Campagne.numCampagne== participer.numCampagne).one()
+    lab = Laboratoire.query.filter(Laboratoire.nomLab == Plateforme.query.filter(Plateforme.nomPlateforme == camp.nomPlateforme).one().lab_id).one()
+    print(lab)
+    toutesPlat = Plateforme.query.filter(Plateforme.lab_id == lab.nomLab).order_by(Plateforme.nomPlateforme).all()
+    print(toutesPlat)
+    nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
+    toutesCamp = Campagne.query.filter(Campagne.nomPlateforme.in_(nomsPlat)).all()
+    print(toutesCamp)
+    return render_template('base.html' )
