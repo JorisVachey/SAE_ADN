@@ -3,6 +3,10 @@ html, body {
     margin: 0;
 }
 
+body {
+    background-color: #dfcc9a;
+}
+
 header{
     background-color: whitesmoke;
     display: flex;
@@ -13,31 +17,31 @@ header{
     box-shadow: 3px;
 }
 
-.inside{
+header .inside{
     margin: 10px;
 }
 
-body{
-    background-color: wheat;
-    margin:0,0,0,0;
-}
-
-ul{
+header ul{
     display: flex;
     padding-left: 75em;
 }
 
-li{
+header li{
     margin-right: 0.8em;
     list-style-type: none;
 }
 
-h1{
+header h1{
     margin-left: 1.5em;
 }
 
-img {
+header img {
   width: 5em;
   height: 5em;
   object-fit: cover;
+}
+
+a {
+    text-decoration: none;
+    color: black;
 }

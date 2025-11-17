@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>SAE Web</title>
     <link rel="stylesheet" href="{{url_for ('static', filename='css/styles.css')}}">
+    {% block styles_additionnels %}
+    {% endblock %}
 </head>
 <body>
 
@@ -13,16 +15,13 @@
         <img id="logo" src="{{url_for ('static', filename='img/logo.png')}}" alt="logo_app">
         <h1>Paleonth'Orléans</h1>
         <ul>
-            <li><button id="home"><a>Home</a></button></li>
-            <li><button id="co"><a>Se connecter</a></button></li>
+            <li><button id="home"><a href="{{ url_for('accueil') }}">Home</a></button></li>
+            <li><button id="co"><a href="{{ url_for('connexion') }}">Se connecter</a></button></li>
             <li><button id="deco"><a>Se déconnecter</a></button></li>
             <li><button id="profil"><a>Profil</a></button></li>
         </ul>
     </header>
 {%endblock%}
-
-</div>
-
 
 {% block main %}
 

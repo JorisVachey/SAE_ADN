@@ -1,20 +1,11 @@
-html, body {
-    height: 100%;
-    margin: 0;
-}
-
-body {
-    background-color: #dfcc9a;
-}
-
-main {
+.block {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
 
-main section {
+.block section {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -47,7 +38,7 @@ main section {
     height: auto;
 }
 
-main section article {
+.block section article {
     display: flex;
     width: 100%;
     flex-direction: column;
