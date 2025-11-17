@@ -8,9 +8,14 @@ from monApp.forms import *
 from sqlalchemy import desc,func
 from datetime import date, datetime
 
+
 @app.route('/')
-def base() :
-    return render_template('base.html')
+def accueil() :
+    return render_template('accueil.html')
+
+@app.route('/connexion/')
+def connexion() :
+    return render_template('connexion.html')
 
 @app.route('/login/',methods=('GET','POST',))
 def login():
