@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paléonth’Orléans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_connexion.css') }}">
+</head>
+<body>
+    <main>
+        <section>
+            <h2>Se Connecter</h2>
+            
+            <form>
+                <input type="text" placeholder="Nom ..." required>
+                <input type="password" placeholder="Mot de passe ..." required>
+                
+                <div class="bas">
+                    <p>Vous êtes nouveau ? <a href="#">S'inscrire</a></p>
+                    <button type="submit">S'Inscrire</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>

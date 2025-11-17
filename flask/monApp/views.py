@@ -14,7 +14,9 @@ from datetime import date, datetime
 def accueil() :
     return render_template('accueil.html')
 
-
+@app.route('/connexion/')
+def connexion() :
+    return render_template('connexion.html')
 
 #@app.route('/login/',methods=('GET','POST',))
 #def login():
