@@ -40,4 +40,5 @@ img {
   width: 5em;
   height: 5em;
   object-fit: cover;
+  margin-left: 10px;
 }
