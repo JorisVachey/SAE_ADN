@@ -9,16 +9,8 @@ from sqlalchemy import desc,func
 from datetime import date, datetime
 
 
-@app.route('/')
-def accueil() :
-    return render_template('accueil.html')
-
-@app.route('/connexion/')
-def connexion() :
-    return render_template('connexion.html')
-
-@app.route('/login/',methods=('GET','POST',))
-def login():
+@app.route('/connexion/',methods=('GET','POST',))
+def connexion():
     """
     Gère la connexion des utilisateurs.
 
@@ -43,18 +35,18 @@ def login():
             return redirect(next)
     return render_template('connexion.html',form=unForm)
 
-@app.route('/logout/')
-def logout():
+@app.route('/deconnexion/')
+def deconnexion():
     """
     Déconnecte l'utilisateur actuel.
 
     :returns: Redirection vers la page de connexion ('login').
     """
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('connexion'))
 
 
-@app.route('/accueil/')
+@app.route('/')
 @login_required
 def accueil():
     pers = Personne.query.get_or_404(current_user.idP)
@@ -87,4 +79,4 @@ def accueil():
         infos["date"] = camp.date
         infos["duree"] = camp.duree
         infos_camp.append(infos)
-    return render_template('base.html')
+    return render_template('accueil.html')
