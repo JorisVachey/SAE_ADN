@@ -22,6 +22,10 @@ def connexion() :
 def plateforme() :
     return render_template('plateforme.html')
 
+@app.route('/fouille/')
+def fouille() :
+    return render_template('fouille.html')
+
 
 #@app.route('/login/',methods=('GET','POST',))
 #def login():
