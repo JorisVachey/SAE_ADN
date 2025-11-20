@@ -82,6 +82,10 @@ def accueil():
         infos_camp.append(infos)
     return render_template('accueil.html', campagnes= infos_camp,plateformes=infos_plat)
 
+@app.route('/fouille/')
+def fouille() :
+    return render_template('fouille.html')
+
 
 @app.route('/plateforme/', methods=['GET','POST'])
 @login_required
