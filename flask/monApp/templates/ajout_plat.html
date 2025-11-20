@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block main %}
+<section id="ajout">
+    <h1>Créer une Plateforme</h1>
+    <form method="POST" class="champs" id="form-ajout-plat">
+        <input id="nomP" type="text" name="nomPlateforme" placeholder="Saisir nom de la plateforme...">
+        <select class="select_t" name="habilitation"required > 
+            <option value="">-- Veuillez choisir --</option>
+            {% for uneH in habilitation %}
+                <option value="{{ uneH.type }}">{{ uneH.type }}</option>
+            {% endfor %}
+        </select>
+        <input id="nbP" type="decimal" name="nbP" placeholder="Nombre de personne minimal..."required>
+        <input id="cout" type="text" name="coutPJ" placeholder="Cout journalier..."required>
+        <input id="interv" type="decimal" name="interv" placeholder="Interval de maintenace en jour..." required>
+        <input id="interv" type="text" name="lieu" placeholder="Lieu de la plateforme..." required>
+        <div class="boutons_form">
+            <button type="reset" class="annuler" onclick="masquerForm()">Annuler</button>
+            <button type="submit" class="boutons_plat">Ajouter</button>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

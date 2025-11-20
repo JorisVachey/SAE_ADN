@@ -1,6 +1,6 @@
 import flask
 from .app import app,db
-from flask import render_template, request, url_for , redirect, abort
+from flask import render_template, request, url_for , redirect, abort, jsonify
 from hashlib import sha256
 from flask_login import login_required, login_user, logout_user, login_manager, current_user
 from .forms import *
@@ -44,3 +44,59 @@ def connexion() :
 #            return redirect(next)
 #    return render_template('connexion.html',form=unForm)
 
+@app.route('/ajout_plateforme/', methods=['GET', 'POST'])
+def ajout_plat() :
+    if request.method == 'POST':
+        try:
+            nomPlateforme = request.form.get('nomPlateforme')
+            habilitation = request.form.get('habilitation')
+            nbPersonnes = request.form.get("nbP")
+            cout= request.form.get("coutPJ")
+            intervalleMaintenance= request.form.get("interv")
+            lieu= request.form.get("lieu")
+
+            if not nomPlateforme or not habilitation or not nbPersonnes or not cout or not intervalleMaintenance or not lieu:
+                return jsonify({'success': False, 'error': 'Champs manquants'}), 400
+            
+            plat_existant = Plateforme.query.filter_by(nomPlateforme=nomPlateforme).first()
+            if plat_existant:
+                return jsonify({'success': False, 'error': 'Une plateforme avec ce nom existe déjà.'}), 400
+
+            try:
+                prix_decimal = float(cout)
+                nbPersonnes_int = int(nbPersonnes)
+                intervalle = int(intervalleMaintenance)
+            except ValueError:
+                return jsonify({'success': False, 'error': 'Format de prix ou ID invalide'}), 400
+
+            nouvelle_plat = Plateforme(
+                nomPlateforme=nomPlateforme,
+                nbPersonnes=nbPersonnes_int,
+                cout=prix_decimal,
+                intervalleMaintenance=intervalle,
+                lieu=lieu,
+            )
+
+            db.session.add(nouvelle_plat)
+            db.session.commit()
+            
+
+            return jsonify({
+                'success': True,
+                'plat': {
+                    'id': nouveau_plat.idP,
+                    'nomP': nouveau_plat.nomP,
+                    'prixP': nouveau_plat.prixP,
+                    'type_nom': type_nom,
+                    'stock': nouveau_plat.stock,
+                    'stockInit': nouveau_plat.stockInit
+                }
+            })
+
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'success': False, 'error': str(e)}), 500
+
+    plats = Plat.query.all()
+    types = Type_plat.query.all()
+    return render_template("gestion_plat.html", plats=plats, types=types)
