@@ -78,5 +78,6 @@ def accueil():
         infos['num'] = camp.numCampagne
         infos["date"] = camp.date
         infos["duree"] = camp.duree
+        infos["plat"]= camp.nomPlateforme
         infos_camp.append(infos)
-    return render_template('accueil.html')
+    return render_template('accueil.html', campagnes= infos_camp,plateformes=infos_plat)
