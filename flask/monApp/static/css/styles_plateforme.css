@@ -1,0 +1,102 @@
+.block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 5em;
+    margin: 5em;
+}
+
+img {
+    width: 3em;
+    height: auto;
+}
+
+.plateforme {
+    align-self: flex-start;
+    flex-basis: 55%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff3d5;
+    border-radius: 2.5em;
+    padding: 2em;
+}
+
+.info div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.maintenance {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 3em;
+    align-items: center;
+}
+
+.maintenance .planifier {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    background-color: #fff3d5;
+    border-radius: 2.5em;
+    padding: 0.5em;
+}
+
+.image_maint {
+    background-color: #fff3d5;
+    border-radius: 2.5em;
+    padding: 1em 1.5em;
+}
+
+.bouton {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 1em;
+}
+
+.bouton a {
+    text-align: center;
+    background-color: #fff3d5;
+    flex-grow: 1;
+    border-radius: 2.5em;
+    padding: 1.5em;
+}
+
+.equipemment {
+    align-self: flex-start;
+    flex-basis: 40%;
+    background-color: #fff3d5;
+    border-radius: 2.5em;
+    padding: 2em;
+}
+
+.equipemment article {
+    margin-top: 3em;
+}
+
+p, a {
+    font-size: 1.3em;
+}
+
+.trait_horizontale {
+    background-color: black;
+    height: 0.125em;
+}
+
+.position {
+    height: 2.5em;
+    width: auto;
+}
