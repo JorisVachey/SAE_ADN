@@ -81,3 +81,75 @@ def accueil():
         infos["plat"]= camp.nomPlateforme
         infos_camp.append(infos)
     return render_template('accueil.html', campagnes= infos_camp,plateformes=infos_plat)
+
+
+@app.route('/plateforme/', methods=['GET','POST'])
+@login_required
+def create_plateforme():
+    unForm = PlateformeForm()
+    return render_template('ajout_plateforme.html', formulaire = unForm)
+
+@app.route('/plateformes/ajouter-plateforme/', methods=['GET','POST'])
+@login_required
+def ajouter_plateforme():
+    """
+    Traite la soumission du formulaire d'ajout de logement.
+
+    Nécessite une connexion.
+    Vérifie la validité du formulaire et l'existence d'un logement similaire
+    pour l'utilisateur. Si l'ajout est valide et non-doublon, crée un nouvel
+    objet Logement, l'ajoute à la base de données et redirige vers la liste des logements.
+
+    :returns: Redirection vers 'vue_logements'.
+    """
+    pers = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == pers.idP).one()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).one().lab_id).one()
+    unForm = PlateformeForm()
+    if unForm.validate_on_submit:
+        Nom = unForm.Nom.data
+        nbPersonnes = unForm.nbPersonnes.data
+        Cout = unForm.Cout.data
+        IntervalleMaintenance = unForm.IntervalleMaintenance.data
+        Lieu = unForm.Lieu.data
+        DerniereMaintenance = unForm.DerniereMaintenance.data
+        plateforme = Plateforme(nomPlateforme =Nom,
+                                nbPersonnes=nbPersonnes,
+                                cout=Cout,
+                                intervalleMaintenance=IntervalleMaintenance,
+                                lieu=Lieu,
+                                derniereMaintenance=DerniereMaintenance,
+                                lab_id= lab.lab_id)
+        db.session.add(plateforme)
+        db.session.commit()
+        habilitations = request.form.getlist('habilitation')
+        for hab in habilitations :
+            db.session.add(Necessite(type =hab,nomPlateforme=Nom))
+            db.session.commit()
+        return redirect(url_for('accueil'))
+    
+@app.route('/plateformes/<nomPlateforme>/')
+@login_required
+def detail_plateforme(nomPlateforme):
+    pers = Personne.query.get_or_404(current_user.idP)
+    plat =Plateforme.query.filter(Plateforme.nomPlateforme ==nomPlateforme).one()
+
+    if not plat:
+        return redirect(url_for('accueil'))
+
+    infos = dict()
+    infos['nom'] = plat.nomPlateforme
+    infos["lieu"] = plat.lieu
+    infos["pers"] = plat.nbPersonnes
+    infos["intervalle"] = plat.intervalleMaintenance
+    infos["maint"] = plat.derniereMaintenance
+    infos["cout"] = plat.cout
+    infos["obj"] = []
+    for obj in Contenir.query.filter(Contenir.nomPlateforme==nomPlateforme).all():
+            infos["obj"].append(obj)    
+    return render_template('gestion_logement.html',plateforme = infos)

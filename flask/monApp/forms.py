@@ -18,3 +18,11 @@ class LoginForm(FlaskForm):
         m.update(self.Password.data.encode())
         passwd = m.hexdigest()
         return unUser if passwd == unUser.mdp else None
+
+class PlateformeForm(FlaskForm):
+    Nom  = StringField('Nom plateforme', validators=[DataRequired(message="Cette option est obligatoire")])
+    nbPersonnes = IntegerField('nb personnes', validators=[DataRequired(message="Cette option est obligatoire")])
+    Cout = IntegerField('cout', validators=[DataRequired(message="Cette option est obligatoire")])
+    IntervalleMaintenance  = IntegerField('nb jours entre maintenances', validators=[DataRequired(message="Cette option est obligatoire")])
+    Lieu = StringField('lieu', validators=[DataRequired(message="Cette option est obligatoire")])
+    DerniereMaintenance = DateField('DerniereMaintenance', validators=[DataRequired(message="Cette option est obligatoire")])

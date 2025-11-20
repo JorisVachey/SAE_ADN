@@ -31,12 +31,13 @@ class Plateforme(db.Model):
     laboratoire = db.relationship ("Laboratoire", backref =db.backref ("plateformes", lazy="dynamic") )
 
 
-    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,lieu):
+    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,lieu,lab_id):
         self.nomPlateforme= nomPlateforme
         self.nbPersonnes= nbPersonnes
         self.cout= cout
         self.intervalleMaintenance= intervalleMaintenance
         self.lieu= lieu
+        self.lab_id=lab_id
 
     def __repr__(self):
         return "<La plateforme (%s), %i personnes . intervalle : %i>" % (self.nomPlateforme , self.nbPersonnes, self.intervalleMaintenance)
