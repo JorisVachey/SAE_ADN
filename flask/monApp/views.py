@@ -18,6 +18,11 @@ def accueil() :
 def connexion() :
     return render_template('connexion.html')
 
+@app.route('/plateforme/')
+def plateforme() :
+    return render_template('plateforme.html')
+
+
 #@app.route('/login/',methods=('GET','POST',))
 #def login():
 #    """
