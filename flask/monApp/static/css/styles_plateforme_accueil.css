@@ -100,3 +100,11 @@ p, a {
     height: 2.5em;
     width: auto;
 }
+
+.acceder {
+    width: 100%;
+    text-align: center;
+    background-color: #fff3d5;
+    border-radius: 2.5em;
+    padding: 1em 0;
+}
