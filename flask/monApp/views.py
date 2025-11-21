@@ -139,7 +139,8 @@ def detail_plateforme(nomPlateforme):
     infos["intervalle"] = plat.intervalleMaintenance
     infos["maint"] = plat.derniereMaintenance
     infos["cout"] = plat.cout
-    infos["obj"] = []
+    objets = []
     for obj in Contenir.query.filter(Contenir.nomPlateforme==nomPlateforme).all():
-            infos["obj"].append(obj)    
-    return render_template('plateforme.html',plateforme = infos)
+            objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
+            objets.append(objet)    
+    return render_template('plateforme.html',plateforme = infos, objets=objets)

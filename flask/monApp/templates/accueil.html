@@ -23,7 +23,7 @@
                 <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
                 <p>{{cpg["plat"]}}</p>
             </div>
-            <a href="nigger">nigger</a>
+            
         </article>
         <div class="trait_horizontal"></div>
         {% endfor %}
@@ -45,7 +45,7 @@
                 <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
                 <p>{{plt["lieu"]}}</p>
             </div>
-            <a href="{{ url_for('detail_plateforme',plt['nom'] ) }}">nigger</a>
+            <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
         </article>
         <div class="trait_horizontal"></div>
         {% endfor %}

@@ -9,22 +9,20 @@
 <section class="block">
     <section class="plateforme">
         <article class="info">
-            <h1>Plateforme de Fouille : PTF-Alpha</h1>
+            <h1>Plateforme de Fouille : {{plateforme["nom"]}}</h1>
             <div>
                 <img class="position" src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>Chem. de Meung-sur-Loire</p>
+                <p>{{plateforme["lieu"]}}</p>
             </div>
-            <p>Nombre de personnes : 36</p>
-            <p>Intervalle de maintenance : 30 jours</p>
-            <p>Dernière maintenance : 2025-07-12 </p>
-            <p>Coût journalier : 4 200 €</p>
+            <p>Nombre de personnes : {{plateforme["pers"]}}</p>
+            <p>Intervalle de maintenance : {{plateforme["intervalle"]}} jours</p>
+            <p>Dernière maintenance : {{plateforme["maint"]}} </p>
+            <p>Coût journalier : {{plateforme["cout"]}} €</p>
         </article>
         <article class="maintenance">
             <div class="planifier">
                 <p>Planifier une maintenance : </p>
-                <div>
-                    <p>date</p>
-                </div>
+                <input type="date" id="ddn" name="date" >
             </div>
             <div class="image_maint">
                 <img src="{{ url_for('static', filename='img/valider.png') }}" alt="">
@@ -38,19 +36,10 @@
     <section class="equipemment">
         <h1>Liste des équipements sur la Plateforme</h1>
         <article>
-            <p>Pelle</p>
+            {% for obj in objets %}
+            <p>{{obj.nomEquipement}}</p>
             <div class="trait_horizontale"></div>
-            <p>Pelle</p>
-            <div class="trait_horizontale"></div>
-            <p>Pelle</p>
-            <div class="trait_horizontale"></div>
-            <p>Pelle</p>
-            <div class="trait_horizontale"></div>
-            <p>Pelle</p>
-            <div class="trait_horizontale"></div>
-            <p>Pelle</p>
-            <div class="trait_horizontale"></div>
-            <p>Pelle</p>
+            {%endfor%}
         </article>
     </section>
 </section>
