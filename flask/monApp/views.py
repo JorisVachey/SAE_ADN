@@ -85,6 +85,8 @@ def accueil():
 @app.route('/fouille/')
 def fouille() :
     return render_template('fouille.html')
+
+
 """
 @app.route('/plateforme/', methods=['GET','POST'])
 @login_required
@@ -147,3 +149,42 @@ def detail_plateforme(nomPlateforme):
             objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
             objets.append(objet)    
     return render_template('plateforme.html',plateforme = infos, objets=objets)
+
+@app.route('/campagnes/<numCampagne>/')
+@login_required
+def detail_campagne(numCampagne):
+    user = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == user.idP).one()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+
+    if not camp:
+        return redirect(url_for('accueil'))
+
+    infos = dict()
+    infos['numCampagne'] = camp.numCampagne
+    infos["date"] = camp.date
+    infos["duree"] = camp.duree
+    infos["nomPlateforme"] = camp.nomPlateforme
+    personnes = []
+    for pers in Participer.query.filter(Participer.numCampagne==numCampagne).all():
+            personne = Personne.query.filter(Personne.idP==pers.idP).one()
+            personnes.append(personne)    
+    return render_template('fouille.html',campagne = infos, personnes=personnes)
+
+
+"""user = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == user.idP).one()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).one().lab_id).one()
+    toutesPlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).order_by(
+            Plateforme.nomPlateforme).all()
+    nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
+    toutesCamp = Campagne.query.filter(Campagne.nomPlateforme.in_(nomsPlat)).all()
+    nomsCamp = [cpg.numCampagne for cpg in toutesCamp]
+    participations = Participer.query.filter(Participer.numCampagne.in_(nomsCamp)).all()"""

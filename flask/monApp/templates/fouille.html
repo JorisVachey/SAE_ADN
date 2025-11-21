@@ -9,38 +9,29 @@
 <section class="block">
     <section class="plateforme">
         <article class="info">
-            <h1>Campagne de Fouille : CPG-Alpha</h1>
+            <h1>Campagne de Fouille numéro {{campagne["numCampagne"]}}</h1>
             <div>
                 <img class="position" src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
+                <p>{{campagne["nomPlateforme"]}}</p>
             </div>
-            <p>date de début : 2025-06-21</p>
-            <p>durée : 3 mois</p>
+            <p>date de début : {{campagne["date"]}}</p>
+            <p>durée : {{campagne["duree"]}} jours</p>
         </article>
         <article class="acceder">
             <p>Accéder aux échantillons de la campagne</p>
         </article>
         <article class="bouton">
-            <a href="">Voir la plateforme associée</a>
+            <a href="{{ url_for('detail_plateforme', nomPlateforme =campagne['nomPlateforme'] ) }}">Voir la plateforme associée</a>
             <a href="">Modifier les informations</a>
         </article>
     </section>
     <section class="equipemment">
-        <h1>Liste des personnes sur la Campagne (36)</h1>
+        <h1>Liste des personnes sur la Campagne</h1>
         <article>
-            <p>Albert Dumont</p>
+            {% for pers in personnes %}
+            <p>{{pers.nom}} {{pers.prenom}}</p>
             <div class="trait_horizontale"></div>
-            <p>Albert Dumont</p>
-            <div class="trait_horizontale"></div>
-            <p>Albert Dumont</p>
-            <div class="trait_horizontale"></div>
-            <p>Albert Dumont</p>
-            <div class="trait_horizontale"></div>
-            <p>Albert Dumont</p>
-            <div class="trait_horizontale"></div>
-            <p>Albert Dumont</p>
-            <div class="trait_horizontale"></div>
-            <p>Albert Dumont</p>
+            {%endfor%}
         </article>
     </section>
 </section>

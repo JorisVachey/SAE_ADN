@@ -22,6 +22,7 @@
             <div class="position">
                 <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
                 <p>{{cpg["plat"]}}</p>
+                <a href="{{ url_for('detail_campagne', numCampagne =cpg['num'] ) }}">détails</a>
             </div>
             
         </article>
