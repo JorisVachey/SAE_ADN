@@ -44,8 +44,8 @@
             <div class="position">
                 <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
                 <p>{{plt["lieu"]}}</p>
+                <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
             </div>
-            <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
         </article>
         <div class="trait_horizontal"></div>
         {% endfor %}
