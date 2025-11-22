@@ -1,3 +1,4 @@
+from datetime import datetime, date, timedelta
 from enum import Enum
 import enum
 from .app import db
@@ -27,17 +28,33 @@ class Plateforme(db.Model):
     intervalleMaintenance = db.Column( db.Integer)
     lieu = db.Column( db.String(255))
     derniereMaintenance = db.Column( db.String(10))
+    prochaineMaintenance = db.Column(db.String(10))
     lab_id = db.Column (db.String(255), db.ForeignKey ("laboratoire.nomLab") )
     laboratoire = db.relationship ("Laboratoire", backref =db.backref ("plateformes", lazy="dynamic") )
 
 
-    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,lieu,lab_id):
+    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,derniereMaintenance,prochaineMaintenance,lieu):
         self.nomPlateforme= nomPlateforme
         self.nbPersonnes= nbPersonnes
         self.cout= cout
         self.intervalleMaintenance= intervalleMaintenance
+        self.prochaineMaintenance=prochaineMaintenance
         self.lieu= lieu
-        self.lab_id=lab_id
+
+        if derniereMaintenance is None:
+            self.derniereMaintenance = date.today().strftime('%Y-%m-%d')
+        else:
+            self.derniereMaintenance = derniereMaintenance
+
+        if prochaineMaintenance is None:
+            try:
+                dm_date = datetime.strptime(self.derniereMaintenance, '%Y-%m-%d')
+                pm_date = dm_date + timedelta(days=intervalleMaintenance)
+                self.prochaineMaintenance = pm_date.strftime('%Y-%m-%d')
+            except ValueError:
+                self.prochaineMaintenance = None 
+        else:
+            self.prochaineMaintenance = prochaineMaintenance
 
     def __repr__(self):
         return "<La plateforme (%s), %i personnes . intervalle : %i>" % (self.nomPlateforme , self.nbPersonnes, self.intervalleMaintenance)

@@ -118,8 +118,9 @@ def ajouter_plateforme():
                                 cout=Cout,
                                 intervalleMaintenance=IntervalleMaintenance,
                                 lieu=Lieu,
-                                derniereMaintenance=DerniereMaintenance,
-                                lab_id= lab.lab_id)
+                                derniereMaintenance=DerniereMaintenance
+                                )
+        plateforme.laboratoire = lab
         db.session.add(plateforme)
         db.session.commit()
         habilitations = request.form.getlist('habilitation')
@@ -147,6 +148,7 @@ def detail_plateforme(nomPlateforme):
         infos["pers"] = plat.nbPersonnes
         infos["intervalle"] = plat.intervalleMaintenance
         infos["maint"] = plat.derniereMaintenance
+        infos["pro"]= plat.prochaineMaintenance
         infos["cout"] = plat.cout
         objets = []
         for obj in Contenir.query.filter(Contenir.nomPlateforme==nomPlateforme).all():
