@@ -131,60 +131,57 @@ def ajouter_plateforme():
 @app.route('/plateformes/<nomPlateforme>/')
 @login_required
 def detail_plateforme(nomPlateforme):
-    pers = Personne.query.get_or_404(current_user.idP)
-    plat =Plateforme.query.filter(Plateforme.nomPlateforme ==nomPlateforme).one()
+    user = Personne.query.get_or_404(current_user.idP)
+    try:
+        participer = Participer.query.filter(Participer.idP == user.idP).all()
+        numParticip=[p.numCampagne for p in participer]
+        campagnes = Campagne.query.filter(Campagne.numCampagne.in_(numParticip)).all()
+        nomPlat=[c.nomPlateforme for c in campagnes]
+        if not(nomPlateforme in nomPlat):
+            return redirect(url_for('accueil'))
 
-    if not plat:
+        plat = Plateforme.query.filter(Plateforme.nomPlateforme==nomPlateforme).one()
+        infos = dict()
+        infos['nom'] = plat.nomPlateforme
+        infos["lieu"] = plat.lieu
+        infos["pers"] = plat.nbPersonnes
+        infos["intervalle"] = plat.intervalleMaintenance
+        infos["maint"] = plat.derniereMaintenance
+        infos["cout"] = plat.cout
+        objets = []
+        for obj in Contenir.query.filter(Contenir.nomPlateforme==nomPlateforme).all():
+                objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
+                objets.append(objet)    
+        return render_template('plateforme.html',plateforme = infos, objets=objets)
+    
+    except Exception as e:
+        print(f"Erreur lors de l'accès à la plateforme: {e}")
         return redirect(url_for('accueil'))
-
-    infos = dict()
-    infos['nom'] = plat.nomPlateforme
-    infos["lieu"] = plat.lieu
-    infos["pers"] = plat.nbPersonnes
-    infos["intervalle"] = plat.intervalleMaintenance
-    infos["maint"] = plat.derniereMaintenance
-    infos["cout"] = plat.cout
-    objets = []
-    for obj in Contenir.query.filter(Contenir.nomPlateforme==nomPlateforme).all():
-            objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
-            objets.append(objet)    
-    return render_template('plateforme.html',plateforme = infos, objets=objets)
+    
 
 @app.route('/campagnes/<numCampagne>/')
 @login_required
 def detail_campagne(numCampagne):
     user = Personne.query.get_or_404(current_user.idP)
-    participer = Participer.query.filter(Participer.idP == user.idP).one()
-    camp = Campagne.query.filter(
-        Campagne.numCampagne == participer.numCampagne).one()
+    try:
+        participer = Participer.query.filter(Participer.idP == user.idP, Participer.numCampagne==numCampagne).one()
+        camp = Campagne.query.filter(Campagne.numCampagne==numCampagne).one()
+        if not participer:
+            return redirect(url_for('accueil'))
 
-    if not camp:
+        infos = dict()
+        infos['numCampagne'] = camp.numCampagne
+        infos["date"] = camp.date
+        infos["duree"] = camp.duree
+        infos["nomPlateforme"] = camp.nomPlateforme
+        personnes = []
+        for pers in Participer.query.filter(Participer.numCampagne==numCampagne).all():
+                personne = Personne.query.filter(Personne.idP==pers.idP).one()
+                personnes.append(personne)    
+        return render_template('fouille.html',campagne = infos, personnes=personnes)
+    except Exception as e:
+        print(f"Erreur lors de l'accès à la plateforme: {e}")
         return redirect(url_for('accueil'))
 
-    infos = dict()
-    infos['numCampagne'] = camp.numCampagne
-    infos["date"] = camp.date
-    infos["duree"] = camp.duree
-    infos["nomPlateforme"] = camp.nomPlateforme
-    personnes = []
-    for pers in Participer.query.filter(Participer.numCampagne==numCampagne).all():
-            personne = Personne.query.filter(Personne.idP==pers.idP).one()
-            personnes.append(personne)    
-    return render_template('fouille.html',campagne = infos, personnes=personnes)
-
-
-"""user = Personne.query.get_or_404(current_user.idP)
-    participer = Participer.query.filter(Participer.idP == user.idP).one()
-    camp = Campagne.query.filter(
-        Campagne.numCampagne == participer.numCampagne).one()
-    lab = Laboratoire.query.filter(
-        Laboratoire.nomLab == Plateforme.query.filter(
-            Plateforme.nomPlateforme ==
-            camp.nomPlateforme).one().lab_id).one()
-    toutesPlat = Plateforme.query.filter(
-        Plateforme.lab_id == lab.nomLab).order_by(
-            Plateforme.nomPlateforme).all()
-    nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
-    toutesCamp = Campagne.query.filter(Campagne.nomPlateforme.in_(nomsPlat)).all()
-    nomsCamp = [cpg.numCampagne for cpg in toutesCamp]
-    participations = Participer.query.filter(Participer.numCampagne.in_(nomsCamp)).all()"""
+    
+    
