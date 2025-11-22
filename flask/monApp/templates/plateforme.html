@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-
+<form class="form-horizontal" role="form" method ="POST" action ="">
 <section class="block">
     <section class="plateforme">
         <article class="info">
@@ -23,10 +23,10 @@
         <article class="maintenance">
             <div class="planifier">
                 <p>Planifier une maintenance : </p>
-                <input type="date" id="ddn" name="date" >
+                {{maintenance.ProchaineMaintenance}}
             </div>
             <div class="image_maint">
-                <img src="{{ url_for('static', filename='img/valider.png') }}" alt="">
+                <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
             </div>
         </article>
         <article class="bouton">
@@ -43,4 +43,5 @@
         </article>
     </section>
 </section>
+</form>
 {% endblock %}

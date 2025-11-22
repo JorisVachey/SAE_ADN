@@ -38,7 +38,6 @@ class Plateforme(db.Model):
         self.nbPersonnes= nbPersonnes
         self.cout= cout
         self.intervalleMaintenance= intervalleMaintenance
-        self.prochaineMaintenance=prochaineMaintenance
         self.lieu= lieu
 
         if derniereMaintenance is None:

@@ -112,13 +112,11 @@ def ajouter_plateforme():
         Cout = unForm.Cout.data
         IntervalleMaintenance = unForm.IntervalleMaintenance.data
         Lieu = unForm.Lieu.data
-        DerniereMaintenance = unForm.DerniereMaintenance.data
         plateforme = Plateforme(nomPlateforme =Nom,
                                 nbPersonnes=nbPersonnes,
                                 cout=Cout,
                                 intervalleMaintenance=IntervalleMaintenance,
-                                lieu=Lieu,
-                                derniereMaintenance=DerniereMaintenance
+                                lieu=Lieu
                                 )
         plateforme.laboratoire = lab
         db.session.add(plateforme)
@@ -129,10 +127,11 @@ def ajouter_plateforme():
             db.session.commit()
         return redirect(url_for('accueil'))"""
     
-@app.route('/plateformes/<nomPlateforme>/')
+@app.route('/plateformes/<nomPlateforme>/', methods=['GET','POST'])
 @login_required
 def detail_plateforme(nomPlateforme):
     user = Personne.query.get_or_404(current_user.idP)
+    unForm = PlateformeForm()
     try:
         participer = Participer.query.filter(Participer.idP == user.idP).all()
         numParticip=[p.numCampagne for p in participer]
@@ -154,7 +153,14 @@ def detail_plateforme(nomPlateforme):
         for obj in Contenir.query.filter(Contenir.nomPlateforme==nomPlateforme).all():
                 objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
                 objets.append(objet)    
-        return render_template('plateforme.html',plateforme = infos, objets=objets)
+        if request.method == 'POST' and unForm.validate_on_submit:
+            print(plat.prochaineMaintenance)
+            print(unForm.ProchaineMaintenance.data)
+            plat.prochaineMaintenance = unForm.ProchaineMaintenance.data
+            db.session.commit()
+            infos["pro"]= plat.prochaineMaintenance
+            print(plat.prochaineMaintenance)
+        return render_template('plateforme.html',plateforme = infos, objets=objets, maintenance=unForm)
     
     except Exception as e:
         print(f"Erreur lors de l'accès à la plateforme: {e}")

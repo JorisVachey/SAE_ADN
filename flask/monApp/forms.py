@@ -25,4 +25,4 @@ class PlateformeForm(FlaskForm):
     Cout = IntegerField('cout', validators=[DataRequired(message="Cette option est obligatoire")])
     IntervalleMaintenance  = IntegerField('nb jours entre maintenances', validators=[DataRequired(message="Cette option est obligatoire")])
     Lieu = StringField('lieu', validators=[DataRequired(message="Cette option est obligatoire")])
-    DerniereMaintenance = DateField('DerniereMaintenance', validators=[DataRequired(message="Cette option est obligatoire")])
+    ProchaineMaintenance = DateField('ProchaineMaintenance')
