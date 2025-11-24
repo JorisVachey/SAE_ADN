@@ -58,6 +58,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
 }
 
 .nom_date h2,
@@ -67,7 +68,15 @@
     margin: 1em 0.5em;
 }
 
-
-div a{
-    margin-left: 70%;
+.position div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
+
+.position a {
+    background-color: #fff3d5;
+    padding: 0.5em 2em;
+    border-radius: 2em;
+    margin-right: 1em;
+}   
