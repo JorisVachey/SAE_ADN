@@ -11,16 +11,20 @@
 
 {%block header%}
     <header>
-        <img id="logo" src="{{url_for ('static', filename='img/logo.png')}}" alt="logo_app">
-        <h1>Paleonth'Orléans</h1>
+        <div>
+            <img id="logo" src="{{url_for ('static', filename='img/logo.png')}}" alt="logo_app">
+            <h1>Paleonth'Orléans</h1>
+        </div>
         <ul>
             {% if current_user.is_authenticated %}
-            <li><button id="home"><a href="{{ url_for('accueil') }}">Home</a></button></li>
+            <li><a href="{{ url_for('accueil') }}">Home</a></li>
             {%endif %}
-            <li><button id="co"><a href="{{ url_for('connexion') }}">Se connecter</a></button></li>
+            {% if not current_user.is_authenticated %}
+            <li><a href="{{ url_for('connexion') }}">Se connecter</a></li>
+            {%endif %}
             {% if current_user.is_authenticated %}
-            <li><button id="deco"><a href="{{ url_for('deconnexion') }}">Se déconnecter</a></button></li>
-            <li><button id="profil"><a>Profil</a></button></li>
+            <li><a href="{{ url_for('deconnexion') }}">Se déconnecter</a></li>
+            <li><a>Profil</a></li>
             {% endif %}
         </ul>
     </header>
