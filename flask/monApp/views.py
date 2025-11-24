@@ -192,4 +192,6 @@ def detail_campagne(numCampagne):
         return redirect(url_for('accueil'))
 
     
-    
+@app.route('/fichier_sequence/')
+def fichier_sequence():
+    return render_template('fichier_sequence.html')
