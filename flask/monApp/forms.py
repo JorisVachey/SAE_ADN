@@ -3,6 +3,7 @@ from wtforms import FileField, SelectMultipleField, StringField, HiddenField, Se
 from wtforms.validators import DataRequired
 from .models import *
 from hashlib import sha256
+from wtforms.widgets.core import ListWidget, CheckboxInput
 
 class LoginForm(FlaskForm):
     Login = IntegerField('ID', validators=[DataRequired(message="Cette option est obligatoire")])
@@ -37,4 +38,16 @@ class HabilitationForm(FlaskForm):
         ("Accessoires de loisirs", "Accessoires de loisirs"), ("Objets précieux", "Objets précieux"), 
         ("Divers", "Divers")
     ]
-    habilitation_selectionnee = SelectMultipleField('Habilitations',choices=CHOICES, widget=CheckboxSelectMultiple() )
+    habilitation_selectionnee = SelectMultipleField('Habilitations', 
+            choices=CHOICES,
+            widget=ListWidget(html_tag='ul', prefix_label=False),
+            option_widget=CheckboxInput() 
+        )
+    
+class FichierForm(FlaskForm):
+    nomFichier = StringField('nom fichier', validators=[DataRequired(message="Cette option est obligatoire")])
+
+class EchantillonForm(FlaskForm):
+    typeE  = StringField('type espèce', validators=[DataRequired(message="Cette option est obligatoire")])
+    nomSpecifique  = StringField('nom scientifique', validators=[DataRequired(message="Cette option est obligatoire")])
+    commentaire = StringField('commentaire', validators=[DataRequired(message="Cette option est obligatoire")])
