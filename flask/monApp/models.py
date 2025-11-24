@@ -45,6 +45,7 @@ class Plateforme(db.Model):
         else:
             self.derniereMaintenance = derniereMaintenance
 
+        
         if prochaineMaintenance is None:
             try:
                 dm_date = datetime.strptime(self.derniereMaintenance, '%Y-%m-%d')

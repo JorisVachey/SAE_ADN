@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, StringField, HiddenField, SelectField, IntegerField, RadioField, PasswordField, DateField
+from wtforms import FileField, SelectMultipleField, StringField, HiddenField, SelectField, IntegerField, RadioField, PasswordField, DateField
 from wtforms.validators import DataRequired
 from .models import *
 from hashlib import sha256
-
+from wtforms.widgets.core import ListWidget, CheckboxInput
 
 class LoginForm(FlaskForm):
     Login = IntegerField('ID', validators=[DataRequired(message="Cette option est obligatoire")])
@@ -26,3 +26,28 @@ class PlateformeForm(FlaskForm):
     IntervalleMaintenance  = IntegerField('nb jours entre maintenances', validators=[DataRequired(message="Cette option est obligatoire")])
     Lieu = StringField('lieu', validators=[DataRequired(message="Cette option est obligatoire")])
     ProchaineMaintenance = DateField('ProchaineMaintenance')
+
+class HabilitationForm(FlaskForm):
+    CHOICES = [
+        ("Mobilier", "Mobilier"), ("Gros Électroménager", "Gros Électroménager"), 
+        ("Petit Électroménager", "Petit Électroménager"), ("Service de Table", "Service de Table"), 
+        ("Équipement audiovisuel", "Équipement audiovisuel"), ("Téléphonie", "Téléphonie"), 
+        ("Décoration", "Décoration"), ("Linge", "Linge"), 
+        ("Équipement informatique", "Équipement informatique"), ("Vêtements", "Vêtements"), 
+        ("Provisions", "Provisions"), ("Materiel de bricolage", "Materiel de bricolage"), 
+        ("Accessoires de loisirs", "Accessoires de loisirs"), ("Objets précieux", "Objets précieux"), 
+        ("Divers", "Divers")
+    ]
+    habilitation_selectionnee = SelectMultipleField('Habilitations', 
+            choices=CHOICES,
+            widget=ListWidget(html_tag='ul', prefix_label=False),
+            option_widget=CheckboxInput() 
+        )
+    
+class FichierForm(FlaskForm):
+    nomFichier = StringField('nom fichier', validators=[DataRequired(message="Cette option est obligatoire")])
+
+class EchantillonForm(FlaskForm):
+    typeE  = StringField('type espèce', validators=[DataRequired(message="Cette option est obligatoire")])
+    nomSpecifique  = StringField('nom scientifique', validators=[DataRequired(message="Cette option est obligatoire")])
+    commentaire = StringField('commentaire', validators=[DataRequired(message="Cette option est obligatoire")])

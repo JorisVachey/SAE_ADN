@@ -154,12 +154,12 @@ def detail_plateforme(nomPlateforme):
                 objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
                 objets.append(objet)    
         if request.method == 'POST' and unForm.validate_on_submit:
-            print(plat.prochaineMaintenance)
             print(unForm.ProchaineMaintenance.data)
-            plat.prochaineMaintenance = unForm.ProchaineMaintenance.data
-            db.session.commit()
-            infos["pro"]= plat.prochaineMaintenance
-            print(plat.prochaineMaintenance)
+            print( plat.derniereMaintenance)
+            if (unForm.ProchaineMaintenance.data - datetime.strptime(plat.derniereMaintenance, '%Y-%m-%d').date()).days <= plat.intervalleMaintenance :
+                plat.prochaineMaintenance = unForm.ProchaineMaintenance.data
+                db.session.commit()
+                infos["pro"]= plat.prochaineMaintenance
         return render_template('plateforme.html',plateforme = infos, objets=objets, maintenance=unForm)
     
     except Exception as e:
@@ -189,6 +189,56 @@ def detail_campagne(numCampagne):
         return render_template('fouille.html',campagne = infos, personnes=personnes)
     except Exception as e:
         print(f"Erreur lors de l'accès à la plateforme: {e}")
+        return redirect(url_for('accueil'))
+"""
+@app.route('/echantillons/', methods=['GET','POST'])
+@login_required
+def echantillons(numCampagne):
+##################################################################################################################################
+##################################################################################################################################"
+##################################################################################################################################"
+##################################################################################################################################"
+        pers = Personne.query.get_or_404(current_user.id_pers)
+        campagne = Campagne.query.filter(numCampagne=numCampagne).one()
+        echantillons = Echantillon.query.filter(numCampagne=numCampagne).all()
+        if not campagne:
+            return redirect(url_for('accueil'))
+        
+
+        unForm = EchantillonForm()
+        justifForm = JustifForm()
+        format_date = "%d-%m-%Y"
+        if unForm.validate_on_submit and catForm.validate_on_submit:
+            cat_selectionne_nom = catForm.categorie_selectionnee.data 
+            categorie = Categorie.query.filter_by(nom_cat=cat_selectionne_nom).first()
+            if categorie:
+                id_cat = categorie.id_cat 
+                nom=unForm.nom.data
+                valeur = unForm.valeur.data
+                dateAchat=unForm.dateAchat.data
+                objdate = datetime.strftime(dateAchat, format_date)
+                objet = Objet(nom_obj= nom,
+                            valeur_obj = valeur,
+                            date_achat=objdate,
+                            id_cat=id_cat)
+            
+                db.session.add(objet)
+                db.session.commit()
+                quantite=unForm.quantite.data
+                cont= Contenir(id_obj=objet.id_obj,id_piece=id_piece,quantite = quantite)
+                db.session.add(cont)
+                db.session.commit()
+                fichiers_televerses = request.files.getlist('doc')
+                for fichier in fichiers_televerses:
+                    justif_selectionne_nom = fichier.filename 
+                    id_obj = objet.id_obj 
+                    document_justif=justif_selectionne_nom
+                    justificatif = Justificatif(document_justif=document_justif,id_obj=id_obj)
+                    db.session.add(justificatif)
+                    db.session.commit()
+                return redirect(url_for('detail_piece', id_piece=id_piece, objet = objet))
+"""
+    
         return redirect(url_for('accueil'))
 
 @app.route('/campagnes/')
