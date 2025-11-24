@@ -238,9 +238,6 @@ def echantillons(numCampagne):
                     db.session.commit()
                 return redirect(url_for('detail_piece', id_piece=id_piece, objet = objet))
 """
-    
-        return redirect(url_for('accueil'))
-
 @app.route('/campagnes/')
 @login_required
 def add_camp():
