@@ -18,7 +18,7 @@
             <p>durée : {{campagne["duree"]}} jours</p>
         </article>
         <article class="acceder">
-            <p>Accéder aux échantillons de la campagne</p>
+            <a href="{{ url_for('echantillons', numCampagne=campagne['numCampagne'] ) }}">Accéder aux échantillons de la campagne</a>
         </article>
         <article class="bouton">
             <a href="{{ url_for('detail_plateforme', nomPlateforme =campagne['nomPlateforme'] ) }}">Voir la plateforme associée</a>

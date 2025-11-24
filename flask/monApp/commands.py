@@ -104,14 +104,17 @@ def seed_db():
 
         # --- 11. Fichiers ---
         f1 = Fichier(nomFichier="Résultats_NanoFab_1201.pdf")
-        db.session.add(f1)
+        f2 = Fichier(nomFichier="aaaaaaaaaaaaaa.pdf")
+        db.session.add(f1,f2)
         db.session.commit()
 
         # --- 12. Échantillons ---
         ech1 = Echantillon(typeE="Polymère", nomSpecifique="PPC-1", commentaire="Test initial", numCampagne=camp1.numCampagne, idP=1)
         ech2 = Echantillon(typeE="Métal", nomSpecifique="Acier C40", commentaire="Échantillon de référence", numCampagne=camp2.numCampagne, idP=3)
-        db.session.add_all([ech1, ech2]) 
+        ech3 = Echantillon(typeE="Métal", nomSpecifique="Acier C40", commentaire="Échantillon de référence", numCampagne=camp1.numCampagne, idP=1)
+        db.session.add_all([ech1, ech2,ech3]) 
         ech1.fichier = f1 
+        ech3.fichier = f2 
 
         db.session.commit()
         print("✅ Base de données peuplée avec des données de test !")

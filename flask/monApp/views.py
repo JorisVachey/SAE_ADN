@@ -190,52 +190,55 @@ def detail_campagne(numCampagne):
     except Exception as e:
         print(f"Erreur lors de l'accès à la plateforme: {e}")
         return redirect(url_for('accueil'))
-"""
-@app.route('/echantillons/', methods=['GET','POST'])
+
+
+@app.route('/echantillons/<int:numCampagne>/')
 @login_required
 def echantillons(numCampagne):
-##################################################################################################################################
-##################################################################################################################################"
-##################################################################################################################################"
-##################################################################################################################################"
-        pers = Personne.query.get_or_404(current_user.id_pers)
-        campagne = Campagne.query.filter(numCampagne=numCampagne).one()
-        echantillons = Echantillon.query.filter(numCampagne=numCampagne).all()
-        if not campagne:
-            return redirect(url_for('accueil'))
+    # Récupérer la campagne
+    campagne = Campagne.query.filter(Campagne.numCampagne==numCampagne).first_or_404()
+    
+    # Récupérer tous les échantillons pour cette campagne
+    echantillons = Echantillon.query.filter(Echantillon.numCampagne==numCampagne).all()
+    
+    # Filtrer pour n'avoir que les objets Fichier associés
+    fichiers = [e.fichier for e in echantillons if e.fichier]
+    
+    # Préparer le dictionnaire complet de données (Statique pour JavaScript)
+    all_file_details = {}
+    
+    for fichier in fichiers:
+        # Trouver l'échantillon lié au fichier actuel pour récupérer ses détails
+        echantillon = Echantillon.query.filter_by(idFichier=fichier.idFichier).first()
         
+        if echantillon:
+            # Clé du dictionnaire est l'ID du fichier (en string, important pour le JS)
+            all_file_details[str(fichier.idFichier)] = { 
+                'idFichier': echantillon.idFichier,
+                'idEchantillon': echantillon.numEchantillon,
+                # Combiner typeE et nomSpecifique pour l'affichage de l'espèce
+                'espece': f"{echantillon.typeE} ({echantillon.nomSpecifique})",
+                'commentaire': echantillon.commentaire
+            }
 
-        unForm = EchantillonForm()
-        justifForm = JustifForm()
-        format_date = "%d-%m-%Y"
-        if unForm.validate_on_submit and catForm.validate_on_submit:
-            cat_selectionne_nom = catForm.categorie_selectionnee.data 
-            categorie = Categorie.query.filter_by(nom_cat=cat_selectionne_nom).first()
-            if categorie:
-                id_cat = categorie.id_cat 
-                nom=unForm.nom.data
-                valeur = unForm.valeur.data
-                dateAchat=unForm.dateAchat.data
-                objdate = datetime.strftime(dateAchat, format_date)
-                objet = Objet(nom_obj= nom,
-                            valeur_obj = valeur,
-                            date_achat=objdate,
-                            id_cat=id_cat)
-            
-                db.session.add(objet)
-                db.session.commit()
-                quantite=unForm.quantite.data
-                cont= Contenir(id_obj=objet.id_obj,id_piece=id_piece,quantite = quantite)
-                db.session.add(cont)
-                db.session.commit()
-                fichiers_televerses = request.files.getlist('doc')
-                for fichier in fichiers_televerses:
-                    justif_selectionne_nom = fichier.filename 
-                    id_obj = objet.id_obj 
-                    document_justif=justif_selectionne_nom
-                    justificatif = Justificatif(document_justif=document_justif,id_obj=id_obj)
-                    db.session.add(justificatif)
-                    db.session.commit()
-                return redirect(url_for('detail_piece', id_piece=id_piece, objet = objet))
-"""
+    # Déterminer les détails initiaux pour le pré-remplissage par Jinja
+    initial_details = {
+        'idFichier': 'N/A', 
+        'idEchantillon': 'N/A',
+        'espece': 'Sélectionner un fichier',
+        'commentaire': ''
+    }
+    
+    if all_file_details:
+        # Récupérer les détails du premier fichier (première clé dans le dictionnaire)
+        first_id = list(all_file_details.keys())[0]
+        initial_details = all_file_details[first_id]
+
+    return render_template('fichier_sequence.html', 
+                           campagne=campagne,
+                           fichiers=fichiers, 
+                           initial_details=initial_details,
+                           # PASSER TOUTES LES DONNÉES AU TEMPLATE
+                           all_file_details=all_file_details)
+
     
