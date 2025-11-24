@@ -154,12 +154,12 @@ def detail_plateforme(nomPlateforme):
                 objet = Equipement.query.filter(Equipement.idE==obj.idE).one()
                 objets.append(objet)    
         if request.method == 'POST' and unForm.validate_on_submit:
-            print(plat.prochaineMaintenance)
             print(unForm.ProchaineMaintenance.data)
-            plat.prochaineMaintenance = unForm.ProchaineMaintenance.data
-            db.session.commit()
-            infos["pro"]= plat.prochaineMaintenance
-            print(plat.prochaineMaintenance)
+            print( plat.derniereMaintenance)
+            if (unForm.ProchaineMaintenance.data - datetime.strptime(plat.derniereMaintenance, '%Y-%m-%d').date()).days <= plat.intervalleMaintenance :
+                plat.prochaineMaintenance = unForm.ProchaineMaintenance.data
+                db.session.commit()
+                infos["pro"]= plat.prochaineMaintenance
         return render_template('plateforme.html',plateforme = infos, objets=objets, maintenance=unForm)
     
     except Exception as e:
