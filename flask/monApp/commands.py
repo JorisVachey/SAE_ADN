@@ -14,6 +14,25 @@ def init_db():
             db.session.rollback()
             print(f"Erreur lors de la création de l'administrateur : {e}")
 
+@app.cli.command()
+@click.argument('prenom')
+@click.argument('nom')
+@click.argument('poste')
+@click.argument('pwd')
+def newuser (prenom, nom,poste,pwd):
+    '''Adds a new user'''
+    from . models import Personne
+    from hashlib import sha256
+    m = sha256()
+    m.update(pwd.encode())
+    unUser = Personne(prenom=prenom ,nom=nom,poste=poste,mdp =m.hexdigest())
+    db.session.add(unUser)
+    db.session.commit()
+    lg.warning('User ' + prenom+ nom + ' created!')
+
+#flask newuser Jean Dupont directeur 123456 
+#flask newuser Joris Vachey chercheur azerty 
+#flask newuser Nolan Morain chercheur aaa 
 
 @app.cli.command("seed-db")
 def seed_db():
@@ -24,23 +43,21 @@ def seed_db():
         db.session.add_all([lab1, lab2])
 
         # --- 2. Plateformes ---
-        pf1 = Plateforme(nomPlateforme="NanoFab", nbPersonnes=5, cout=5000, intervalleMaintenance=90, lieu="Bâtiment A")
-        pf1.derniereMaintenance = "2025-10-01"
-        pf1.laboratoire = lab1
+        pf1 = Plateforme(nomPlateforme="NanoFab", nbPersonnes=5, cout=5000, intervalleMaintenance=90,derniereMaintenance = "2025-10-01",prochaineMaintenance="2025-11-02", lieu="Bâtiment A")
+        pf1.laboratoire = lab1 
         
-        pf2 = Plateforme(nomPlateforme="RoboTest", nbPersonnes=3, cout=2000, intervalleMaintenance=30, lieu="Halle Ouest")
-        pf2.derniereMaintenance = "2025-11-05"
+        pf2 = Plateforme(nomPlateforme="RoboTest", nbPersonnes=3, cout=2000, intervalleMaintenance=30, derniereMaintenance=None, prochaineMaintenance=None, lieu="Halle Ouest")
         pf2.laboratoire = lab2
 
         db.session.add_all([pf1, pf2])
-        db.session.commit() # Commit intermédiaire pour avoir les IDs des plateformes
+        db.session.commit() 
 
         # --- 3. Équipements ---
         eq1 = Equipement(nomEquipement="Microscope Électronique")
         eq2 = Equipement(nomEquipement="Sonde de Température")
         eq3 = Equipement(nomEquipement="Bras Robotique KUKA")
         db.session.add_all([eq1, eq2, eq3])
-        db.session.commit() # Commit intermédiaire pour avoir les IDs des équipements
+        db.session.commit() 
 
         # --- 4. Contenir (Plateforme -> Équipement) ---
         c1 = Contenir(nomPlateforme=pf1.nomPlateforme, idE=eq1.idE)
@@ -71,25 +88,18 @@ def seed_db():
         camp2.nomPlateforme = pf2.nomPlateforme
         
         db.session.add_all([camp1, camp2])
-        db.session.commit() # Commit intermédiaire pour avoir les IDs des campagnes
-
-        # --- 8. Personnes ---
-        p1 = Personne(nom="Dupont", prenom="Alice", poste="Chercheuse")
-        p2 = Personne(nom="Martin", prenom="Bob", poste="Technicien")
-        p3 = Personne(nom="Lefevre", prenom="Claire", poste="Stagiaire")
-        db.session.add_all([p1, p2, p3])
-        db.session.commit() # Commit intermédiaire pour avoir les IDs des personnes
+        db.session.commit() 
 
         # --- 9. Posséder (Personne -> Habilitation) ---
-        pos1 = Posseder(type=h1.type, idP=p1.idP)
-        pos2 = Posseder(type=h2.type, idP=p2.idP)
-        pos3 = Posseder(type=h2.type, idP=p1.idP)
+        pos1 = Posseder(type=h1.type, idP=1)
+        pos2 = Posseder(type=h2.type, idP=2)
+        pos3 = Posseder(type=h2.type, idP=1)
         db.session.add_all([pos1, pos2,pos3])
 
         # --- 10. Participer (Campagne -> Personne) ---
-        part1 = Participer(numCampagne=camp1.numCampagne, idP=p1.idP)
-        part2 = Participer(numCampagne=camp1.numCampagne, idP=p2.idP)
-        part3 = Participer(numCampagne=camp2.numCampagne, idP=p3.idP)
+        part1 = Participer(numCampagne=camp1.numCampagne, idP=1)
+        part2 = Participer(numCampagne=camp1.numCampagne, idP=2)
+        part3 = Participer(numCampagne=camp2.numCampagne, idP=3)
         db.session.add_all([part1, part2, part3])
 
         # --- 11. Fichiers ---
@@ -98,13 +108,9 @@ def seed_db():
         db.session.commit()
 
         # --- 12. Échantillons ---
-        ech1 = Echantillon(typeE="Polymère", nomSpecifique="PPC-1", commentaire="Test initial", numCampagne=camp1.numCampagne, idP=p1.idP)
-        ech2 = Echantillon(typeE="Métal", nomSpecifique="Acier C40", commentaire="Échantillon de référence", numCampagne=camp2.numCampagne, idP=p3.idP)
-
-        # Ajoutez les échantillons à la session IMMÉDIATEMENT
+        ech1 = Echantillon(typeE="Polymère", nomSpecifique="PPC-1", commentaire="Test initial", numCampagne=camp1.numCampagne, idP=1)
+        ech2 = Echantillon(typeE="Métal", nomSpecifique="Acier C40", commentaire="Échantillon de référence", numCampagne=camp2.numCampagne, idP=3)
         db.session.add_all([ech1, ech2]) 
-
-        # Maintenant, l'établissement de la relation n'émettra plus d'avertissement
         ech1.fichier = f1 
 
         db.session.commit()

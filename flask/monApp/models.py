@@ -1,3 +1,4 @@
+from datetime import datetime, date, timedelta
 from enum import Enum
 import enum
 from .app import db
@@ -27,16 +28,32 @@ class Plateforme(db.Model):
     intervalleMaintenance = db.Column( db.Integer)
     lieu = db.Column( db.String(255))
     derniereMaintenance = db.Column( db.String(10))
+    prochaineMaintenance = db.Column(db.String(10))
     lab_id = db.Column (db.String(255), db.ForeignKey ("laboratoire.nomLab") )
     laboratoire = db.relationship ("Laboratoire", backref =db.backref ("plateformes", lazy="dynamic") )
 
 
-    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,lieu):
+    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,derniereMaintenance,prochaineMaintenance,lieu):
         self.nomPlateforme= nomPlateforme
         self.nbPersonnes= nbPersonnes
         self.cout= cout
         self.intervalleMaintenance= intervalleMaintenance
         self.lieu= lieu
+
+        if derniereMaintenance is None:
+            self.derniereMaintenance = date.today().strftime('%Y-%m-%d')
+        else:
+            self.derniereMaintenance = derniereMaintenance
+
+        if prochaineMaintenance is None:
+            try:
+                dm_date = datetime.strptime(self.derniereMaintenance, '%Y-%m-%d')
+                pm_date = dm_date + timedelta(days=intervalleMaintenance)
+                self.prochaineMaintenance = pm_date.strftime('%Y-%m-%d')
+            except ValueError:
+                self.prochaineMaintenance = None 
+        else:
+            self.prochaineMaintenance = prochaineMaintenance
 
     def __repr__(self):
         return "<La plateforme (%s), %i personnes . intervalle : %i>" % (self.nomPlateforme , self.nbPersonnes, self.intervalleMaintenance)
@@ -81,20 +98,30 @@ class Campagne(db.Model):
     def __repr__(self):
         return "<La campagne %i à partir du %s pendant %i jour(s) sur la plateforme %s>" % (self.numCampagne , self.date, self.duree, self.nomPlateforme)
     
-class Personne(db.Model):
+class Personne(UserMixin,db.Model):
     __tablename__ = 'personne'
     idP = db.Column( db.Integer, primary_key=True )
     nom = db.Column( db.String(255))
     prenom = db.Column(db.String(255))
     poste = db.Column( db.String(255))
+    mdp = db.Column(db.String(255))
 
-    def __init__(self,nom,prenom,poste):
+    def __init__(self,nom,prenom,poste,mdp):
         self.nom= nom
         self.prenom= prenom
         self.poste= poste
+        self.mdp=mdp
 
     def __repr__(self):
         return "<%s %s (%i) au poste %s>" % (self.nom , self.prenom, self.idP, self.poste)
+
+    def get_id(self):
+        return self.idP
+    
+from .app import login_manager
+@login_manager.user_loader
+def load_user(idP):
+    return Personne.query.get(idP)
     
 
 class Participer(db.Model):

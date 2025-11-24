@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block styles_additionnels %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_plateforme_accueil.css') }}">
+{% endblock %}
+
+{% block main %}
+<form class="form-horizontal" role="form" method ="POST" action ="">
+<section class="block">
+    <section class="plateforme">
+        <article class="info">
+            <h1>Plateforme de Fouille : {{plateforme["nom"]}}</h1>
+            <div>
+                <img class="position" src="{{ url_for('static', filename='img/position.png') }}" alt="">
+                <p>{{plateforme["lieu"]}}</p>
+            </div>
+            <p>Nombre de personnes : {{plateforme["pers"]}}</p>
+            <p>Intervalle de maintenance : {{plateforme["intervalle"]}} jours</p>
+            <p>Dernière maintenance : {{plateforme["maint"]}} </p>
+            <p>Prochiane maintenance : {{plateforme["pro"]}} </p>
+            <p>Coût journalier : {{plateforme["cout"]}} €</p>
+        </article>
+        <article class="maintenance">
+            <div class="planifier">
+                <p>Planifier une maintenance : </p>
+                {{maintenance.ProchaineMaintenance}}
+            </div>
+            <div class="image_maint">
+                <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
+            </div>
+        </article>
+        <article class="bouton">
+            <a href="">Modifier les informations</a>
+        </article>
+    </section>
+    <section class="equipemment">
+        <h1>Liste des équipements sur la Plateforme</h1>
+        <article>
+            {% for obj in objets %}
+            <p>{{obj.nomEquipement}}</p>
+            <div class="trait_horizontale"></div>
+            {%endfor%}
+        </article>
+    </section>
+</section>
+</form>
+{% endblock %}

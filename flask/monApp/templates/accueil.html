@@ -13,64 +13,21 @@
             <img src="{{ url_for('static', filename='img/plus.png') }}" alt=""> 
         </div>
 
-
+        {%for cpg in campagnes%}
         <article>
             <div class="nom_date">
-                <h2>CPG-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
+                <h2> Numéro de campagne : {{cpg["num"]}}</h2>
+                <p>date de début : {{cpg["date"]}}</p>
             </div>
             <div class="position">
                 <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
+                <p>{{cpg["plat"]}}</p>
+                <a href="{{ url_for('detail_campagne', numCampagne =cpg['num'] ) }}">détails</a>
             </div>
+            
         </article>
         <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>CPG-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>CPG-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>CPG-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>CPG-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-
-
+        {% endfor %}
 
     </section>
     <section class="plateforme">
@@ -79,62 +36,21 @@
             <img src="{{ url_for('static', filename='img/plus.png') }}" alt="">
         </div>
 
+        {%for plt in plateformes%}
+        <article>
+            <div class="nom_date">
+                <h2>{{plt["nom"]}}</h2>
+                <p>dernière maintenance : {{plt["maint"]}}</p>
+            </div>
+            <div class="position">
+                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
+                <p>{{plt["lieu"]}}</p>
+                <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
+            </div>
+        </article>
+        <div class="trait_horizontal"></div>
+        {% endfor %}
 
-        <article>
-            <div class="nom_date">
-                <h2>PTF-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>PTF-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>PTF-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>PTF-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
-        <article>
-            <div class="nom_date">
-                <h2>PTF-Alpha</h2>
-                <p>date de début : 2025-06-21</p>
-            </div>
-            <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>4 rue des roses Blois</p>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
     </section>
 </section>
 {% endblock %}

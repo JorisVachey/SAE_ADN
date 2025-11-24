@@ -5,21 +5,35 @@
 {% endblock %}
 
 {% block main %}
-
+<form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('connexion') }}">
+{{ form.hidden_tag() }}
 <section class="block">
     <section>
         <h2>Se Connecter</h2>
         
-        <form>
-            <input type="text" placeholder="Nom ..." required>
-            <input type="password" placeholder="Mot de passe ..." required>
+            <input 
+            type="text" 
+            id="{{ form.Login.id }}" 
+            name="{{ form.Login.name }}" 
+            placeholder="ID ..." 
+            required
+            >
             
+            <input 
+            type="password" 
+            id="{{ form.Password.id }}" 
+            name="{{ form.Password.name }}" 
+            placeholder="Mot de passe ..." 
+            required
+            >
+
             <div class="bas">
                 <p>Vous êtes nouveau ? <a href="#">S'inscrire</a></p>
-                <button type="submit">S'Inscrire</button>
+                <button type="submit">Se connecter</button>
             </div>
-        </form>
+        
     </section>
 </section>
+</form>
 
 {% endblock %}
