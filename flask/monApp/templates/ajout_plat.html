@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 
+{% block styles_additionnels %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate.css') }}">
+{% endblock %}
+
 {% block main %}
 <section id="ajout">
-    <h1>Créer une Plateforme</h1>
     <form method="POST" class="champs" id="form-ajout-plat">
-        <input id="nomP" type="text" name="nomPlateforme" placeholder="Saisir nom de la plateforme...">
-        <select class="select_t" name="habilitation"required > 
-            <option value="">-- Veuillez choisir --</option>
-            {% for uneH in habilitation %}
-                <option value="{{ uneH.type }}">{{ uneH.type }}</option>
-            {% endfor %}
-        </select>
-        <input id="nbP" type="decimal" name="nbP" placeholder="Nombre de personne minimal..."required>
+        <div id = zone1>
+            <label>Créer une plateforme</label>
+        <input id="date" type="date" name="date_camp" placeholder="Saisir une date...">
+        <input id="nomPlateforme" type="text" name="nomP" placeholder="Nombre de personne minimal..."required>
         <input id="cout" type="text" name="coutPJ" placeholder="Cout journalier..."required>
         <input id="interv" type="decimal" name="interv" placeholder="Interval de maintenace en jour..." required>
-        <input id="interv" type="text" name="lieu" placeholder="Lieu de la plateforme..." required>
+        </div>
+        <select class="select_t" name="habilitation"required > 
+            <option value="">-- Veuillez choisir des habilitations --</option>
+        </select>
+        <select class="select_t" name="habilitation"required > 
+            <option value="">-- Veuillez choisir des équipements --</option>
+        </select>
         <div class="boutons_form">
             <button type="reset" class="annuler" onclick="masquerForm()">Annuler</button>
             <button type="submit" class="boutons_plat">Ajouter</button>

@@ -87,12 +87,12 @@ def fouille() :
     return render_template('fouille.html')
 
 
-"""
+
 @app.route('/plateforme/', methods=['GET','POST'])
 @login_required
 def create_plateforme():
     unForm = PlateformeForm()
-    return render_template('ajout_plateforme.html', formulaire = unForm)
+    return render_template('ajout_plat.html', formulaire = unForm)
 
 @app.route('/plateformes/ajouter-plateforme/', methods=['GET','POST'])
 @login_required
@@ -125,7 +125,7 @@ def ajouter_plateforme():
         for hab in habilitations :
             db.session.add(Necessite(type =hab,nomPlateforme=Nom))
             db.session.commit()
-        return redirect(url_for('accueil'))"""
+        return redirect(url_for('accueil'))
     
 @app.route('/plateformes/<nomPlateforme>/', methods=['GET','POST'])
 @login_required
@@ -191,60 +191,7 @@ def detail_campagne(numCampagne):
         print(f"Erreur lors de l'accès à la plateforme: {e}")
         return redirect(url_for('accueil'))
 
-    
-    @app.route('/ajout_plateforme/', methods=['GET', 'POST'])
-def ajout_plat() :
-    if request.method == 'POST':
-        try:
-            nomPlateforme = request.form.get('nomPlateforme')
-            habilitation = request.form.get('habilitation')
-            nbPersonnes = request.form.get("nbP")
-            cout= request.form.get("coutPJ")
-            intervalleMaintenance= request.form.get("interv")
-            lieu= request.form.get("lieu")
-
-            if not nomPlateforme or not habilitation or not nbPersonnes or not cout or not intervalleMaintenance or not lieu:
-                return jsonify({'success': False, 'error': 'Champs manquants'}), 400
-            
-            plat_existant = Plateforme.query.filter_by(nomPlateforme=nomPlateforme).first()
-            if plat_existant:
-                return jsonify({'success': False, 'error': 'Une plateforme avec ce nom existe déjà.'}), 400
-
-            try:
-                prix_decimal = float(cout)
-                nbPersonnes_int = int(nbPersonnes)
-                intervalle = int(intervalleMaintenance)
-            except ValueError:
-                return jsonify({'success': False, 'error': 'Format de prix ou ID invalide'}), 400
-
-            nouvelle_plat = Plateforme(
-                nomPlateforme=nomPlateforme,
-                nbPersonnes=nbPersonnes_int,
-                cout=prix_decimal,
-                intervalleMaintenance=intervalle,
-                lieu=lieu,
-            )
-
-            db.session.add(nouvelle_plat)
-            db.session.commit()
-            
-
-            return jsonify({
-                'success': True,
-                'plat': {
-                    'id': nouveau_plat.idP,
-                    'nomP': nouveau_plat.nomP,
-                    'prixP': nouveau_plat.prixP,
-                    'type_nom': type_nom,
-                    'stock': nouveau_plat.stock,
-                    'stockInit': nouveau_plat.stockInit
-                }
-            })
-
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'success': False, 'error': str(e)}), 500
-
-    plats = Plat.query.all()
-    types = Type_plat.query.all()
-    return render_template("gestion_plat.html", plats=plats, types=types)
+@app.route('/campagnes/')
+@login_required
+def add_camp():
+    return render_template('ajout_camp.html')

@@ -1,0 +1,117 @@
+body {
+    background-color: #dfd1a7;
+    font-family: 'Times New Roman', Times, serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+#ajout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    width: 100%;
+}
+
+#form-ajout-plat {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+#zone1 {
+    background-color: #fcf3d9;
+    border-radius: 50px;
+    padding: 30px 50px;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+#zone1 label {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 10px;
+    display: block;
+}
+
+#zone1 input {
+    background-color: #dccca5;
+    border: none;
+    border-radius: 25px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    color: white;
+    font-weight: bold;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#zone1 input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: normal;
+}
+
+#zone1 input:focus {
+    box-shadow: inset 0 0 0 2px #fff;
+}
+
+.select_t {
+    background-color: #fcf3d9;
+    border: none;
+    border-radius: 30px;
+    padding: 20px 40px;
+    width: 60%;
+    font-size: 1.2rem;
+    font-family: 'Times New Roman', serif;
+    font-weight: bold;
+    color: #333;
+    appearance: none;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.boutons_form {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.boutons_plat {
+    background-color: #fcf3d9;
+    color: #000;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease;
+}
+
+.boutons_plat:hover {
+    transform: scale(1.05);
+}
+
+.annuler {
+    background: none;
+    border: none;
+    color: #555;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1rem;
+}
