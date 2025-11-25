@@ -20,8 +20,10 @@
                 <p>date de début : {{cpg["date"]}}</p>
             </div>
             <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>{{cpg["plat"]}}</p>
+                <div>
+                    <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
+                    <p>{{cpg["plat"]}}</p>
+                </div>
                 <a href="{{ url_for('detail_campagne', numCampagne =cpg['num'] ) }}">détails</a>
             </div>
             
@@ -43,8 +45,10 @@
                 <p>dernière maintenance : {{plt["maint"]}}</p>
             </div>
             <div class="position">
-                <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>{{plt["lieu"]}}</p>
+                <div>
+                    <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
+                    <p>{{plt["lieu"]}}</p>
+                </div>
                 <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
             </div>
         </article>

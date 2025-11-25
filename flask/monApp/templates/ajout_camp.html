@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block styles_additionnels %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_add_camp.css') }}">
+{% endblock %}
+
+{% block main %}
+<section id="ajout">
+    <form method="POST" class="champs" id="form-ajout-camp">
+        <div id = zone1>
+            <label>Créer une Campagne</label>
+        <select class="select_pla" name="plateforme"required > 
+            <option value="">-- Veuillez choisir la plateforme --</option>
+        </select>
+        <input id="" type="date" name="date" placeholder="Date de la campagne..." required>
+        <input id="" type="text" name="lieu" placeholder="Lieu de la campagne..." required>
+        <input id="" type="text" name="durée" placeholder="Durée en jour..." required>
+        </div>
+        <select class="select_p" name="personnes"required > 
+            <option value="">-- Veuillez choisir les personnes voulues --</option>
+        </select>
+        <div class="boutons_form">
+            <button type="reset" class="annuler" onclick="masquerForm()">Annuler</button>
+            <button type="submit" class="boutons_camp">Ajouter</button>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

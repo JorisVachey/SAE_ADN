@@ -1,5 +1,5 @@
 from .app import app,db
-from flask import render_template, request, url_for , redirect, abort
+from flask import render_template, request, url_for , redirect, abort, jsonify
 from hashlib import sha256
 from flask_login import login_required, login_user, logout_user, login_manager, current_user
 from .forms import LoginForm
@@ -87,12 +87,12 @@ def fouille() :
     return render_template('fouille.html')
 
 
-"""
+
 @app.route('/plateforme/', methods=['GET','POST'])
 @login_required
 def create_plateforme():
     unForm = PlateformeForm()
-    return render_template('ajout_plateforme.html', formulaire = unForm)
+    return render_template('ajout_plat.html', formulaire = unForm)
 
 @app.route('/plateformes/ajouter-plateforme/', methods=['GET','POST'])
 @login_required
@@ -125,7 +125,7 @@ def ajouter_plateforme():
         for hab in habilitations :
             db.session.add(Necessite(type =hab,nomPlateforme=Nom))
             db.session.commit()
-        return redirect(url_for('accueil'))"""
+        return redirect(url_for('accueil'))
     
 @app.route('/plateformes/<nomPlateforme>/', methods=['GET','POST'])
 @login_required
