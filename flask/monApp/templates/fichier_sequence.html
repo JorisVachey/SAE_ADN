@@ -8,22 +8,21 @@
 
 <section class="block">
     <section class="titre">
-        <h1>Campagne de Fouille : {{ campagne.nomCampagne }}</h1>
+        <h1>Campagne de Fouille : {{ campagne.numCampagne }}</h1>
     </section>
     <section class="detail">
-        <!-- Colonne de Gauche : Liste des Fichiers -->
         <article class="lstFichier">
             <div class="plus">
                 <img src="{{ url_for('static', filename='img/plus.png') }}" alt="Ajouter un fichier" width="24" height="24"> 
             </div>
             
-            {% for fichier in fichiers %}
-            <!-- Le clic appelle la fonction JS et lui passe l'élément cliqué -->
+            {% for fichier in fichiers %}             
             <div class="file-item" 
                  data-file-id="{{ fichier.idFichier }}" 
                  onclick="showFileInfo(this)">
-                {{ fichier.nomFichier }}
+                <p>{{ fichier.nomFichier }}</p>
             </div>
+            
             <div class="trait_horizontal"></div>
             {% endfor %}
             {% if not fichiers %}
@@ -31,7 +30,6 @@
             {% endif %}
         </article>
         
-        <!-- Colonne de Droite : Détails du Fichier (Pré-remplis par Flask/Jinja) -->
         <article class="detailFichier">
             <h4>Fichier Séquencé n°<span id="file-sequence-number">{{ initial_details.idFichier }}</span></h4>
             <h4>Échantillon n°<span id="file-sample-number">{{ initial_details.idEchantillon }}</span></h4>
@@ -41,13 +39,12 @@
             
             <div class="commentaire">
                 <p>Commentaire : </p>
-                <!-- L'attribut 'readonly' est ajouté pour empêcher la modification accidentelle -->
-                <textarea name="commentaire" id="file-comment" placeholder="Ajouter un commentaire..." rows="5" readonly>{{ initial_details.commentaire }}</textarea>
+                <textarea name="commentaire" id="file-comment" placeholder="Ajouter un commentaire..." rows="5" >{{ initial_details.commentaire }}</textarea>
             </div>
             
             <div class="televerser">
-                <img src="{{ url_for('static', filename='img/televerser.png') }}" width="24" height="24">
-                <button>Téléverser les séquences</button>
+                <button><img src="{{ url_for('static', filename='img/televerser.png') }}" width="24" height="24">
+                Téléverser les séquences</button>
             </div>
         </article>
     </section>
