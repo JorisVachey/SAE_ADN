@@ -151,10 +151,12 @@ def detail_plateforme(nomPlateforme):
     unForm = PlateformeForm()
     try:
         print('bbbbbbb')
-        participer = Participer.query.filter(Participer.idP == user.idP).all()
-        numParticip=[p.numCampagne for p in participer]
-        campagnes = Campagne.query.filter(Campagne.numCampagne.in_(numParticip)).all()
-        nomPlat=[c.nomPlateforme for c in campagnes]
+        participer = Participer.query.filter(Participer.idP == user.idP).one()
+        camp = Campagne.query.filter(Campagne.numCampagne==participer.numCampagne).one()
+        plat = Plateforme.query.filter(Plateforme.nomPlateforme==camp.nomPlateforme).one()
+        lab=Laboratoire.query.filter(Laboratoire.nomLab==plat.lab_id).one()
+        toutePlat = Plateforme.query.filter(Plateforme.lab_id==lab.nomLab).all()
+        nomPlat = [p.nomPlateforme for p in toutePlat]
         if not(nomPlateforme in nomPlat):
             print('oulaaaaaa')
             return redirect(url_for('accueil'))
