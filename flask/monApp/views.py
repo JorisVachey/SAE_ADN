@@ -82,17 +82,14 @@ def accueil():
         infos_camp.append(infos)
     return render_template('accueil.html', campagnes= infos_camp,plateformes=infos_plat)
 
-@app.route('/fouille/')
-def fouille() :
-    return render_template('fouille.html')
-
-
 
 @app.route('/plateforme/', methods=['GET','POST'])
 @login_required
 def create_plateforme():
     unForm = PlateformeForm()
-    return render_template('ajout_plat.html', formulaire = unForm)
+    habForm = HabilitationForm()
+    equipForm = EquipementForm()
+    return render_template('ajout_plat.html', form = unForm, hab = habForm,equipements=equipForm)
 
 @app.route('/plateformes/ajouter-plateforme/', methods=['GET','POST'])
 @login_required
@@ -105,8 +102,12 @@ def ajouter_plateforme():
         Laboratoire.nomLab == Plateforme.query.filter(
             Plateforme.nomPlateforme ==
             camp.nomPlateforme).one().lab_id).one()
+    
     unForm = PlateformeForm()
-    if unForm.validate_on_submit:
+    habForm = HabilitationForm()
+    equipForm = EquipementForm()
+    if unForm.validate_on_submit() and habForm.validate() and equipForm.validate():
+
         Nom = unForm.Nom.data
         nbPersonnes = unForm.nbPersonnes.data
         Cout = unForm.Cout.data
@@ -116,28 +117,46 @@ def ajouter_plateforme():
                                 nbPersonnes=nbPersonnes,
                                 cout=Cout,
                                 intervalleMaintenance=IntervalleMaintenance,
-                                lieu=Lieu
+                                lieu=Lieu,
+                                derniereMaintenance=None,
+                                prochaineMaintenance=None
                                 )
         plateforme.laboratoire = lab
         db.session.add(plateforme)
         db.session.commit()
-        habilitations = request.form.getlist('habilitation')
+        habilitations = habForm.habilitation_selectionnee.data
+        print(habilitations)
         for hab in habilitations :
             db.session.add(Necessite(type =hab,nomPlateforme=Nom))
             db.session.commit()
+
+        equipements = equipForm.objets_selectionnes.data
+        print(equipements)
+        for eqp in equipements :
+            db.session.add(Contenir(idE =eqp,nomPlateforme=Nom))
+            db.session.commit()
         return redirect(url_for('accueil'))
+    return render_template(
+        'ajout_plat.html', 
+        form = unForm, 
+        hab = habForm, 
+        equipements = equipForm
+    )
     
 @app.route('/plateformes/<nomPlateforme>/', methods=['GET','POST'])
 @login_required
 def detail_plateforme(nomPlateforme):
+    print('aaaaaaaa')
     user = Personne.query.get_or_404(current_user.idP)
     unForm = PlateformeForm()
     try:
+        print('bbbbbbb')
         participer = Participer.query.filter(Participer.idP == user.idP).all()
         numParticip=[p.numCampagne for p in participer]
         campagnes = Campagne.query.filter(Campagne.numCampagne.in_(numParticip)).all()
         nomPlat=[c.nomPlateforme for c in campagnes]
         if not(nomPlateforme in nomPlat):
+            print('oulaaaaaa')
             return redirect(url_for('accueil'))
 
         plat = Plateforme.query.filter(Plateforme.nomPlateforme==nomPlateforme).one()
@@ -195,20 +214,13 @@ def detail_campagne(numCampagne):
 @app.route('/echantillons/<int:numCampagne>/')
 @login_required
 def echantillons(numCampagne):
-    # Récupérer la campagne
     campagne = Campagne.query.filter(Campagne.numCampagne==numCampagne).first_or_404()
-    
-    # Récupérer tous les échantillons pour cette campagne
     echantillons = Echantillon.query.filter(Echantillon.numCampagne==numCampagne).all()
-    
-    # Filtrer pour n'avoir que les objets Fichier associés
     fichiers = [e.fichier for e in echantillons if e.fichier]
-    
-    # Préparer le dictionnaire complet de données (Statique pour JavaScript)
     all_file_details = {}
     
     for fichier in fichiers:
-        # Trouver l'échantillon lié au fichier actuel pour récupérer ses détails
+
         echantillon = Echantillon.query.filter_by(idFichier=fichier.idFichier).first()
         
         if echantillon:
@@ -228,9 +240,7 @@ def echantillons(numCampagne):
         'espece': 'Sélectionner un fichier',
         'commentaire': ''
     }
-    
     if all_file_details:
-        # Récupérer les détails du premier fichier (première clé dans le dictionnaire)
         first_id = list(all_file_details.keys())[0]
         initial_details = all_file_details[first_id]
 
@@ -238,7 +248,6 @@ def echantillons(numCampagne):
                            campagne=campagne,
                            fichiers=fichiers, 
                            initial_details=initial_details,
-                           # PASSER TOUTES LES DONNÉES AU TEMPLATE
                            all_file_details=all_file_details)
 
     

@@ -6,20 +6,20 @@
 
 {% block main %}
 <section id="ajout">
-    <form method="POST" class="champs" id="form-ajout-plat">
+    <form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('ajouter_plateforme') }}">
+        {{ form.hidden_tag() }}
         <div id = zone1>
             <label>Créer une plateforme</label>
-        <input id="date" type="date" name="date_camp" placeholder="Saisir une date...">
-        <input id="nomPlateforme" type="text" name="nomP" placeholder="Nombre de personne minimal..."required>
-        <input id="cout" type="text" name="coutPJ" placeholder="Cout journalier..."required>
-        <input id="interv" type="decimal" name="interv" placeholder="Interval de maintenace en jour..." required>
+        <input id="nom" type="text" name="{{ form.Nom.name }}" placeholder="Saisir le nom de la plateforme..."required>
+        <input id="nomPlateforme" type="number" name="{{ form.nbPersonnes.name }}" placeholder="Nombre de personnes minimal..."required>
+        <input id="cout" type="number" name="{{ form.Cout.name }}" placeholder="Cout journalier..."required>
+        <input id="interv" type="number" name="{{ form.IntervalleMaintenance.name }}" placeholder="Intervalle de maintenace en jour..." required>
         </div>
-        <select class="select_t" name="habilitation"required > 
-            <option value="">-- Veuillez choisir des habilitations --</option>
-        </select>
-        <select class="select_t" name="habilitation"required > 
-            <option value="">-- Veuillez choisir des équipements --</option>
-        </select>
+        <div id = zone2> 
+            {{ hab.habilitation_selectionnee() }}
+        <div id = zone3> 
+            {{ equipements.objets_selectionnes() }}
+        </div>
         <div class="boutons_form">
             <button type="reset" class="annuler" onclick="masquerForm()">Annuler</button>
             <button type="submit" class="boutons_plat">Ajouter</button>
