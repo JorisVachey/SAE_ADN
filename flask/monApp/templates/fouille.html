@@ -20,17 +20,24 @@
         <article class="acceder">
             <a href="{{ url_for('echantillons', numCampagne=campagne['numCampagne'] ) }}">Accéder aux échantillons de la campagne</a>
         </article>
-        <article class="bouton">
-            <a href="{{ url_for('detail_plateforme', nomPlateforme =campagne['nomPlateforme'] ) }}">Voir la plateforme associée</a>
-            <a href="">Modifier les informations</a>
-        </article>
+        <div class="gestion">
+            <article>
+                <a href="{{ url_for('detail_plateforme', nomPlateforme =campagne['nomPlateforme'] ) }}">Voir la plateforme associée</a>
+            </article>
+            <article>
+                <a href="">Modifier les informations</a>
+            </article>
+        </div>
     </section>
     <section class="equipemment">
         <h1>Liste des personnes sur la Campagne</h1>
         <article>
             {% for pers in personnes %}
-            <p>{{pers.nom}} {{pers.prenom}}</p>
-            <div class="trait_horizontale"></div>
+            <div class="case">
+                {% set nb = random.randint(1,14) %}
+                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                <p>{{pers.nom}} {{pers.prenom}}</p>
+            </div>
             {%endfor%}
         </article>
     </section>

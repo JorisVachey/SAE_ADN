@@ -22,10 +22,10 @@
         </article>
         <article class="maintenance">
             <div class="planifier">
-                <p>Planifier une maintenance : </p>
-                {{maintenance.ProchaineMaintenance}}
-            </div>
-            <div class="image_maint">
+                <div>
+                    <p>Planifier une maintenance : </p>
+                    {{maintenance.ProchaineMaintenance}}
+                </div>
                 <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
             </div>
         </article>
@@ -37,8 +37,11 @@
         <h1>Liste des équipements sur la Plateforme</h1>
         <article>
             {% for obj in objets %}
-            <p>{{obj.nomEquipement}}</p>
-            <div class="trait_horizontale"></div>
+            <div class="case">
+                {% set nb = random.randint(1,14) %}
+                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                <p>{{obj.nomEquipement}}</p>
+            </div>
             {%endfor%}
         </article>
     </section>

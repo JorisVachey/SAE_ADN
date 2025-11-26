@@ -14,7 +14,7 @@
         </div>
         {%for plt in plateformes%}
         <article>
-            {% set nb = random.randint(1,10) %}
+            {% set nb = random.randint(1,14) %}
             <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
             <div>
                 <div class="nom_date">
@@ -42,7 +42,7 @@
 
         {%for cpg in campagnes%}
         <article>
-            {% set nb = random.randint(1,10) %}
+            {% set nb = random.randint(1,14) %}
             <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
             <div>
                 <div class="nom_date">

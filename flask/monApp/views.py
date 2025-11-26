@@ -245,7 +245,7 @@ def detail_plateforme(nomPlateforme):
                 plat.prochaineMaintenance = unForm.ProchaineMaintenance.data
                 db.session.commit()
                 infos["pro"]= plat.prochaineMaintenance
-        return render_template('plateforme.html',plateforme = infos, objets=objets, maintenance=unForm)
+        return render_template('plateforme.html',plateforme = infos, objets=objets, maintenance=unForm, random=random)
     
     except Exception as e:
         print(f"Erreur lors de l'accès à la plateforme: {e}")
@@ -275,7 +275,7 @@ def detail_campagne(numCampagne):
         for pers in Participer.query.filter(Participer.numCampagne==numCampagne).all():
                 personne = Personne.query.filter(Personne.idP==pers.idP).one()
                 personnes.append(personne)    
-        return render_template('fouille.html',campagne = infos, personnes=personnes)
+        return render_template('fouille.html',campagne = infos, personnes=personnes, random=random)
     except Exception as e:
         print(f"Erreur lors de l'accès à la plateforme: {e}")
         return redirect(url_for('accueil'))

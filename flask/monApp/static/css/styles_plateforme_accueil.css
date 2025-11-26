@@ -5,6 +5,7 @@
     justify-content: center;
     gap: 5em;
     margin: 5em;
+    margin-top: 8em;
 }
 
 img {
@@ -12,9 +13,14 @@ img {
     height: auto;
 }
 
+.block h1 {
+    font-family: 'Old Standard TT', serif;
+    font-size: 2.5em;
+}
+
 .plateforme {
     align-self: flex-start;
-    flex-basis: 55%;
+    flex-basis: 65%;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -24,9 +30,11 @@ img {
 .info {
     display: flex;
     flex-direction: column;
-    background-color: #fff3d5;
-    border-radius: 2.5em;
+    align-items: center;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
     padding: 2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
 }
 
 .info div {
@@ -47,16 +55,46 @@ img {
     justify-content: center;
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     flex-grow: 1;
-    background-color: #fff3d5;
-    border-radius: 2.5em;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
     padding: 0.5em;
 }
 
-.image_maint {
-    background-color: #fff3d5;
-    border-radius: 2.5em;
-    padding: 1em 1.5em;
+.planifier>div {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10em;
+}
+
+.planifier input {
+    background-color: #dfcc9a;
+    border: none;
+    border-radius: 1.2em;
+    padding: 0 1em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    margin-left: 1em;
+    transition: 0.3s;
+}
+
+.planifier input:hover {
+    transform: scale(1.05);
+}
+
+
+.planifier button {
+    background-color: #dfcc9a;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.3s;
+    border: none;
+    padding: 0.5em 4em;
+}
+
+.planifier button:hover {
+    transform: scale(1.05);
 }
 
 .bouton {
@@ -65,35 +103,43 @@ img {
     width: 100%;
     justify-content: center;
     gap: 1em;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
 }
 
 .bouton a {
     text-align: center;
-    background-color: #fff3d5;
+    background-color: #F9F7F2;
     flex-grow: 1;
-    border-radius: 2.5em;
+    border-radius: 0.9em;
     padding: 1.5em;
+    color: black;
+    text-decoration: none;
+}
+
+.bouton:hover {
+    transform: scale(1.02);
 }
 
 .equipemment {
     align-self: flex-start;
-    flex-basis: 40%;
-    background-color: #fff3d5;
-    border-radius: 2.5em;
+    flex-basis: 35%;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
     padding: 2em;
 }
 
 .equipemment article {
     margin-top: 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
 }
 
 p, a {
     font-size: 1.3em;
-}
-
-.trait_horizontale {
-    background-color: black;
-    height: 0.125em;
 }
 
 .position {
@@ -104,7 +150,72 @@ p, a {
 .acceder {
     width: 100%;
     text-align: center;
-    background-color: #fff3d5;
-    border-radius: 2.5em;
-    padding: 1em 0;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+}
+
+.acceder:hover {
+    transform: scale(1.03);
+}
+
+.acceder a {
+    text-decoration: none;
+    color: black;
+}
+
+.equipemment .case {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+    gap: 2em;
+}
+
+p, a {
+    font-size: 1.5em;
+    text-decoration: none;
+    color: black;
+}
+
+.equipemment .case:hover {
+    transform: scale(1.03);
+}
+
+.fossile {
+    width: auto;
+    height: 10em;
+    border-radius: 1.4em 0 0 1.4em;
+}
+
+.gestion {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 3em;
+}
+
+.gestion article {
+    text-align: center;
+    flex-basis: 45%;
+    flex-grow: 1;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    background-color: #F9F7F2;
+    transition: 0.4s;
+}
+
+.gestion article:hover {
+    transform: scale(1.04);
+}
+
+.gestion article a,
+.acceder a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 1.1em 0;
 }
