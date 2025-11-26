@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_add_camp.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate.css') }}">
 {% endblock %}
 
 {% block main %}
@@ -23,8 +23,8 @@
             <option value="">-- Veuillez choisir les personnes voulues --</option>
         </select>
         <div class="boutons_form">
-            <button type="reset" class="annuler" onclick="masquerForm()">Annuler</button>
-            <button type="submit" class="boutons_camp">Ajouter</button>
+            <a href="{{ url_for('accueil') }}" class="boutons_plat" >Annuler</a>
+            <button type="submit" class="boutons_plat">Ajouter</button>
         </div>
     </form>
 </section>

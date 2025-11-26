@@ -15,14 +15,17 @@
         <input id="cout" type="number" name="{{ form.Cout.name }}" placeholder="Cout journalier..."required>
         <input id="interv" type="number" name="{{ form.IntervalleMaintenance.name }}" placeholder="Intervalle de maintenace en jour..." required>
         </div>
+        <h2>Type d'habilitations requises</h2>
         <div id = zone2> 
-            {{ hab.habilitation_selectionnee() }}
+            {{ hab.habilitation_selectionnee(class="custom-check") }}
+        </div>
+        <h2>Équipemments disponibles</h2>
         <div id = zone3> 
-            {{ equipements.objets_selectionnes() }}
+            {{ equipements.objets_selectionnes(class="custom-check") }}
         </div>
         <div class="boutons_form">
-            <button type="reset" class="annuler" onclick="masquerForm()">Annuler</button>
-            <button type="submit" class="boutons_plat">Ajouter</button>
+            <a href="{{ url_for('accueil') }}" class="boutons_plat" >Annuler</a>
+            <button type="submit" class="boutons_plat" >Ajouter</button>
         </div>
     </form>
 </section>
