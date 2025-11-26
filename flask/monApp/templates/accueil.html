@@ -10,7 +10,7 @@
     <section class="campagne">
         <h1>Campagnes en cours</h1>
         <div class="plus">
-            <img src="{{ url_for('static', filename='img/plus.png') }}" alt="">
+            <a href="{{ url_for('create_campagne') }}" ><img src="{{ url_for('static', filename='img/plus.png') }}" alt=""></a>
         </div>
 
         {%for cpg in campagnes%}

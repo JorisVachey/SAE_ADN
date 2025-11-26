@@ -63,3 +63,8 @@ class EquipementForm(FlaskForm): # Renommé pour plus de clarté
             (str(obj.idE), obj.nomEquipement) 
             for obj in tous_les_objets
         ]
+
+
+class CampagneForm(FlaskForm):
+    date  = DateField('date début', validators=[DataRequired(message="Cette option est obligatoire")])
+    duree = IntegerField('nb jours', validators=[DataRequired(message="Cette option est obligatoire")])

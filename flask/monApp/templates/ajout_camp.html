@@ -6,17 +6,20 @@
 
 {% block main %}
 <section id="ajout">
-    <form method="POST" class="champs" id="form-ajout-camp">
+    <form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('ajouter_campagne') }}">
+        {{ form.hidden_tag() }}
         <div id = zone1>
             <label>Créer une Campagne</label>
         <select class="select_pla" name="plateforme"required > 
-            <option value="">-- Veuillez choisir la plateforme --</option>
+            {%for plat in plateformes%}
+            <option value={{plat.nomPlateforme}}>{{plat.nomPlateforme}}</option>
+            {%endfor%}
         </select>
-        <input id="" type="date" name="date" placeholder="Date de la campagne..." required>
-        <input id="" type="text" name="lieu" placeholder="Lieu de la campagne..." required>
-        <input id="" type="text" name="durée" placeholder="Durée en jour..." required>
+        <input id="" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." required>
+        <input id="" type="text" name="lieu" placeholder="Lieu de la campagne..." >
+        <input id="" type="text" name="{{form.duree.name}}" placeholder="Durée en jour..." required>
         </div>
-        <select class="select_p" name="personnes"required > 
+        <select class="select_p" name="personnes" > 
             <option value="">-- Veuillez choisir les personnes voulues --</option>
         </select>
         <div class="boutons_form">

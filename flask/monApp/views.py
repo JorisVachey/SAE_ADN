@@ -107,50 +107,97 @@ def ajouter_plateforme():
     habForm = HabilitationForm()
     equipForm = EquipementForm()
     if unForm.validate_on_submit() and habForm.validate() and equipForm.validate():
-
-        Nom = unForm.Nom.data
-        nbPersonnes = unForm.nbPersonnes.data
-        Cout = unForm.Cout.data
-        IntervalleMaintenance = unForm.IntervalleMaintenance.data
-        Lieu = unForm.Lieu.data
-        plateforme = Plateforme(nomPlateforme =Nom,
-                                nbPersonnes=nbPersonnes,
-                                cout=Cout,
-                                intervalleMaintenance=IntervalleMaintenance,
-                                lieu=Lieu,
-                                derniereMaintenance=None,
-                                prochaineMaintenance=None
-                                )
-        plateforme.laboratoire = lab
-        db.session.add(plateforme)
-        db.session.commit()
-        habilitations = habForm.habilitation_selectionnee.data
-        print(habilitations)
-        for hab in habilitations :
-            db.session.add(Necessite(type =hab,nomPlateforme=Nom))
+        if unForm.Nom.data not in (p.nomPlateforme for p in Plateforme.query.filter(Plateforme.lab_id==lab.nomLab).all()):
+            Nom = unForm.Nom.data
+            nbPersonnes = unForm.nbPersonnes.data
+            Cout = unForm.Cout.data
+            IntervalleMaintenance = unForm.IntervalleMaintenance.data
+            Lieu = unForm.Lieu.data
+            plateforme = Plateforme(nomPlateforme =Nom,
+                                    nbPersonnes=nbPersonnes,
+                                    cout=Cout,
+                                    intervalleMaintenance=IntervalleMaintenance,
+                                    lieu=Lieu,
+                                    derniereMaintenance=None,
+                                    prochaineMaintenance=None
+                                    )
+            plateforme.laboratoire = lab
+            db.session.add(plateforme)
             db.session.commit()
+            habilitations = habForm.habilitation_selectionnee.data
+            print(habilitations)
+            for hab in habilitations :
+                db.session.add(Necessite(type =hab,nomPlateforme=Nom))
+                db.session.commit()
 
-        equipements = equipForm.objets_selectionnes.data
-        print(equipements)
-        for eqp in equipements :
-            db.session.add(Contenir(idE =eqp,nomPlateforme=Nom))
-            db.session.commit()
-        return redirect(url_for('accueil'))
+            equipements = equipForm.objets_selectionnes.data
+            for eqp in equipements :
+                db.session.add(Contenir(idE =eqp,nomPlateforme=Nom))
+                db.session.commit()
+            return redirect(url_for('accueil'))
+        else:
+            print("cette plateforme existe déjà")
     return render_template(
         'ajout_plat.html', 
         form = unForm, 
         hab = habForm, 
         equipements = equipForm
     )
+
+
+
+
+
+
+@app.route('/campagne/', methods=['GET','POST'])
+@login_required
+def create_campagne():
+    pers = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == pers.idP).one()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).one().lab_id).one()
+
+    toutesPlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).order_by(
+            Plateforme.nomPlateforme).all()
+    unForm = CampagneForm()
+    return render_template('ajout_camp.html', form = unForm, plateformes=toutesPlat)
+
+
+@app.route('/campagnes/ajouter-campagne/', methods=['GET','POST'])
+@login_required
+def ajouter_campagne():
+    pers = Personne.query.get_or_404(current_user.idP)
+    unForm = CampagneForm()
+    if unForm.validate_on_submit():
+        #verif date
+            date = unForm.date.data
+            duree = unForm.duree.data
+            plat = request.form.get('plateforme')
+            plateforme = Plateforme.query.filter(Plateforme.nomPlateforme== plat).one()
+            campagne = Campagne(date=date,duree=duree)
+            campagne.plateforme = plateforme
+            db.session.add(campagne)
+            db.session.commit()
+            return redirect(url_for('accueil'))
+    return render_template('ajout_camp.html',form = unForm )
+
+     
+
+
+
+
     
 @app.route('/plateformes/<nomPlateforme>/', methods=['GET','POST'])
 @login_required
 def detail_plateforme(nomPlateforme):
-    print('aaaaaaaa')
     user = Personne.query.get_or_404(current_user.idP)
     unForm = PlateformeForm()
     try:
-        print('bbbbbbb')
         participer = Participer.query.filter(Participer.idP == user.idP).one()
         camp = Campagne.query.filter(Campagne.numCampagne==participer.numCampagne).one()
         plat = Plateforme.query.filter(Plateforme.nomPlateforme==camp.nomPlateforme).one()
@@ -158,7 +205,6 @@ def detail_plateforme(nomPlateforme):
         toutePlat = Plateforme.query.filter(Plateforme.lab_id==lab.nomLab).all()
         nomPlat = [p.nomPlateforme for p in toutePlat]
         if not(nomPlateforme in nomPlat):
-            print('oulaaaaaa')
             return redirect(url_for('accueil'))
 
         plat = Plateforme.query.filter(Plateforme.nomPlateforme==nomPlateforme).one()
@@ -192,12 +238,16 @@ def detail_plateforme(nomPlateforme):
 @login_required
 def detail_campagne(numCampagne):
     user = Personne.query.get_or_404(current_user.idP)
+    camp = Campagne.query.filter(Campagne.numCampagne==numCampagne).one()
     try:
-        participer = Participer.query.filter(Participer.idP == user.idP, Participer.numCampagne==numCampagne).one()
+        """participer = Participer.query.filter(Participer.idP == user.idP, Participer.numCampagne==numCampagne).one()
         camp = Campagne.query.filter(Campagne.numCampagne==numCampagne).one()
         if not participer:
-            return redirect(url_for('accueil'))
+            return redirect(url_for('accueil'))"""
 
+        if not user:
+            return redirect(url_for('accueil'))
+        
         infos = dict()
         infos['numCampagne'] = camp.numCampagne
         infos["date"] = camp.date
