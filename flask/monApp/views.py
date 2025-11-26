@@ -172,19 +172,29 @@ def create_campagne():
 @login_required
 def ajouter_campagne():
     pers = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == pers.idP).one()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).one().lab_id).one()
+
+    toutesPlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).order_by(
+            Plateforme.nomPlateforme).all()
     unForm = CampagneForm()
     if unForm.validate_on_submit():
-        #verif date
             date = unForm.date.data
             duree = unForm.duree.data
             plat = request.form.get('plateforme')
-            plateforme = Plateforme.query.filter(Plateforme.nomPlateforme== plat).one()
-            campagne = Campagne(date=date,duree=duree)
-            campagne.plateforme = plateforme
-            db.session.add(campagne)
-            db.session.commit()
-            return redirect(url_for('accueil'))
-    return render_template('ajout_camp.html',form = unForm )
+            campagne = Campagne(date=date,duree=duree, nomPlateforme=plat)
+            print(Campagne.query.filter(Campagne.nomPlateforme==plat, Campagne.date==date).all())
+            if (Campagne.query.filter(Campagne.nomPlateforme==plat, Campagne.date==date).all())==[]:
+                db.session.add(campagne)
+                db.session.commit()
+                return redirect(url_for('accueil'))
+    return render_template('ajout_camp.html',form = unForm,plateformes=toutesPlat )
 
      
 

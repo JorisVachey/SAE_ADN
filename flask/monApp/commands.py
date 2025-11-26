@@ -81,11 +81,8 @@ def seed_db():
         db.session.add(n3)
         
         # --- 7. Campagnes ---
-        camp1 = Campagne(date="2025-12-01", duree=7)
-        camp1.nomPlateforme = pf1.nomPlateforme
-        
-        camp2 = Campagne(date="2026-01-15", duree=3)
-        camp2.nomPlateforme = pf2.nomPlateforme
+        camp1 = Campagne(date="2025-12-01", duree=7,nomPlateforme = pf1.nomPlateforme)
+        camp2 = Campagne(date="2026-01-15", duree=3,nomPlateforme = pf2.nomPlateforme)
         
         db.session.add_all([camp1, camp2])
         db.session.commit() 

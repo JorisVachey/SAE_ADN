@@ -92,9 +92,11 @@ class Campagne(db.Model):
     nomPlateforme = db.Column( db.String(255), db.ForeignKey ("plateforme.nomPlateforme"))
     plateforme = db.relationship ("Plateforme", backref =db.backref ("campagnes", lazy="dynamic") )
 
-    def __init__(self,date,duree):
+    def __init__(self,date,duree,nomPlateforme):
         self.date= date
         self.duree= duree
+        self.nomPlateforme= nomPlateforme
+
 
     def __repr__(self):
         return "<La campagne %i à partir du %s pendant %i jour(s) sur la plateforme %s>" % (self.numCampagne , self.date, self.duree, self.nomPlateforme)
