@@ -7,6 +7,8 @@ from monApp.models import *
 from monApp.forms import *
 from sqlalchemy import desc,func
 from datetime import date, datetime
+import random
+
 
 
 @app.route('/connexion/',methods=('GET','POST',))
@@ -80,7 +82,7 @@ def accueil():
         infos["duree"] = camp.duree
         infos["plat"]= camp.nomPlateforme
         infos_camp.append(infos)
-    return render_template('accueil.html', campagnes= infos_camp,plateformes=infos_plat)
+    return render_template('accueil.html', campagnes= infos_camp,plateformes=infos_plat, random=random)
 
 
 @app.route('/plateforme/', methods=['GET','POST'])

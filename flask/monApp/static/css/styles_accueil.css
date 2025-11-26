@@ -9,28 +9,44 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    flex-basis: 45%;
     align-items: center;
-    justify-content: center;
-    background-color: #fff3d5;
+    justify-content: flex-start;
     margin: 5em;
-    border-radius: 5em;
     padding: 2em;
+    align-self: flex-start;
+}
+
+.block h1 {
+    font-family: 'Old Standard TT', serif;
+    font-size: 2.5em;
 }
 
 .plus {
     margin-bottom: 2em;
-    border-radius: 2em;
-    background-color: #dfcc9a;
+    border-radius: 1.2em;
+    background-color: #F9F7F2;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0.3em 0;
+    transition: 0.4s;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
 }
 
 .plus img {
-    width: 5em;
+    width: 3em;
     height: auto;
+}
+
+.plus a {
+    width: 100%;
+    text-align: center;
+}
+
+.plus:hover {
+    transform: scale(1.04);
 }
 
 .position img {
@@ -41,10 +57,11 @@
 .block section article {
     display: flex;
     width: 100%;
-    flex-direction: column;
-    background-color: #dfcc9a;
+    flex-direction: row;
+    background-color: #F9F7F2;
     margin-bottom: 2em;
-    border-radius: 2em;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
 }
 
 .nom_date {
@@ -52,6 +69,7 @@
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
 }
 
 .position {
@@ -75,8 +93,27 @@
 }
 
 .position a {
-    background-color: #fff3d5;
+    background-color: #dfcc9a;
     padding: 0.5em 2em;
     border-radius: 2em;
     margin-right: 1em;
-}   
+    color: black;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+}
+
+.position a:hover {
+    transform: scale(1.05);
+}
+
+.fossile {
+    width: auto;
+    height: 10em;
+    border-radius: 1.4em 0 0 1.4em;
+}
+
+article > div {
+    width: 100%;
+    padding: 0 3em;
+}
