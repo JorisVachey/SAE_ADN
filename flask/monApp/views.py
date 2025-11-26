@@ -318,6 +318,7 @@ def echantillons(numCampagne):
                            campagne=campagne,
                            fichiers=fichiers, 
                            initial_details=initial_details,
-                           all_file_details=all_file_details)
+                           all_file_details=all_file_details,
+                           random=random)
 
     

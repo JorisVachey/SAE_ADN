@@ -17,13 +17,14 @@
             </div>
             
             {% for fichier in fichiers %}             
-            <div class="file-item" 
+            <div class="file-item case" 
                  data-file-id="{{ fichier.idFichier }}" 
                  onclick="showFileInfo(this)">
+                {% set nb = random.randint(1,14) %}
+                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
                 <p>{{ fichier.nomFichier }}</p>
             </div>
             
-            <div class="trait_horizontal"></div>
             {% endfor %}
             {% if not fichiers %}
             <p style="padding: 10px; color: #888;">Aucun fichier séquencé disponible pour cette campagne.</p>
@@ -50,7 +51,7 @@
     </section>
 </section>
 <script>
-    const ALL_FILE_DATA = {{ all_file_details | tojson | safe }};
+    const ALL_FILE_DATA = JSON.parse('{{ all_file_details | tojson | safe }}');
 
     function showFileInfo(clickedElement) {
         // 1. Récupérer l'ID du fichier (clé dans notre dictionnaire)
