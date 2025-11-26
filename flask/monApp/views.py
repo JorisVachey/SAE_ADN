@@ -188,9 +188,15 @@ def ajouter_campagne():
             date = unForm.date.data
             duree = unForm.duree.data
             plat = request.form.get('plateforme')
+
+            date_fin_nouv = date + timedelta(days=duree)
+            
+            date_fin_existante = db.func.datetime(Campagne.date, 
+            Campagne.duree.cast(db.String) + db.literal(' days'))
+
+            campagnes_existantes = Campagne.query.filter(Campagne.nomPlateforme == plat,Campagne.date < date_fin_nouv, date_fin_existante > date).all()
             campagne = Campagne(date=date,duree=duree, nomPlateforme=plat)
-            print(Campagne.query.filter(Campagne.nomPlateforme==plat, Campagne.date==date).all())
-            if (Campagne.query.filter(Campagne.nomPlateforme==plat, Campagne.date==date).all())==[]:
+            if not campagnes_existantes:
                 db.session.add(campagne)
                 db.session.commit()
                 return redirect(url_for('accueil'))
