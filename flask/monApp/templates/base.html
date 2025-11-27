@@ -32,7 +32,16 @@
         </ul>
     </header>
     <section class="profil">
-        <p></p>
+        <img src="{{url_for ('static', filename='img/profil.png')}}" alt="">
+        <div>
+            {% if current_user.is_authenticated %}
+                <p>Prénom : {{ current_user.prenom }}</p>
+                <p>Nom : {{ current_user.nom }}</p>
+                <p>Poste : {{ current_user.poste }}</p>
+            {% else %}
+                <p>Utilisateur non connecté</p>
+            {% endif %}
+        </div>
     </section>
 {%endblock%}
 
