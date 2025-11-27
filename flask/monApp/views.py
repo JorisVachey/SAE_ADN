@@ -1,15 +1,76 @@
 from .app import app,db
-from flask import render_template, request, url_for , redirect, abort, jsonify
+from flask import render_template, request, url_for , redirect, abort, jsonify, flash
 from hashlib import sha256
 from flask_login import login_required, login_user, logout_user, login_manager, current_user
 from .forms import LoginForm
 from monApp.models import *
 from monApp.forms import *
 from sqlalchemy import desc,func
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
+from werkzeug.utils import secure_filename
 import random
+import os
+from functools import wraps
 
 
+def admin(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Vérifie si le user est connecté
+        print(current_user)
+        if not current_user.is_authenticated:
+            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
+            return redirect(url_for('connection'))
+        # Vérifie le metier du user
+        if not current_user.poste=="administration":
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def chercheur(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Vérifie si le user est connecté
+        print(current_user)
+        if not current_user.is_authenticated:
+            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
+            return redirect(url_for('connection'))
+        # Vérifie le metier du user
+        if not current_user.poste=="chercheur":
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def directeur(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Vérifie si le user est connecté
+        print(current_user)
+        if not current_user.is_authenticated:
+            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
+            return redirect(url_for('connection'))
+        # Vérifie le metier du user
+        if not current_user.poste=="directeur":
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def technicien(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Vérifie si le user est connecté
+        print(current_user)
+        if not current_user.is_authenticated:
+            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
+            return redirect(url_for('connection'))
+        # Vérifie le metier du user
+        if not current_user.poste=="technicien":
+            return redirect(url_for('index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @app.route('/connexion/',methods=('GET','POST',))
 def connexion():
@@ -294,16 +355,13 @@ def echantillons(numCampagne):
         echantillon = Echantillon.query.filter_by(idFichier=fichier.idFichier).first()
         
         if echantillon:
-            # Clé du dictionnaire est l'ID du fichier (en string, important pour le JS)
             all_file_details[str(fichier.idFichier)] = { 
                 'idFichier': echantillon.idFichier,
                 'idEchantillon': echantillon.numEchantillon,
-                # Combiner typeE et nomSpecifique pour l'affichage de l'espèce
                 'espece': f"{echantillon.typeE} ({echantillon.nomSpecifique})",
                 'commentaire': echantillon.commentaire
             }
 
-    # Déterminer les détails initiaux pour le pré-remplissage par Jinja
     initial_details = {
         'idFichier': 'N/A', 
         'idEchantillon': 'N/A',
@@ -314,11 +372,41 @@ def echantillons(numCampagne):
         first_id = list(all_file_details.keys())[0]
         initial_details = all_file_details[first_id]
 
-    return render_template('fichier_sequence.html', 
-                           campagne=campagne,
-                           fichiers=fichiers, 
-                           initial_details=initial_details,
-                           all_file_details=all_file_details,
-                           random=random)
+    return render_template('fichier_sequence.html', campagne=campagne,fichiers=fichiers, initial_details=initial_details,all_file_details=all_file_details, random=random)
 
-    
+@app.route('/echantillons/ajouter/<int:numCampagne>/', methods=['GET', 'POST'])
+@login_required
+def ajouter_echantillon(numCampagne):
+    campagne = Campagne.query.get_or_404(numCampagne)
+    form = EchantillonForm()
+    fichier_form = FichierForm()
+
+    if form.validate_on_submit() and fichier_form.validate_on_submit():
+        f = fichier_form.nomFichier.data
+        filename = secure_filename(f.filename)
+        upload_dir = os.path.join(app.root_path, 'static', 'uploads')
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+        
+        filepath = os.path.join(upload_dir, filename)
+        f.save(filepath)
+
+        nouveau_fichier = Fichier(nomFichier=filename)
+        db.session.add(nouveau_fichier)
+        db.session.commit()
+
+        echantillon = Echantillon(
+            typeE=form.typeE.data,
+            nomSpecifique=form.nomSpecifique.data,
+            commentaire=form.commentaire.data,
+            numCampagne=numCampagne,
+            idP=current_user.idP
+        )
+        echantillon.idFichier = nouveau_fichier.idFichier
+        db.session.add(echantillon)
+        db.session.commit()
+
+        return redirect(url_for('echantillons', numCampagne=numCampagne))
+
+    return render_template('ajout_echantillon.html', form=form, fichier_form=fichier_form, campagne=campagne, random=random)
+

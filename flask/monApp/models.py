@@ -106,7 +106,7 @@ class Personne(UserMixin,db.Model):
     idP = db.Column( db.Integer, primary_key=True )
     nom = db.Column( db.String(255))
     prenom = db.Column(db.String(255))
-    poste = db.Column( db.String(255))
+    poste = db.Column(db.Enum("administration","chercheur","directeur","technicien"))
     mdp = db.Column(db.String(255))
 
     def __init__(self,nom,prenom,poste,mdp):

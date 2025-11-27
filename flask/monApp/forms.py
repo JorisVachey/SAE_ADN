@@ -39,7 +39,7 @@ class HabilitationForm(FlaskForm):
         )
     
 class FichierForm(FlaskForm):
-    nomFichier = StringField('nom fichier', validators=[DataRequired(message="Cette option est obligatoire")])
+    nomFichier = FileField('Fichier (.adn)', validators=[DataRequired(message="Cette option est obligatoire")])
 
 class EchantillonForm(FlaskForm):
     typeE  = StringField('type espèce', validators=[DataRequired(message="Cette option est obligatoire")])
