@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 import random
 import os
 from functools import wraps
-
+from monApp.utils import adn, fonctions_utiles, phylogenie
 
 def admin(f):
     @wraps(f)
@@ -410,3 +410,115 @@ def ajouter_echantillon(numCampagne):
 
     return render_template('ajout_echantillon.html', form=form, fichier_form=fichier_form, campagne=campagne, random=random)
 
+@app.route('/exploitation', methods=['GET'])
+@login_required
+def exploit():
+    form_mutation = MutationForm()
+    form_comparaison = ComparaisonForm()
+    fichiers = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
+    return render_template("exploitation.html", form_mutation=form_mutation, form_comparaison=form_comparaison, resultat_comparaison=None, fichiers=fichiers)
+
+@app.route('/mutation', methods=['POST'])
+@login_required
+def mutation():
+    form = MutationForm()
+    if form.validate_on_submit():
+        id_fichier = request.form.get('fichier_source')
+        fichier = Fichier.query.get(id_fichier)
+        upload_dir = os.path.join(app.root_path, 'static', 'uploads')
+        filepath = os.path.join(upload_dir, fichier.nomFichier)
+        
+        proba_r = form.proba_r.data / 100.0
+        proba_d = form.proba_d.data / 100.0
+        proba_i = form.proba_i.data / 100.0
+        
+        try:
+            nouveau_chemin, modifs = adn.mutations(filepath, proba_r, proba_d, proba_i)
+            nouveau_nom = os.path.basename(nouveau_chemin)
+            
+            # Enregistrement en BDD
+            nouveau_fichier = Fichier(nomFichier=nouveau_nom)
+            db.session.add(nouveau_fichier)
+            db.session.commit()
+            
+            # Création d'un échantillon "virtuel" pour le voir dans la liste
+            echantillon = Echantillon(
+                typeE="Variant",
+                nomSpecifique=f"Muté de {fichier.nomFichier}",
+                commentaire=f"R:{form.proba_r.data}%, D:{form.proba_d.data}%, I:{form.proba_i.data}%",
+                numCampagne=1, # Campagne par défaut ou à choisir
+                idP=current_user.idP
+            )
+            echantillon.idFichier = nouveau_fichier.idFichier
+            db.session.add(echantillon)
+            db.session.commit()
+            
+            flash(f"Mutation réussie ! Fichier créé : {nouveau_nom}", "success")
+            return redirect(url_for('exploit'))
+        except Exception as e:
+            print(f"Erreur mutation: {e}")
+            flash(f"Erreur lors de la mutation : {e}", "error")
+            return redirect(url_for('exploit'))
+    else:
+        flash("Formulaire invalide", "error")
+    return redirect(url_for('exploit'))
+
+@app.route('/comparaison', methods=['POST'])
+@login_required
+def comparaison():
+    form = ComparaisonForm()
+    resultat = None
+    if form.validate_on_submit():
+        id1 = request.form.get('fichier1')
+        id2 = request.form.get('fichier2')
+        f1 = Fichier.query.get(id1)
+        f2 = Fichier.query.get(id2)
+        
+        upload_dir = os.path.join(app.root_path, 'static', 'uploads')
+        path1 = os.path.join(upload_dir, f1.nomFichier)
+        path2 = os.path.join(upload_dir, f2.nomFichier)
+        
+        resultat = adn.distance_levenshtein(path1, path2)
+            
+    form_mutation = MutationForm()
+    fichiers = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
+    return render_template("exploitation.html", form_mutation=form_mutation, form_comparaison=form, resultat_comparaison=resultat, fichiers=fichiers)
+
+@app.route('/phylogenie', methods=['POST'])
+@login_required
+def arbre_phylogenetique():
+    # 1. Récupérer les fichiers
+    fichiers_db = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
+    upload_dir = os.path.join(app.root_path, 'static', 'uploads')
+    
+    especes = []
+    # 2. Créer les objets EspeceAveree
+    for f in fichiers_db:
+        path = os.path.join(upload_dir, f.nomFichier)
+        try:
+            # On passe le chemin complet
+            especes.append(phylogenie.EspeceAveree(path))
+        except Exception as e:
+            print(f"Erreur chargement {f.nomFichier}: {e}")
+
+    if len(especes) < 2:
+        flash("Il faut au moins 2 espèces pour construire un arbre.", "error")
+        return redirect(url_for('exploit'))
+
+    # 3. Reconstruire l'arbre
+    try:
+        racine = phylogenie.reconstruire_arbre_phylogenetique(especes)
+        arbre_visuel = phylogenie.visualiser_arbre(racine)
+    except Exception as e:
+        flash(f"Erreur lors de la reconstruction : {e}", "error")
+        return redirect(url_for('exploit'))
+    
+    # 4. Renvoyer le résultat à la page
+    form_mutation = MutationForm()
+    form_comparaison = ComparaisonForm()
+    return render_template("exploitation.html", 
+                         form_mutation=form_mutation, 
+                         form_comparaison=form_comparaison, 
+                         resultat_comparaison=None, 
+                         fichiers=fichiers_db,
+                         arbre_phylogenetique=arbre_visuel)

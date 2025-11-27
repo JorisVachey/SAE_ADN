@@ -1,7 +1,7 @@
 import random
 import os
 import numpy as np
-import fonctions_utiles as fu
+from . import fonctions_utiles as fu
 
 def generer_adn(nom_fichier : str, longueur : int):
     """
@@ -206,7 +206,8 @@ def mutations(nom_fichier: str, proba_r: float, proba_d: float, proba_i: float)-
 
     if outputs:
         final = outputs[-1]
-        final_name = f"{base_name}_mutations.adn"
+        suffixe = random.randint(1000, 9999)
+        final_name = f"{base_name}_mutations_{suffixe}.adn"
         os.rename(final, final_name)
         print(f"Traitement terminé. Fichier final : {final_name}")
         return final_name, nbModif

@@ -1,6 +1,6 @@
 import os
-import fonctions_utiles as fu
-from adn import *
+from . import fonctions_utiles as fu
+from . import adn
 
 class Espece:
     def __init__(self, nom):
@@ -99,7 +99,7 @@ def distance_especes(espece_a: Espece, espece_b: Espece)-> int:
         return (d1+d2)/2
     
     else: 
-        return distance_levenshtein(espece_a.get_adn(), espece_b.get_adn())
+        return adn.distance_levenshtein(espece_a.get_adn(), espece_b.get_adn())
     
 
 def reconstruire_arbre_phylogenetique(especes_initiales: list[EspeceAveree]) -> Espece:

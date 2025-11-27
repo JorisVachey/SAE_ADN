@@ -68,3 +68,11 @@ class EquipementForm(FlaskForm): # Renommé pour plus de clarté
 class CampagneForm(FlaskForm):
     date  = DateField('date début', validators=[DataRequired(message="Cette option est obligatoire")])
     duree = IntegerField('nb jours', validators=[DataRequired(message="Cette option est obligatoire")])
+
+class MutationForm(FlaskForm):
+    proba_r = IntegerField('Pourcentage Remplacement', default=0)
+    proba_d = IntegerField('Pourcentage Délétion', default=0)
+    proba_i = IntegerField('Pourcentage Insertion', default=0)
+
+class ComparaisonForm(FlaskForm):
+    methode = RadioField('Méthode', choices=[('levenshtein', 'Levenshtein')], default='levenshtein')
