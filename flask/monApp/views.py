@@ -19,7 +19,6 @@ def admin(f):
         # Vérifie si le user est connecté
         print(current_user)
         if not current_user.is_authenticated:
-            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
             return redirect(url_for('connection'))
         # Vérifie le metier du user
         if not current_user.poste=="administration":
@@ -34,7 +33,6 @@ def chercheur(f):
         # Vérifie si le user est connecté
         print(current_user)
         if not current_user.is_authenticated:
-            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
             return redirect(url_for('connection'))
         # Vérifie le metier du user
         if not current_user.poste=="chercheur":
@@ -49,7 +47,6 @@ def directeur(f):
         # Vérifie si le user est connecté
         print(current_user)
         if not current_user.is_authenticated:
-            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
             return redirect(url_for('connection'))
         # Vérifie le metier du user
         if not current_user.poste=="directeur":
@@ -64,7 +61,6 @@ def technicien(f):
         # Vérifie si le user est connecté
         print(current_user)
         if not current_user.is_authenticated:
-            flash("Veuillez vous connecter pour accéder à cette page.", "warning")
             return redirect(url_for('connection'))
         # Vérifie le metier du user
         if not current_user.poste=="technicien":
@@ -87,7 +83,6 @@ def connexion():
     if current_user.is_authenticated:
         return redirect(url_for('accueil'))
     unForm = LoginForm ()
-    unUser=Nfirst
     if not unForm.is_submitted():
         unForm.next.data = request.args.get('next')
     elif unForm.validate_on_submit():
