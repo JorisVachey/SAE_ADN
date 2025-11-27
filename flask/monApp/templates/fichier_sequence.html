@@ -13,7 +13,9 @@
     <section class="detail">
         <article class="lstFichier">
             <div class="plus">
-                <img src="{{ url_for('static', filename='img/plus.png') }}" alt="Ajouter un fichier" width="24" height="24"> 
+                <a href="{{ url_for('ajouter_echantillon', numCampagne=campagne.numCampagne) }}">
+                    <img src="{{ url_for('static', filename='img/plus.png') }}" alt="Ajouter un fichier" width="24" height="24"> 
+                </a>
             </div>
             
             {% for fichier in fichiers %}             
