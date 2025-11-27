@@ -5,7 +5,7 @@
     justify-content: center;
     gap: 5em;
     margin: 5em;
-    margin-top: 8em;
+    margin-top: 5em;
 }
 
 img {
@@ -16,6 +16,7 @@ img {
 .block h1 {
     font-family: 'Old Standard TT', serif;
     font-size: 2.5em;
+    margin: 1em 0 0.3em 0;
 }
 
 .plateforme {
@@ -24,7 +25,7 @@ img {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    gap: 2em;
+    gap: 2.5em;
 }
 
 .info {
@@ -35,6 +36,7 @@ img {
     border-radius: 1.2em;
     padding: 2em;
     box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    gap: 1.5em;
 }
 
 .info div {
@@ -55,12 +57,13 @@ img {
     justify-content: center;
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     flex-grow: 1;
     background-color: #F9F7F2;
     border-radius: 1.2em;
     box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
-    padding: 0.5em;
+    padding: 1.3em 0.5em;
 }
 
 .planifier>div {
@@ -73,7 +76,7 @@ img {
     background-color: #dfcc9a;
     border: none;
     border-radius: 1.2em;
-    padding: 0 1em;
+    padding: 1em 1em;
     box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
     margin-left: 1em;
     transition: 0.3s;
@@ -113,7 +116,7 @@ img {
     background-color: #F9F7F2;
     flex-grow: 1;
     border-radius: 0.9em;
-    padding: 1.5em;
+    padding: 1.3em;
     color: black;
     text-decoration: none;
 }
@@ -140,6 +143,7 @@ img {
 
 p, a {
     font-size: 1.3em;
+    margin: 0;
 }
 
 .position {

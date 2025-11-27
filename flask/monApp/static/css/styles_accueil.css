@@ -3,6 +3,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 2em;
 }
 
 .block section {
@@ -12,7 +13,6 @@
     flex-basis: 45%;
     align-items: center;
     justify-content: flex-start;
-    margin: 5em;
     padding: 2em;
     align-self: flex-start;
 }
@@ -115,5 +115,5 @@
 
 article > div {
     width: 100%;
-    padding: 0 3em;
+    padding: 0 1em;
 }

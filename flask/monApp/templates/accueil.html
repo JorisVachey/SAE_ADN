@@ -19,13 +19,9 @@
             <div>
                 <div class="nom_date">
                     <h2>{{plt["nom"]}}</h2>
-                    <p>dernière maintenance : {{plt["maint"]}}</p>
                 </div>
-                <div class="position">
-                    <div>
-                        <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                        <p>{{plt["lieu"]}}</p>
-                    </div>
+                <div class="position">   
+                    <p>dernière maintenance : {{plt["maint"]}}</p>
                     <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
                 </div>
             </div>
@@ -47,13 +43,9 @@
             <div>
                 <div class="nom_date">
                     <h2> Numéro de campagne : {{cpg["num"]}}</h2>
-                    <p>date de début : {{cpg["date"]}}</p>
                 </div>
-                <div class="position">
-                    <div>
-                        <img src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                        <p>{{cpg["plat"]}}</p>
-                    </div>
+                <div class="position"> 
+                    <p>date de début : {{cpg["date"]}}</p>
                     <a href="{{ url_for('detail_campagne', numCampagne =cpg['num'] ) }}">détails</a>
                 </div>
             </div>
