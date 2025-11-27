@@ -16,7 +16,7 @@ img {
 .block h1 {
     font-family: 'Old Standard TT', serif;
     font-size: 2.5em;
-    margin: 1em 0 0.3em 0;
+    margin: 0.5em 0 0 0;
 }
 
 .plateforme {
@@ -36,7 +36,7 @@ img {
     border-radius: 1.2em;
     padding: 2em;
     box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
-    gap: 1.5em;
+    gap: 1em;
 }
 
 .info div {
