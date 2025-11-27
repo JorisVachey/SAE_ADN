@@ -67,3 +67,12 @@ header li a {
 header li a:hover {
     transform: scale(1.05);
 }
+
+.profil {
+    position: absolute;
+    top: 7em;
+    right: 0;
+    background-color: #dfcc9a;
+    display: none;
+    box-shadow: -4px 4px 6px 1px rgba(0,0,0,0.3);
+}

@@ -27,10 +27,13 @@
             {%endif %}
             {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('deconnexion') }}">Se déconnecter</a></li>
-            <li><a>Profil</a></li>
+            <li><a href="" id="profil">Profil</a></li>
             {% endif %}
         </ul>
     </header>
+    <section class="profil">
+        <p></p>
+    </section>
 {%endblock%}
 
 <main>
@@ -38,6 +41,18 @@
 
 {% endblock %}
 </main>
+<script>
+    const aProfil = document.getElementById('profil');
+    const profil = document.querySelector('.profil');
 
+    aProfil.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (profil.style.display === 'none' || profil.style.display === '') {
+            profil.style.display = 'block';
+        } else {
+            profil.style.display = 'none';
+        }
+    });
+</script>
 </body>
 </html>
