@@ -410,3 +410,27 @@ def ajouter_echantillon(numCampagne):
 
     return render_template('ajout_echantillon.html', form=form, fichier_form=fichier_form, campagne=campagne, random=random)
 
+
+@app.route('/modif_plat/')
+def modif_plat():
+    unForm = PlateformeForm()
+    habForm = HabilitationForm()
+    equipForm = EquipementForm()
+    return render_template('modif_plat.html', form = unForm, hab = habForm,equipements=equipForm)
+
+@app.route('/modif_campagne/')
+def modif_campagne():
+    unForm = CampagneForm()
+    pers = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == pers.idP).one()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).one()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).one().lab_id).one()
+
+    toutesPlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).order_by(
+            Plateforme.nomPlateforme).all()
+    return render_template('modif_campagne.html', form = unForm,plateformes=toutesPlat)
