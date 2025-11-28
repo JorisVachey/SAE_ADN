@@ -23,6 +23,7 @@ def admin(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "administration":
+            flash("Seul un administrateur peut accèder à cette fonctionnalité", "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
     return decorated_function
@@ -51,6 +52,7 @@ def directeur(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "directeur":
+            flash("Seul le directeur peut accèder à cette fonctionnalité", "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
     return decorated_function
@@ -64,6 +66,7 @@ def technicien(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "technicien":
+            flash("Seul un technicien peut accèder à cette fonctionnalité", "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
     return decorated_function
@@ -618,6 +621,7 @@ def echantillons(numCampagne):
 
 @app.route('/echantillons/ajouter/<int:numCampagne>/', methods=['GET', 'POST'])
 @login_required
+@chercheur
 def ajouter_echantillon(numCampagne):
     campagne = Campagne.query.get_or_404(numCampagne)
     form = EchantillonForm()
