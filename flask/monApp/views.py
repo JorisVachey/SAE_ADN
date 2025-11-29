@@ -17,7 +17,6 @@ from monApp.utils import adn, fonctions_utiles, phylogenie
 def admin(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print(current_user)
         if not current_user.is_authenticated:
             flash("Veuillez vous connecter pour accéder à cette page.",
                   "warning")
@@ -31,8 +30,6 @@ def admin(f):
 def chercheur(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        # Vérifie si le user est connecté
-        print(current_user)
         if not current_user.is_authenticated:
             flash("Veuillez vous connecter pour accéder à cette page.",
                   "warning")
@@ -46,7 +43,6 @@ def chercheur(f):
 def directeur(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print(current_user)
         if not current_user.is_authenticated:
             flash("Veuillez vous connecter pour accéder à cette page.",
                   "warning")
@@ -60,7 +56,6 @@ def directeur(f):
 def technicien(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        print(current_user)
         if not current_user.is_authenticated:
             flash("Veuillez vous connecter pour accéder à cette page.",
                   "warning")
@@ -202,7 +197,6 @@ def ajouter_plateforme():
             db.session.add(plateforme)
             db.session.commit()
             habilitations = habForm.habilitation_selectionnee.data
-            print(habilitations)
             for hab in habilitations:
                 db.session.add(Necessite(type=hab, nomPlateforme=Nom))
                 db.session.commit()
@@ -444,7 +438,6 @@ def ajouter_campagne():
 
         # Récupération des IDs des personnes cochées
         personnes_ids = request.form.getlist('personnes_choisies')
-        print(personnes_ids)
 
         date_fin_nouv = date_campagne + timedelta(days=duree)
 
@@ -526,8 +519,6 @@ def detail_plateforme(nomPlateforme):
             objet = Equipement.query.filter(Equipement.idE == obj.idE).first()
             objets.append(objet)
         if request.method == 'POST' and unForm.validate_on_submit:
-            print(unForm.ProchaineMaintenance.data)
-            print(plat.derniereMaintenance)
             if (unForm.ProchaineMaintenance.data - datetime.strptime(
                     plat.derniereMaintenance,
                     '%Y-%m-%d').date()).days <= plat.intervalleMaintenance:
@@ -815,3 +806,75 @@ def arbre_phylogenetique():
                            resultat_comparaison=None,
                            fichiers=fichiers_db,
                            arbre_phylogenetique=arbre_visuel)
+
+@app.route('/plateforme/<nomPlateforme>/', methods=['GET','POST'])
+@login_required
+def gerer_plateforme(nomPlateforme):
+    user = Personne.query.get_or_404(current_user.idP)
+    unForm = PlateformeForm()
+    participer = Participer.query.filter(
+        Participer.idP == user.idP).first()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).first()
+    plat = Plateforme.query.filter(
+        Plateforme.nomPlateforme == camp.nomPlateforme).first()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == plat.lab_id).first()
+    toutePlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).all()
+    nomPlat = [p.nomPlateforme for p in toutePlat]
+    if not (nomPlateforme in nomPlat):
+        return redirect(url_for('accueil'))
+    plateforme = Plateforme.query.filter(
+            Plateforme.nomPlateforme == nomPlateforme).first()
+    
+    necessite = Necessite.query.filter(
+        Necessite.nomPlateforme == nomPlateforme
+    ).all()
+    habilitations = [obj.type for obj in necessite]
+
+    contenir = Contenir.query.filter(
+        Contenir.nomPlateforme == nomPlateforme
+    ).all()
+    contenir_id = [str(obj.idE) for obj in contenir]
+
+    unForm = PlateformeForm(Nom= nomPlateforme,nbPersonnes = plateforme.nbPersonnes,Cout=plateforme.cout ,IntervalleMaintenance=plateforme.intervalleMaintenance,Lieu=plateforme.lieu)
+    hab = HabilitationForm(habilitation_selectionnee=habilitations)
+    equipements = EquipementForm(objets_selectionnes=contenir_id)
+    if unForm.validate_on_submit():
+        plateforme.nomPlateforme=unForm.Nom.data
+        plateforme.nbPersonnes=unForm.nbPersonnes.data
+        plateforme.cout=unForm.Cout.data
+        plateforme.intervalleMaintenance=unForm.IntervalleMaintenance.data
+        plateforme.lieu=unForm.Lieu.data
+        db.session.commit()
+        Necessite.query.filter_by(nomPlateforme=nomPlateforme).delete()
+        for type_hab in hab.habilitation_selectionnee.data:
+            new_necessite = Necessite(type=type_hab, nomPlateforme=nomPlateforme)
+            db.session.add(new_necessite)
+        Contenir.query.filter_by(nomPlateforme=nomPlateforme).delete()
+        for id_equip_str in equipements.objets_selectionnes.data:
+            id_equip = int(id_equip_str) 
+            new_contenir = Contenir(idE=id_equip, nomPlateforme=nomPlateforme)
+            db.session.add(new_contenir)
+
+        db.session.commit()    
+
+        if nomPlateforme != unForm.Nom.data:
+            Campagne.query.filter_by(nomPlateforme=nomPlateforme).update(
+                {'nomPlateforme': unForm.Nom.data}, 
+                synchronize_session=False
+            )
+            # Mettre à jour les tables d'association avec le nouveau nom
+            Necessite.query.filter_by(nomPlateforme=nomPlateforme).update(
+                {'nomPlateforme': unForm.Nom.data}, 
+                synchronize_session=False
+            )
+            Contenir.query.filter_by(nomPlateforme=nomPlateforme).update(
+                {'nomPlateforme': unForm.Nom.data}, 
+                synchronize_session=False
+            )
+            db.session.commit() 
+        return redirect(url_for('detail_plateforme', nomPlateforme=plateforme.nomPlateforme))
+    return render_template('modif_plat.html',form= unForm, hab=hab, equipements=equipements)
+
