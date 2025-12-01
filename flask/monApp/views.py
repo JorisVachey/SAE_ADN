@@ -116,7 +116,7 @@ def deconnexion():
     """
     Déconnecte l'utilisateur actuel.
 
-    :returns: Redirection vers la page de connexion ('login').
+    :returns: Redirection vers la page de connexion ('connexion').
     """
     logout_user()
     return redirect(url_for('connexion'))
@@ -343,14 +343,10 @@ def api_get_disponibilites():
         }), 500
 
 
-# --- Routes de l'Application (Gestion de la vue) ---
-
-
 @app.route('/campagne/', methods=['GET', 'POST'])
 @login_required
 @chercheur
 def create_campagne():
-    # Logique pour charger les plateformes (inchangée)
     try:
         pers = Personne.query.get_or_404(current_user.idP)
         participer = Participer.query.filter(
@@ -516,11 +512,6 @@ def detail_campagne(numCampagne):
     user = Personne.query.get_or_404(current_user.idP)
     camp = Campagne.query.filter(Campagne.numCampagne == numCampagne).first()
     try:
-        """participer = Participer.query.filter(Participer.idP == user.idP, Participer.numCampagne==numCampagne).first()
-        camp = Campagne.query.filter(Campagne.numCampagne==numCampagne).first()
-        if not participer:
-            return redirect(url_for('accueil'))"""
-
         if not user:
             return redirect(url_for('accueil'))
 
@@ -674,18 +665,16 @@ def mutation():
                                                    proba_i)
             nouveau_nom = os.path.basename(nouveau_chemin)
 
-            # Enregistrement en BDD
             nouveau_fichier = Fichier(nomFichier=nouveau_nom)
             db.session.add(nouveau_fichier)
             db.session.commit()
 
-            # Création d'un échantillon "virtuel" pour le voir dans la liste
             echantillon = Echantillon(
                 typeE="Variant",
                 nomSpecifique=f"Muté de {fichier.nomFichier}",
                 commentaire=
                 f"R:{form.proba_r.data}%, D:{form.proba_d.data}%, I:{form.proba_i.data}%",
-                numCampagne=1,  # Campagne par défaut ou à choisir
+                numCampagne=1,
                 idP=current_user.idP)
             echantillon.idFichier = nouveau_fichier.idFichier
             db.session.add(echantillon)
@@ -732,16 +721,13 @@ def comparaison():
 @app.route('/phylogenie', methods=['POST'])
 @login_required
 def arbre_phylogenetique():
-    # 1. Récupérer les fichiers
     fichiers_db = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
     upload_dir = os.path.join(app.root_path, 'static', 'uploads')
 
     especes = []
-    # 2. Créer les objets EspeceAveree
     for f in fichiers_db:
         path = os.path.join(upload_dir, f.nomFichier)
         try:
-            # On passe le chemin complet
             especes.append(phylogenie.EspeceAveree(path))
         except Exception as e:
             print(f"Erreur chargement {f.nomFichier}: {e}")
@@ -750,7 +736,6 @@ def arbre_phylogenetique():
         flash("Il faut au moins 2 espèces pour construire un arbre.", "error")
         return redirect(url_for('exploit'))
 
-    # 3. Reconstruire l'arbre
     try:
         racine = phylogenie.reconstruire_arbre_phylogenetique(especes)
         arbre_visuel = phylogenie.visualiser_arbre(racine)
@@ -758,7 +743,6 @@ def arbre_phylogenetique():
         flash(f"Erreur lors de la reconstruction : {e}", "error")
         return redirect(url_for('exploit'))
 
-    # 4. Renvoyer le résultat à la page
     form_mutation = MutationForm()
     form_comparaison = ComparaisonForm()
     return render_template("exploitation.html",
@@ -826,7 +810,6 @@ def gerer_plateforme(nomPlateforme):
         if nomPlateforme != unForm.Nom.data:
             Campagne.query.filter_by(nomPlateforme=nomPlateforme).update(
                 {'nomPlateforme': unForm.Nom.data}, synchronize_session=False)
-            # Mettre à jour les tables d'association avec le nouveau nom
             Necessite.query.filter_by(nomPlateforme=nomPlateforme).update(
                 {'nomPlateforme': unForm.Nom.data}, synchronize_session=False)
             Contenir.query.filter_by(nomPlateforme=nomPlateforme).update(
@@ -857,22 +840,17 @@ def deleteCampagne(numCampagne):
 def eraseCampagne():
     deletedCampagne = None
     unForm = CampagneForm()
-    #recherche de l'auteur à supprimer
     idA = int(unForm.numCampagne.data)
     deletedCampagne = Campagne.query.get(idA)
     if deletedCampagne:
-        # 1. Supprimer les participations liées à cette campagne
         Participer.query.filter(Participer.numCampagne == idA).delete()
 
-        # 2. Supprimer les échantillons liés à cette campagne
-        # Note : Si vous voulez aussi supprimer les fichiers (.adn) liés aux échantillons, 
-        # il faudrait une logique supplémentaire ici, mais voici la suppression des enregistrements échantillons.
         Echantillon.query.filter(Echantillon.numCampagne == idA).delete()
 
-        # 3. Suppression de la campagne elle-même
         db.session.delete(deletedCampagne)
         db.session.commit()
-        flash("La campagne et ses données associées ont été supprimées.", "success")
+        flash("La campagne et ses données associées ont été supprimées.",
+              "success")
     else:
         flash("Campagne introuvable.", "error")
     return redirect(url_for('accueil'))
