@@ -860,7 +860,19 @@ def eraseCampagne():
     #recherche de l'auteur à supprimer
     idA = int(unForm.numCampagne.data)
     deletedCampagne = Campagne.query.get(idA)
-    #suppression
-    db.session.delete(deletedCampagne)
-    db.session.commit()
+    if deletedCampagne:
+        # 1. Supprimer les participations liées à cette campagne
+        Participer.query.filter(Participer.numCampagne == idA).delete()
+
+        # 2. Supprimer les échantillons liés à cette campagne
+        # Note : Si vous voulez aussi supprimer les fichiers (.adn) liés aux échantillons, 
+        # il faudrait une logique supplémentaire ici, mais voici la suppression des enregistrements échantillons.
+        Echantillon.query.filter(Echantillon.numCampagne == idA).delete()
+
+        # 3. Suppression de la campagne elle-même
+        db.session.delete(deletedCampagne)
+        db.session.commit()
+        flash("La campagne et ses données associées ont été supprimées.", "success")
+    else:
+        flash("Campagne introuvable.", "error")
     return redirect(url_for('accueil'))
