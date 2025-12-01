@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
 {% endblock %}
 
 {% block main %}
-<h1 >Suppression de la campagne {{ campagne.numCampagne }}. Etes vous sur ?</h1>
+<h1>Suppression de la campagne {{ campagne.numCampagne }}. Etes vous sur ?</h1>
 <form role="form" method="POST" action="{{ url_for ('eraseCampagne') }}">
-{{ deleteForm.hidden_tag () }}
-<div class="form-group mb-3">
-{{ deleteForm.numCampagne.label }}
-{{ deleteForm.numCampagne(size=50, disabled=True, class_="form-control") }}
-</div>
-<input class ="btn btn-danger" type="submit" value ="Confirmer">
-<a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="btn btn-secondary">Retour</a>
-</form >
+    {{ deleteForm.hidden_tag () }}
+    <div class="form-group mb-3">
+        {{ deleteForm.numCampagne.label }}
+        {{ deleteForm.numCampagne(size=50, disabled=True, class_="form-control") }}
+    </div>
+    <input class="btn btn-danger" type="submit" value="Confirmer">
+    <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="btn btn-secondary">Retour</a>
+</form>
 {% endblock %}

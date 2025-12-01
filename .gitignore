@@ -1,6 +1,7 @@
-*.adn
 Exploitation/__pycache__/
 flask/monApp/__pycache__/
 flask/__pycache__/
 .nfs*
 flask/monApp.db
+*/__pycache__/
+Exploitation/*.adn

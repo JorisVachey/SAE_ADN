@@ -247,38 +247,12 @@ def check_personne_qualification(personne_id, nomPlateforme):
     return True
 
 
-def get_personnes_du_laboratoire_de_la_campagne_actuelle():
-    pers_connectee = Personne.query.get_or_404(current_user.idP)
-
-    participation = Participer.query.filter(
-        Participer.idP == pers_connectee.idP).first()
-
-    if not participation:
-        return []
-
-    campagne_actuelle = Campagne.query.get_or_404(participation.numCampagne)
-
-    plat_source = Plateforme.query.filter(
-        Plateforme.nomPlateforme == campagne_actuelle.nomPlateforme).first()
-
-    nom_laboratoire = plat_source.lab_id
-
-    # 1. Sous-requête : Toutes les plateformes du laboratoire
-    plateformes_du_labo = Plateforme.query.filter(
-        Plateforme.lab_id == nom_laboratoire).subquery()
-
-    # 2. Sous-requête : Toutes les campagnes sur ces plateformes
-    campagnes_du_labo = Campagne.query.filter(
-        Campagne.nomPlateforme.in_(
-            db.session.query(plateformes_du_labo.c.nomPlateforme))).subquery()
-
-    # 3. Requête finale : Toutes les personnes participant à ces campagnes
-    personnes_du_labo = db.session.query(Personne).join(Participer).filter(
-        Participer.numCampagne.in_(
-            db.session.query(campagnes_du_labo.c.numCampagne))).order_by(
-                Personne.nom).all()
-
-    return personnes_du_labo
+def get_personnes_du_laboratoire_de_la_campagne_actuelle(campagne):
+    plateforme_actuelle = Plateforme.query.filter_by(nomPlateforme=campagne.nomPlateforme).first()
+    if plateforme_actuelle and plateforme_actuelle.lab_id:
+        # Récupère toutes les plateformes ayant le même ID de laboratoire
+        return Plateforme.query.filter_by(lab_id=plateforme_actuelle.lab_id).all()
+    return Plateforme.query.all()
 
 
 def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
@@ -296,7 +270,7 @@ def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
         return []
 
     personnes_disponibles = []
-    toutes_les_personnes = get_personnes_du_laboratoire_de_la_campagne_actuelle(
+    toutes_les_personnes = get_personnes_du_laboratoire_de_la_campagne_actuelle(Campagne.query.get(participation.numCampagne)
     )
 
     for personne in toutes_les_personnes:
