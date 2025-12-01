@@ -66,6 +66,7 @@ class EquipementForm(FlaskForm): # Renommé pour plus de clarté
 
 
 class CampagneForm(FlaskForm):
+    numCampagne = IntegerField('num')
     date  = DateField('date début', validators=[DataRequired(message="Cette option est obligatoire")])
     duree = IntegerField('nb jours', validators=[DataRequired(message="Cette option est obligatoire")])
 

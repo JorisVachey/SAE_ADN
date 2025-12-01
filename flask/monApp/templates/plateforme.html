@@ -20,6 +20,7 @@
             <p>Prochiane maintenance : {{plateforme["pro"]}} </p>
             <p>Coût journalier : {{plateforme["cout"]}} €</p>
         </article>
+        {%if current_user.poste == "technicien" %}
         <article class="maintenance">
             <div class="planifier">
                 <div>
@@ -29,8 +30,9 @@
                 <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
             </div>
         </article>
+        {%endif%}
         <article class="bouton">
-            <a href="{{ url_for('modif_plat') }}">Modifier les informations</a>
+            <a href="{{ url_for('gerer_plateforme', nomPlateforme=plateforme['nom']) }}">Modifier les informations</a>
         </article>
     </section>
     <section class="equipemment">
