@@ -10,7 +10,7 @@
     {{ deleteForm.hidden_tag () }}
     <div class="form-group mb-3">
         {{ deleteForm.numCampagne.label }}
-        {{ deleteForm.numCampagne(size=50, disabled=True, class_="form-control") }}
+        {{ deleteForm.numCampagne(size=50, readonly=True, class_="form-control") }}
     </div>
     <input class="btn btn-danger" type="submit" value="Confirmer">
     <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="btn btn-secondary">Retour</a>
