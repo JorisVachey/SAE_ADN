@@ -629,12 +629,30 @@ def ajouter_echantillon(numCampagne):
 def exploit():
     form_mutation = MutationForm()
     form_comparaison = ComparaisonForm()
-    fichiers = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
+    # On récupère tous les fichiers .adn, qu'ils soient dans la BDD ou non
+    upload_dir = os.path.join(app.root_path, 'static', 'uploads')
+    fichiers_disponibles = []
+    
+    # 1. Fichiers en BDD
+    fichiers_bdd = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
+    noms_bdd = [f.nomFichier for f in fichiers_bdd]
+    fichiers_disponibles.extend(fichiers_bdd)
+    
+    # 2. Fichiers physiques non présents en BDD (synchronisation)
+    if os.path.exists(upload_dir):
+        for filename in os.listdir(upload_dir):
+            if filename.endswith('.adn') and filename not in noms_bdd:
+                # On l'ajoute à la BDD pour qu'il soit utilisable
+                nouveau_fichier = Fichier(nomFichier=filename)
+                db.session.add(nouveau_fichier)
+                fichiers_disponibles.append(nouveau_fichier)
+        db.session.commit()
+    
     return render_template("exploitation.html",
                            form_mutation=form_mutation,
                            form_comparaison=form_comparaison,
                            resultat_comparaison=None,
-                           fichiers=fichiers)
+                           fichiers=fichiers_disponibles)
 
 
 @app.route('/mutation', methods=['POST'])
