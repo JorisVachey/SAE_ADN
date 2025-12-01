@@ -15,6 +15,7 @@ from monApp.utils import adn, fonctions_utiles, phylogenie
 
 
 def admin(f):
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -22,12 +23,16 @@ def admin(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "administration":
-            flash("Seul un administrateur peut accèder à cette fonctionnalité", "error")
+            flash("Seul un administrateur peut accèder à cette fonctionnalité",
+                  "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
+
     return decorated_function
 
+
 def chercheur(f):
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -35,12 +40,16 @@ def chercheur(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "chercheur":
-            flash("Seul un chercheur peut accèder à cette fonctionnalité", "error")
+            flash("Seul un chercheur peut accèder à cette fonctionnalité",
+                  "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
+
     return decorated_function
 
+
 def directeur(f):
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -48,12 +57,16 @@ def directeur(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "directeur":
-            flash("Seul le directeur peut accèder à cette fonctionnalité", "error")
+            flash("Seul le directeur peut accèder à cette fonctionnalité",
+                  "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
+
     return decorated_function
 
+
 def technicien(f):
+
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -61,9 +74,11 @@ def technicien(f):
                   "warning")
             return redirect(url_for('connexion'))
         if not current_user.poste == "technicien":
-            flash("Seul un technicien peut accèder à cette fonctionnalité", "error")
+            flash("Seul un technicien peut accèder à cette fonctionnalité",
+                  "error")
             return redirect(url_for('accueil'))
         return f(*args, **kwargs)
+
     return decorated_function
 
 
@@ -215,7 +230,6 @@ def ajouter_plateforme():
 
 
 def get_date_fin(date_debut_str, duree_jours):
-    """Calcule la date de fin d'une campagne."""
     try:
         date_debut = datetime.strptime(date_debut_str, '%Y-%m-%d').date()
         return date_debut + timedelta(days=int(duree_jours))
@@ -224,70 +238,62 @@ def get_date_fin(date_debut_str, duree_jours):
 
 
 def check_personne_qualification(personne_id, nomPlateforme):
-    """Vérifie si la personne possède toutes les habilitations nécessaires pour la plateforme."""
-
-    # Utilisation des classes de modèle (SQLAlchemy)
     required_types = [
         n.type
         for n in Necessite.query.filter_by(nomPlateforme=nomPlateforme).all()
     ]
-
     if not required_types:
         return True
-
     possessed_types = [
         p.type for p in Posseder.query.filter_by(idP=personne_id).all()
     ]
-
-    # La personne doit posséder TOUTES les habilitations requises
     for req_type in required_types:
         if req_type not in possessed_types:
             return False
-
     return True
 
 
-def get_personnes_du_laboratoire_de_la_campagne_actuelle(campagne):
-    plateforme_actuelle = Plateforme.query.filter_by(nomPlateforme=campagne.nomPlateforme).first()
-    if plateforme_actuelle and plateforme_actuelle.lab_id:
-        # Récupère toutes les plateformes ayant le même ID de laboratoire
-        return Plateforme.query.filter_by(lab_id=plateforme_actuelle.lab_id).all()
-    return Plateforme.query.all()
+def get_personnes_du_laboratoire_de_la_campagne_actuelle():
+    pers_connectee = Personne.query.get_or_404(current_user.idP)
+    participation = Participer.query.filter(
+        Participer.idP == pers_connectee.idP).first()
+    if not participation:
+        return []
+    campagne_actuelle = Campagne.query.get_or_404(participation.numCampagne)
+    plat_source = Plateforme.query.filter(
+        Plateforme.nomPlateforme == campagne_actuelle.nomPlateforme).first()
+    nom_laboratoire = plat_source.lab_id
+    plateformes_du_labo = Plateforme.query.filter(
+        Plateforme.lab_id == nom_laboratoire).subquery()
+    campagnes_du_labo = Campagne.query.filter(
+        Campagne.nomPlateforme.in_(
+            db.session.query(plateformes_du_labo.c.nomPlateforme))).subquery()
+    personnes_du_labo = db.session.query(Personne).join(Participer).filter(
+        Participer.numCampagne.in_(
+            db.session.query(campagnes_du_labo.c.numCampagne))).order_by(
+                Personne.nom).all()
+    return personnes_du_labo
 
 
 def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
-    """
-    Trouve les personnes qui sont qualifiées (habilitations) et disponibles (pas de chevauchement).
-    """
-
     if not date_debut_str or not duree_jours or int(duree_jours) <= 0:
         return []
-
     date_debut = datetime.strptime(date_debut_str, '%Y-%m-%d').date()
     date_fin = get_date_fin(date_debut_str, duree_jours)
-
     if not date_fin:
         return []
-
     personnes_disponibles = []
-    toutes_les_personnes = get_personnes_du_laboratoire_de_la_campagne_actuelle(Campagne.query.get(participation.numCampagne)
+    toutes_les_personnes = get_personnes_du_laboratoire_de_la_campagne_actuelle(
     )
-
     for personne in toutes_les_personnes:
         personne_id = personne.idP
-
-        # 1. Vérification des Habilitations (Qualification)
         if not check_personne_qualification(personne_id, nomPlateforme):
             continue
-
-        # 2. Vérification des Conflits de Planning
         participations_existantes = Participer.query.filter_by(
             idP=personne_id).all()
-
         conflit_trouve = False
         for participation in participations_existantes:
             campagne_existante = Campagne.query.get(participation.numCampagne)
-
             if campagne_existante:
                 try:
                     date_debut_existante = datetime.strptime(
@@ -296,55 +302,39 @@ def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
                                                       campagne_existante.duree)
                 except (ValueError, TypeError):
                     continue
-
                 if (date_debut
                         < date_fin_existante) and (date_fin
                                                    > date_debut_existante):
                     conflit_trouve = True
                     break
-
         if not conflit_trouve:
             personnes_disponibles.append(personne)
-
     return personnes_disponibles
-
-
-# --- Route API JSON (Cible du JavaScript) ---
 
 
 @app.route('/api/get_disponibilites', methods=['POST'])
 def api_get_disponibilites():
-    """Route API qui reçoit les paramètres et retourne la liste des personnes disponibles en JSON."""
-
     if not request.is_json:
         return jsonify({'error': 'Le contenu doit être de type JSON'}), 415
-
     data = request.get_json()
-
     nomPlateforme = data.get('plateforme')
     date_debut = data.get('date')
     duree = data.get('duree')
-
     if not all([nomPlateforme, date_debut, duree
                 ]) or not str(duree).isdigit() or int(duree) <= 0:
         return jsonify({
             'error':
             'Paramètres (plateforme, date, durée) manquants ou invalides'
         }), 400
-
     try:
         personnes = get_personnes_disponibles(nomPlateforme, date_debut, duree)
-
-        # Format attendu par le JavaScript : [{id: 1, nom_complet: "Prenom Nom (Poste)"}, ...]
         resultat = []
         for p in personnes:
             resultat.append({
                 'id': p.idP,
                 'nom_complet': f"{p.prenom} {p.nom} ({p.poste})"
             })
-
         return jsonify({'personnes': resultat})
-
     except Exception as e:
         print(f"Erreur lors de la recherche de disponibilité : {e}")
         return jsonify({
@@ -388,7 +378,6 @@ def create_campagne():
 def ajouter_campagne():
     unForm = CampagneForm()
 
-    # Logique pour le rechargement en cas d'erreur
     try:
         pers = Personne.query.get_or_404(current_user.idP)
         participer = Participer.query.filter(
@@ -406,25 +395,34 @@ def ajouter_campagne():
         toutesPlat = Plateforme.query.order_by(Plateforme.nomPlateforme).all()
 
     if unForm.validate_on_submit():
-        date_campagne = unForm.date.data
+        date_debut = unForm.date.data
         duree = unForm.duree.data
         nomPlateforme = request.form.get('plateforme')
-
-        # Récupération des IDs des personnes cochées
         personnes_ids = request.form.getlist('personnes_choisies')
+        date_fin = date_debut + timedelta(days=duree)
 
-        date_fin_nouv = date_campagne + timedelta(days=duree)
+        campagnes_existantes = Campagne.query.filter_by(
+            nomPlateforme=nomPlateforme).all()
+        conflit = False
 
-        # Vérification de la disponibilité de la PLATEFORME
-        date_fin_existante = db.func.datetime(
-            Campagne.date,
-            Campagne.duree.cast(db.String) + db.literal(' days'))
+        for c in campagnes_existantes:
+            try:
+                date_debut_ex = datetime.strptime(c.date, '%Y-%m-%d').date()
+                date_fin_ex = date_debut_ex + timedelta(days=c.duree)
+                if date_debut < date_fin_ex and date_fin > date_debut_ex:
+                    conflit = True
+                    break
+            except:
+                continue
 
-        campagnes_existantes_sur_plat = Campagne.query.filter(
-            Campagne.nomPlateforme == nomPlateforme, Campagne.date
-            < date_fin_nouv, date_fin_existante > date_campagne).all()
+        if conflit:
+            flash(
+                f"La plateforme {nomPlateforme} est déjà occupée sur cette période.",
+                'error')
+            return render_template('ajout_camp.html',
+                                   form=unForm,
+                                   plateformes=toutesPlat)
 
-        # Vérification des personnes sélectionnées
         if not personnes_ids:
             flash("Veuillez sélectionner au moins une personne participante.",
                   'error')
@@ -432,26 +430,28 @@ def ajouter_campagne():
                                    form=unForm,
                                    plateformes=toutesPlat)
 
-        if not campagnes_existantes_sur_plat and (
-                len(personnes_ids)
-                == Plateforme.query.filter(Plateforme.nomPlateforme ==
-                                           nomPlateforme).one().nbPersonnes):
-            # Création de la campagne
-            campagne = Campagne(date=date_campagne.strftime('%Y-%m-%d'),
+        plateforme_cible = Plateforme.query.filter(
+            Plateforme.nomPlateforme == nomPlateforme).first()
+
+        if len(personnes_ids) >= plateforme_cible.nbPersonnes:
+            campagne = Campagne(date=date_debut.strftime('%Y-%m-%d'),
                                 duree=duree,
                                 nomPlateforme=nomPlateforme)
             db.session.add(campagne)
             db.session.commit()
 
-            for p_id_str in personnes_ids:
-                p_id = int(p_id_str)
+            for p_id in personnes_ids:
                 db.session.add(
-                    Participer(numCampagne=campagne.numCampagne, idP=p_id))
+                    Participer(numCampagne=campagne.numCampagne,
+                               idP=int(p_id)))
 
             db.session.commit()
             return redirect(url_for('accueil'))
+        else:
+            flash(
+                f"Le nombre de participants doit être exactement de {plateforme_cible.nbPersonnes}.",
+                'error')
 
-    # Si échec de la validation
     return render_template('ajout_camp.html',
                            form=unForm,
                            plateformes=toutesPlat)
@@ -624,7 +624,6 @@ def ajouter_echantillon(numCampagne):
                            random=random)
 
 
-
 @app.route('/exploitation', methods=['GET'])
 @login_required
 def exploit():
@@ -751,85 +750,92 @@ def arbre_phylogenetique():
                            fichiers=fichiers_db,
                            arbre_phylogenetique=arbre_visuel)
 
-@app.route('/plateforme/<nomPlateforme>/', methods=['GET','POST'])
+
+@app.route('/plateforme/<nomPlateforme>/', methods=['GET', 'POST'])
 @login_required
 def gerer_plateforme(nomPlateforme):
     user = Personne.query.get_or_404(current_user.idP)
     unForm = PlateformeForm()
-    participer = Participer.query.filter(
-        Participer.idP == user.idP).first()
+    participer = Participer.query.filter(Participer.idP == user.idP).first()
     camp = Campagne.query.filter(
         Campagne.numCampagne == participer.numCampagne).first()
     plat = Plateforme.query.filter(
         Plateforme.nomPlateforme == camp.nomPlateforme).first()
-    lab = Laboratoire.query.filter(
-        Laboratoire.nomLab == plat.lab_id).first()
-    toutePlat = Plateforme.query.filter(
-        Plateforme.lab_id == lab.nomLab).all()
+    lab = Laboratoire.query.filter(Laboratoire.nomLab == plat.lab_id).first()
+    toutePlat = Plateforme.query.filter(Plateforme.lab_id == lab.nomLab).all()
     nomPlat = [p.nomPlateforme for p in toutePlat]
     if not (nomPlateforme in nomPlat):
         return redirect(url_for('accueil'))
     plateforme = Plateforme.query.filter(
-            Plateforme.nomPlateforme == nomPlateforme).first()
-    
+        Plateforme.nomPlateforme == nomPlateforme).first()
+
     necessite = Necessite.query.filter(
-        Necessite.nomPlateforme == nomPlateforme
-    ).all()
+        Necessite.nomPlateforme == nomPlateforme).all()
     habilitations = [obj.type for obj in necessite]
 
     contenir = Contenir.query.filter(
-        Contenir.nomPlateforme == nomPlateforme
-    ).all()
+        Contenir.nomPlateforme == nomPlateforme).all()
     contenir_id = [str(obj.idE) for obj in contenir]
 
-    unForm = PlateformeForm(Nom= nomPlateforme,nbPersonnes = plateforme.nbPersonnes,Cout=plateforme.cout ,IntervalleMaintenance=plateforme.intervalleMaintenance,Lieu=plateforme.lieu)
+    unForm = PlateformeForm(
+        Nom=nomPlateforme,
+        nbPersonnes=plateforme.nbPersonnes,
+        Cout=plateforme.cout,
+        IntervalleMaintenance=plateforme.intervalleMaintenance,
+        Lieu=plateforme.lieu)
     hab = HabilitationForm(habilitation_selectionnee=habilitations)
     equipements = EquipementForm(objets_selectionnes=contenir_id)
     if unForm.validate_on_submit():
-        plateforme.nomPlateforme=unForm.Nom.data
-        plateforme.nbPersonnes=unForm.nbPersonnes.data
-        plateforme.cout=unForm.Cout.data
-        plateforme.intervalleMaintenance=unForm.IntervalleMaintenance.data
-        plateforme.lieu=unForm.Lieu.data
+        plateforme.nomPlateforme = unForm.Nom.data
+        plateforme.nbPersonnes = unForm.nbPersonnes.data
+        plateforme.cout = unForm.Cout.data
+        plateforme.intervalleMaintenance = unForm.IntervalleMaintenance.data
+        plateforme.lieu = unForm.Lieu.data
         db.session.commit()
         Necessite.query.filter_by(nomPlateforme=nomPlateforme).delete()
         for type_hab in hab.habilitation_selectionnee.data:
-            new_necessite = Necessite(type=type_hab, nomPlateforme=nomPlateforme)
+            new_necessite = Necessite(type=type_hab,
+                                      nomPlateforme=nomPlateforme)
             db.session.add(new_necessite)
         Contenir.query.filter_by(nomPlateforme=nomPlateforme).delete()
         for id_equip_str in equipements.objets_selectionnes.data:
-            id_equip = int(id_equip_str) 
+            id_equip = int(id_equip_str)
             new_contenir = Contenir(idE=id_equip, nomPlateforme=nomPlateforme)
             db.session.add(new_contenir)
 
-        db.session.commit()    
+        db.session.commit()
 
         if nomPlateforme != unForm.Nom.data:
             Campagne.query.filter_by(nomPlateforme=nomPlateforme).update(
-                {'nomPlateforme': unForm.Nom.data}, 
-                synchronize_session=False
-            )
+                {'nomPlateforme': unForm.Nom.data}, synchronize_session=False)
             # Mettre à jour les tables d'association avec le nouveau nom
             Necessite.query.filter_by(nomPlateforme=nomPlateforme).update(
-                {'nomPlateforme': unForm.Nom.data}, 
-                synchronize_session=False
-            )
+                {'nomPlateforme': unForm.Nom.data}, synchronize_session=False)
             Contenir.query.filter_by(nomPlateforme=nomPlateforme).update(
-                {'nomPlateforme': unForm.Nom.data}, 
-                synchronize_session=False
-            )
-            db.session.commit() 
-        return redirect(url_for('detail_plateforme', nomPlateforme=plateforme.nomPlateforme))
-    return render_template('modif_plat.html',form= unForm, hab=hab, equipements=equipements)
+                {'nomPlateforme': unForm.Nom.data}, synchronize_session=False)
+            db.session.commit()
+        return redirect(
+            url_for('detail_plateforme',
+                    nomPlateforme=plateforme.nomPlateforme))
+    return render_template('modif_plat.html',
+                           form=unForm,
+                           hab=hab,
+                           equipements=equipements)
+
 
 @app.route('/campagnes/<numCampagne>/delete/')
 @login_required
 def deleteCampagne(numCampagne):
     campagne = Campagne.query.get(numCampagne)
-    unForm = CampagneForm(numCampagne=campagne.numCampagne, date=campagne.date, duree = campagne.duree)
-    return render_template("modif_campagne.html",campagne=campagne, deleteForm=unForm)
+    unForm = CampagneForm(numCampagne=campagne.numCampagne,
+                          date=campagne.date,
+                          duree=campagne.duree)
+    return render_template("modif_campagne.html",
+                           campagne=campagne,
+                           deleteForm=unForm)
 
-@app.route ('/campagne/erase/', methods =("POST" ,))
+
+@app.route('/campagne/erase/', methods=("POST", ))
 def eraseCampagne():
     deletedCampagne = None
     unForm = CampagneForm()
