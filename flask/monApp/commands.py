@@ -32,7 +32,7 @@ def newuser (prenom, nom,poste,pwd):
 
 #flask newuser Jean Dupont directeur 123456 
 #flask newuser Joris Vachey chercheur azerty 
-#flask newuser Nolan Morain chercheur aaa 
+#flask newuser Nolan Morain technicien aaa 
 
 @app.cli.command("seed-db")
 def seed_db():

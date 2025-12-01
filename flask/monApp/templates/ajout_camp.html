@@ -1,32 +1,154 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
 {% endblock %}
 
 {% block main %}
+
 <section id="ajout">
-    <form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('ajouter_campagne') }}">
+    <form class="form-horizontal" role="form" method="POST" action="{{ url_for ('ajouter_campagne') }}">
         {{ form.hidden_tag() }}
-        <div id = zone1>
+        <div id=zone1>
             <label>Créer une Campagne</label>
-        <select class="select_pla" name="plateforme"required > 
-            {%for plat in plateformes%}
-            <option value={{plat.nomPlateforme}}>{{plat.nomPlateforme}}</option>
-            {%endfor%}
-        </select>
-        <input id="" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." required>
-        <input id="" type="text" name="lieu" placeholder="Lieu de la campagne..." >
-        <input id="" type="text" name="{{form.duree.name}}" placeholder="Durée en jour..." required>
+
+            <select class="select_pla" name="plateforme" id="plateforme_select" required
+                onchange="updateDisponibilites()">{%for plat in plateformes%} <option value="{{ plat.nomPlateforme }}">
+                    {{plat.nomPlateforme}}</option>
+                {%endfor%}
+
+            </select>
+
+            <input id="date_input" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." required
+                onchange="updateDisponibilites()" />
+
+            <input id="" type="text" name="lieu" placeholder="Lieu de la campagne...">
+
+            <input id="duree_input" type="number" name="{{form.duree.name}}" placeholder="Durée en jour..." required
+                min="1" oninput="updateDisponibilites()" value="{{ form.duree.data or 1 }}" />
+
         </div>
-        <select class="select_p" name="personnes" > 
-            <option value="">-- Veuillez choisir les personnes voulues --</option>
-        </select>
+
+        <div id="loading_indicator" style="display:none; color: blue; margin-top: 10px;">
+            Chargement des disponibilités...
+        </div>
+
+        <div id="personnes_disponibles_container" class="my-4 p-4 border rounded-lg bg-gray-50">
+            <p>Veuillez choisir la plateforme, la date et la durée pour voir les personnes disponibles.</p>
+        </div>
+
         <div class="boutons_form">
-            <a href="{{ url_for('accueil') }}" class="boutons_plat" >Annuler</a>
+            <a href="{{ url_for('accueil') }}" class="boutons_plat">Annuler</a>
             <button type="submit" class="boutons_plat">Ajouter</button>
         </div>
     </form>
+
 </section>
+
+<script>
+    function updateDisponibilites() {
+        const plateformeSelect = document.getElementById('plateforme_select');
+        const dateInput = document.getElementById('date_input');
+        const dureeInput = document.getElementById('duree_input');
+        const container = document.getElementById('personnes_disponibles_container');
+        const loadingIndicator = document.getElementById('loading_indicator');
+
+        const plateforme = plateformeSelect.value;
+        const date = dateInput.value;
+        const duree = dureeInput.value;
+
+        if (!plateforme || !date || !duree || parseInt(duree) <= 0) {
+            container.innerHTML = '<p class="text-gray-500">Veuillez choisir la plateforme, la date et une durée valide (>0) pour voir les personnes disponibles.</p>';
+            return;
+        }
+
+        loadingIndicator.style.display = 'block';
+        container.innerHTML = '';
+
+        fetch('/api/get_disponibilites', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                plateforme: plateforme,
+                date: date,
+                duree: duree
+            })
+        })
+            .then(response => {
+                loadingIndicator.style.display = 'none';
+                if (!response.ok) {
+                    // FIX 1: Ajout des backticks pour la template literal
+                    throw new Error(`Erreur HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.error) {
+                    // FIX 2: Utilisation correcte d'une template literal pour le HTML
+                    container.innerHTML = `<p style="color: red;">Erreur serveur: ${data.error}</p>`;
+                    return;
+                }
+
+                renderCheckboxes(data.personnes);
+
+            })
+            .catch(error => {
+                loadingIndicator.style.display = 'none';
+                console.error('Erreur lors de la récupération des disponibilités:', error);
+                // FIX 3: Utilisation correcte d'une template literal pour le HTML
+                container.innerHTML = `<p style="color: red;">Une erreur est survenue lors de la communication avec le serveur. (${error.message}) </p>`;
+            });
+
+    }
+
+    function renderCheckboxes(personnes) {
+        const container = document.getElementById('personnes_disponibles_container');
+        container.innerHTML = '';
+
+        if (personnes.length === 0) {
+            container.innerHTML = '<p class="text-yellow-700 font-medium">Aucune personne disponible (pas qualifiée ou déjà occupée) pour cette période.</p>';
+            return;
+        }
+
+        const title = document.createElement('p');
+        title.className = 'font-bold mb-2 text-gray-800';
+        title.textContent = 'Personnes disponibles à sélectionner :';
+        container.appendChild(title);
+
+        personnes.forEach(personne => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center space-x-2';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            // FIX 4: Ajout des backticks pour la template literal
+            checkbox.id = `personne_${personne.id}`;
+            checkbox.name = 'personnes_choisies';
+            checkbox.value = personne.id;
+            checkbox.className = 'form-checkbox h-4 w-4 text-indigo-600 rounded';
+
+            const label = document.createElement('label');
+            // FIX 5: Ajout des backticks pour la template literal
+            label.htmlFor = `personne_${personne.id}`;
+            label.textContent = personne.nom_complet;
+            label.className = 'text-gray-700';
+
+            div.appendChild(checkbox);
+            div.appendChild(label);
+            container.appendChild(div);
+
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Déclenchement initial au chargement
+        // Un léger délai est une bonne pratique pour s'assurer que tout le DOM est prêt, 100ms est correct.
+        setTimeout(updateDisponibilites, 100);
+    });
+</script>
 
 {% endblock %}

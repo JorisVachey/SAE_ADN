@@ -3,3 +3,4 @@ python-dotenv
 flask-sqlalchemy
 flask_login
 flask-wtf
+numpy
