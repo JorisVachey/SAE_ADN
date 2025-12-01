@@ -650,36 +650,6 @@ def ajouter_echantillon(numCampagne):
                            random=random)
 
 
-@app.route('/modif_plat/')
-def modif_plat():
-    unForm = PlateformeForm()
-    habForm = HabilitationForm()
-    equipForm = EquipementForm()
-    return render_template('modif_plat.html',
-                           form=unForm,
-                           hab=habForm,
-                           equipements=equipForm)
-
-
-@app.route('/modif_campagne/')
-def modif_campagne():
-    unForm = CampagneForm()
-    pers = Personne.query.get_or_404(current_user.idP)
-    participer = Participer.query.filter(Participer.idP == pers.idP).one()
-    camp = Campagne.query.filter(
-        Campagne.numCampagne == participer.numCampagne).one()
-    lab = Laboratoire.query.filter(
-        Laboratoire.nomLab == Plateforme.query.filter(
-            Plateforme.nomPlateforme ==
-            camp.nomPlateforme).one().lab_id).one()
-
-    toutesPlat = Plateforme.query.filter(
-        Plateforme.lab_id == lab.nomLab).order_by(
-            Plateforme.nomPlateforme).all()
-    return render_template('modif_campagne.html',
-                           form=unForm,
-                           plateformes=toutesPlat)
-
 
 @app.route('/exploitation', methods=['GET'])
 @login_required
@@ -878,3 +848,21 @@ def gerer_plateforme(nomPlateforme):
         return redirect(url_for('detail_plateforme', nomPlateforme=plateforme.nomPlateforme))
     return render_template('modif_plat.html',form= unForm, hab=hab, equipements=equipements)
 
+@app.route('/campagnes/<numCampagne>/delete/')
+@login_required
+def deleteCampagne(numCampagne):
+    campagne = Campagne.query.get(numCampagne)
+    unForm = CampagneForm(numCampagne=campagne.numCampagne, date=campagne.date, duree = campagne.duree)
+    return render_template("modif_campagne.html",campagne=campagne, deleteForm=unForm)
+
+@app.route ('/campagne/erase/', methods =("POST" ,))
+def eraseCampagne():
+    deletedCampagne = None
+    unForm = CampagneForm()
+    #recherche de l'auteur à supprimer
+    idA = int(unForm.numCampagne.data)
+    deletedCampagne = Campagne.query.get(idA)
+    #suppression
+    db.session.delete(deletedCampagne)
+    db.session.commit()
+    return redirect(url_for('accueil'))
