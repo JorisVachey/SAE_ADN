@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_supprimer_campagne.css') }}">
 {% endblock %}
 
 {% block main %}
@@ -9,7 +9,6 @@
 <form role="form" method="POST" action="{{ url_for ('eraseCampagne') }}">
     {{ deleteForm.hidden_tag () }}
     <div class="form-group mb-3">
-        {{ deleteForm.numCampagne.label }}
         {{ deleteForm.numCampagne(size=50, readonly=True, class_="form-control") }}
     </div>
     <input class="bouton_plat" type="submit" value="Confirmer">
