@@ -13,8 +13,8 @@
             {{ deleteForm.numCampagne(size=50, readonly=True, class_="menu_deroulant") }}
         </div>
         <div class="block_boutons">
+            <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="boutons_fonctionnels">Annuler</a>
             <input class="boutons_fonctionnels" type="submit" value="Confirmer">
-            <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="boutons_fonctionnels">Retour</a>
         </div>
     </form>
 </section>

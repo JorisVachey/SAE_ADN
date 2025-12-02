@@ -1,59 +1,56 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_accueil.css') }}">
 {% endblock %}
 
 {% block main %}
 
-<section class="block">
+<section style="flex-direction: row; margin-top: 2em;" class="block">
+
     <section class="plateforme">
-        <h1>Plateformes en cours</h1>
+        <h1 style="font-size: 2.5em;">Plateformes en cours</h1>
         <div class="plus">
             <a href="{{ url_for('create_plateforme') }}" ><img src="{{ url_for('static', filename='img/plus.png') }}" alt=""></a>
         </div>
         {%for plt in plateformes%}
-        <article>
-            {% set nb = random.randint(1,14) %}
-            <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
-            <div>
-                <div class="nom_date">
+            <article class="une_plat_camp">
+                {% set nb = random.randint(1,14) %}
+                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                <div class="infos">
                     <h2>{{plt["nom"]}}</h2>
+                    <div class="position">   
+                        <p>dernière maintenance : {{plt["maint"]}}</p>
+                        <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
+                    </div>
                 </div>
-                <div class="position">   
-                    <p>dernière maintenance : {{plt["maint"]}}</p>
-                    <a href="{{ url_for('detail_plateforme', nomPlateforme =plt['nom'] ) }}">détails</a>
-                </div>
-            </div>
-        </article>
-        <div class="trait_horizontal"></div>
+            </article>
+            <div class="trait_horizontal"></div>
         {% endfor %}
-
     </section>
+
     <section class="campagne">
-        <h1>Campagnes en cours</h1>
+        <h1 style="font-size: 2.5em;">Campagnes en cours</h1>
         <div class="plus">
             <a href="{{ url_for('create_campagne') }}" ><img src="{{ url_for('static', filename='img/plus.png') }}" alt=""></a>
         </div>
-
         {%for cpg in campagnes%}
-        <article>
-            {% set nb = random.randint(1,14) %}
-            <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
-            <div>
-                <div class="nom_date">
+            <article class="une_plat_camp">
+                {% set nb = random.randint(1,14) %}
+                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                <div class="infos">
                     <h2> Numéro de campagne : {{cpg["num"]}}</h2>
+                    <div class="position"> 
+                        <p>date de début : {{cpg["date"]}}</p>
+                        <a href="{{ url_for('detail_campagne', numCampagne =cpg['num'] ) }}">détails</a>
+                    </div>
                 </div>
-                <div class="position"> 
-                    <p>date de début : {{cpg["date"]}}</p>
-                    <a href="{{ url_for('detail_campagne', numCampagne =cpg['num'] ) }}">détails</a>
-                </div>
-            </div>
-            
-        </article>
-        <div class="trait_horizontal"></div>
+            </article>
+            <div class="trait_horizontal"></div>
         {% endfor %}
-
     </section>
+
 </section>
+
 {% endblock %}
