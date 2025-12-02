@@ -19,12 +19,12 @@
             <h3>Paleonth'Orléans</h3>
         </div>
         <ul>
-            {%if current_user.poste == "directeur" %}
-            <li><a href="{{url_for('budget')}}">Budget</a></li>
-            {%endif %}
             {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('accueil') }}">Home</a></li>
             <li><a href="{{ url_for('exploit') }}">Laboratoire</a></li>
+            {%endif %}
+            {%if current_user.poste == "directeur" %}
+            <li><a href="{{url_for('budget')}}">Budget</a></li>
             {%endif %}
             {% if not current_user.is_authenticated %}
             <li><a href="{{ url_for('connexion') }}">Se connecter</a></li>

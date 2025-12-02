@@ -126,3 +126,23 @@ form {
     text-align: center;
     line-height: 18px;
 }
+
+.proba {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+}
+
+.block_echantillons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 18%;
+}
+
+.arbre {
+    text-align: left;
+    overflow-x: auto;
+}
