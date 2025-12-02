@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style_supprimer_campagne.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_tout.css') }}">
 {% endblock %}
 
 {% block main %}
-<h1>Suppression de la campagne {{ campagne.numCampagne }}. Etes vous sur ?</h1>
-<form role="form" method="POST" action="{{ url_for ('eraseCampagne') }}">
-    {{ deleteForm.hidden_tag () }}
-    <div class="form-group mb-3">
-        {{ deleteForm.numCampagne(size=50, readonly=True, class_="form-control") }}
-    </div>
-    <input class="bouton_plat" type="submit" value="Confirmer">
-    <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="bouton_plat">Retour</a>
-</form>
+<section class="block">
+    <form role="form" method="POST" action="{{ url_for ('eraseCampagne') }}">
+        <h1>Suppression de la campagne n°{{ campagne.numCampagne }}. Etes vous sur ?</h1>
+        {{ deleteForm.hidden_tag () }}
+        <div style="display: none;">
+            {{ deleteForm.numCampagne(size=50, readonly=True, class_="menu_deroulant") }}
+        </div>
+        <div class="block_boutons">
+            <input class="boutons_fonctionnels" type="submit" value="Confirmer">
+            <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="boutons_fonctionnels">Retour</a>
+        </div>
+    </form>
+</section>
 {% endblock %}
