@@ -24,7 +24,7 @@
             {{ equipements.objets_selectionnes(class="custom-check") }}
         </div>
         <div class="boutons_form">
-            <a href="" class="boutons_plat">Annuler</a>
+            <a href="{{ url_for('detail_plateforme', nomPlateforme =form.Nom.data ) }}" class='boutons_plat'>Annuler</a>
             <button type="submit" class="boutons_plat" >Modifier</button>
         </div>
     </form>

@@ -12,7 +12,7 @@
         {{ deleteForm.numCampagne.label }}
         {{ deleteForm.numCampagne(size=50, readonly=True, class_="form-control") }}
     </div>
-    <input class="btn btn-danger" type="submit" value="Confirmer">
-    <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="btn btn-secondary">Retour</a>
+    <input class="bouton_plat" type="submit" value="Confirmer">
+    <a href="{{ url_for('detail_campagne', numCampagne=campagne.numCampagne) }}" class="bouton_plat">Retour</a>
 </form>
 {% endblock %}
