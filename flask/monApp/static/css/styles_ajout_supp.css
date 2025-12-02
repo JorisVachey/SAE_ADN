@@ -177,7 +177,8 @@ form {
 }
 
 .proba,
-.commentaire {
+.commentaire,
+.la_plateforme .maintenance {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -268,6 +269,215 @@ form {
 
 .une_plat_camp .position a:hover {
     transform: scale(1.05);
+}
+
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+/* ----------- Plateforme / Fouille ----------- */
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+
+.la_plateforme,
+.la_campagne {
+    align-self: flex-start;
+    flex-basis: 65%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5em;
+    margin-left: 8em;
+}
+
+.la_plateforme p,
+.la_plateforme a,
+.la_campagne p,
+.la_campagne a {
+    font-size: 1.5em;
+    color: black;
+    margin: 0;
+}
+
+.la_plateforme .info,
+.la_campagne .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    padding: 2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    gap: 1em;
+}
+
+.la_plateforme .info div,
+.la_campagne .info div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.la_plateforme .maintenance {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 3em;
+    align-items: center;
+}
+
+.la_plateforme .form_invisible {
+    width: 100%;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.la_plateforme .planifier {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    padding: 1.3em 0.5em;
+    width: 100%;
+}
+
+.la_plateforme .planifier div {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10em;
+}
+
+.la_plateforme .planifier input {
+    background-color: #dfcc9a;
+    border: none;
+    border-radius: 1.2em;
+    padding: 1em 1em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    margin-left: 1em;
+    transition: 0.3s;
+}
+
+.la_plateforme .planifier input:hover {
+    transform: scale(1.05);
+}
+
+
+.la_plateforme .planifier button {
+    background-color: #dfcc9a;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.3s;
+    border: none;
+    padding: 0.5em 4em;
+}
+
+.la_plateforme .planifier button:hover {
+    transform: scale(1.05);
+}
+
+.la_plateforme img {
+    width: 3em;
+    height: auto;
+}
+
+.la_campagne .position {
+    height: 2.5em;
+    width: auto;
+}
+
+.la_campagne .gestion {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 3em;
+}
+
+.la_campagne .gestion article {
+    text-align: center;
+    flex-basis: 45%;
+    flex-grow: 1;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    background-color: #F9F7F2;
+    transition: 0.4s;
+}
+
+.la_campagne .gestion article:hover {
+    transform: scale(1.04);
+}
+
+.la_campagne .gestion article a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 1.1em 0;
+}
+
+.la_plateforme .gros_bouton,
+.la_campagne .gros_bouton {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 1em;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+}
+
+.la_plateforme .gros_bouton a,
+.la_campagne .gros_bouton a {
+    text-align: center;
+    background-color: #F9F7F2;
+    flex-grow: 1;
+    border-radius: 0.9em;
+    padding: 1.3em;
+    color: black;
+    text-decoration: none;
+}
+
+.la_plateforme .gros_bouton:hover,
+.la_campagne .gros_bouton:hover {
+    transform: scale(1.02);
+}
+
+.equipemment,
+.personnes {
+    align-self: flex-start;
+    flex-basis: 35%;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    padding: 2em;
+    margin-right: 8em;
+}
+
+.equipemment article,
+.personnes article {
+    margin-top: 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.equipemment .case,
+.personnes .case {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+    gap: 2em;
+}
+
+.equipemment .case:hover, 
+.personnes .case:hover {
+    transform: scale(1.03);
 }
 
 /* -------------------------------------------- */

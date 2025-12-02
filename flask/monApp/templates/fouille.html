@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_plateforme_fouille.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
 {% endblock %}
 
 {% block main %}
 
-<section class="block">
-    <section class="plateforme">
+<section  style="flex-direction: row; gap: 8em;" class="block">
+    <section class="la_campagne">
         <article class="info">
             <h1>Campagne de Fouille numéro {{campagne["numCampagne"]}}</h1>
             <div>
@@ -18,7 +18,7 @@
             <p>date de début : {{campagne["date"]}}</p>
             <p>durée : {{campagne["duree"]}} jours</p>
         </article>
-        <article class="acceder">
+        <article class="gros_bouton">
             <a href="{{ url_for('echantillons', numCampagne=campagne['numCampagne'] ) }}">Accéder aux échantillons de la campagne</a>
         </article>
         <div class="gestion">
@@ -30,7 +30,7 @@
             </article>
         </div>
     </section>
-    <section class="equipemment">
+    <section class="personnes">
         <h1>Liste des personnes sur la Campagne</h1>
         <article>
             {% for pers in personnes %}

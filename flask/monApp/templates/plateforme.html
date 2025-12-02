@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_plateforme_fouille.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" role="form" method ="POST" action ="">
-<section class="block">
-    <section class="plateforme">
+
+<section style="flex-direction: row; gap: 8em;" class="block">
+    <section class="la_plateforme">
         <article class="info">
             <h1>Plateforme de Fouille : {{plateforme["nom"]}}</h1>
             <p>Nombre de personnes : {{plateforme["pers"]}}</p>
@@ -17,17 +17,20 @@
             <p>Coût journalier : {{plateforme["cout"]}} €</p>
         </article>
         {%if current_user.poste == "technicien" %}
-        <article class="maintenance">
-            <div class="planifier">
-                <div>
-                    <p>Planifier une maintenance : </p>
-                    {{maintenance.ProchaineMaintenance}}
-                </div>
-                <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
-            </div>
-        </article>
+            <article class="maintenance">
+                <form class="form_invisible" role="form" method ="POST" action ="">
+                    {{ maintenance.hidden_tag() }}
+                    <div class="planifier">
+                        <div>
+                            <p>Planifier une maintenance : </p>
+                            {{maintenance.ProchaineMaintenance}}
+                        </div>
+                        <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
+                    </div>
+                </form>
+            </article>
         {%endif%}
-        <article class="bouton">
+        <article class="gros_bouton">
             <a href="{{ url_for('gerer_plateforme', nomPlateforme=plateforme['nom']) }}">Modifier les informations</a>
         </article>
     </section>
@@ -35,14 +38,14 @@
         <h1>Liste des équipements sur la Plateforme</h1>
         <article>
             {% for obj in objets %}
-            <div class="case">
-                {% set nb = random.randint(1,14) %}
-                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
-                <p>{{obj.nomEquipement}}</p>
-            </div>
+                <div class="case">
+                    {% set nb = random.randint(1,14) %}
+                    <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                    <p>{{obj.nomEquipement}}</p>
+                </div>
             {%endfor%}
         </article>
     </section>
 </section>
-</form>
+
 {% endblock %}
