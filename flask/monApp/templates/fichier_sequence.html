@@ -1,16 +1,14 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_fichier_sequence.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
 {% endblock %}
 
 {% block main %}
 
-<section class="block">
-    <section class="titre">
-        <h1>Campagne de Fouille : {{ campagne.numCampagne }}</h1>
-    </section>
-    <section class="detail">
+<section style="margin-top: 0em;" class="block">
+    <h1 style="font-size: 4em;">Campagne de Fouille n°{{ campagne.numCampagne }}</h1>
+    <section class="detail_sequence">
         <article class="lstFichier">
             <div class="plus">
                 <a href="{{ url_for('ajouter_echantillon', numCampagne=campagne.numCampagne) }}">
@@ -34,21 +32,17 @@
         </article>
         
         <article class="detailFichier">
-            <h4>Fichier Séquencé n°<span id="file-sequence-number">{{ initial_details.idFichier }}</span></h4>
-            <h4>Échantillon n°<span id="file-sample-number">{{ initial_details.idEchantillon }}</span></h4>
+            <h1>Fichier Séquencé n°<span id="file-sequence-number">{{ initial_details.idFichier }}</span></h1>
+            <h1>Échantillon n°<span id="file-sample-number">{{ initial_details.idEchantillon }}</span></h1>
             <div class="trait_horizontal"></div>
             
-            <p>Espèce : <span id="file-species">{{ initial_details.espece }}</span></p>
+            <p style="font-size: 1.5em;">Espèce : <span id="file-species">{{ initial_details.espece }}</span></p>
             
-            <div class="commentaire">
-                <p>Commentaire : </p>
-                <textarea name="commentaire" id="file-comment" placeholder="Ajouter un commentaire..." rows="5" >{{ initial_details.commentaire }}</textarea>
+            <div style="flex-direction: column;" class="commentaire">
+                <p style="font-size: 1.5em;">Commentaire : </p>
+                <textarea style="width: 95%;" name="commentaire" id="file-comment" placeholder="Ajouter un commentaire..." rows="5" >{{ initial_details.commentaire }}</textarea>
             </div>
             
-            <div class="televerser">
-                <button><img src="{{ url_for('static', filename='img/televerser.png') }}" width="24" height="24">
-                Téléverser les séquences</button>
-            </div>
         </article>
     </section>
 </section>
@@ -56,44 +50,31 @@
     const ALL_FILE_DATA = JSON.parse('{{ all_file_details | tojson | safe }}');
 
     function showFileInfo(clickedElement) {
-        // 1. Récupérer l'ID du fichier (clé dans notre dictionnaire)
         const fileId = clickedElement.getAttribute('data-file-id');
-        
-        // 2. Mettre en évidence l'élément cliqué (gère la classe 'active')
         document.querySelectorAll('.file-item').forEach(item => {
             item.classList.remove('active');
         });
         clickedElement.classList.add('active');
-        
-        // 3. Récupérer les données directement depuis l'objet global
         const data = ALL_FILE_DATA[fileId];
-
         if (data) {
-            // 4. Mettre à jour les éléments HTML instantanément
             document.getElementById('file-sequence-number').textContent = data.idFichier || 'N/A';
             document.getElementById('file-sample-number').textContent = data.idEchantillon || 'N/A';
             document.getElementById('file-species').textContent = data.espece || 'Inconnue'; 
-            // Mise à jour de la zone de commentaire (textarea)
             document.getElementById('file-comment').value = data.commentaire || '';
         } else {
             console.error(`Données manquantes pour l'ID de fichier: ${fileId}`);
-            // Nettoyer l'affichage si les données sont introuvables
             document.getElementById('file-sequence-number').textContent = 'Erreur';
             document.getElementById('file-sample-number').textContent = 'Erreur';
             document.getElementById('file-species').textContent = 'Données non chargées';
             document.getElementById('file-comment').value = '';
         }
     }
-
-    // 5. Initialisation : Mettre en évidence le premier fichier au chargement
     document.addEventListener('DOMContentLoaded', (event) => {
-        // Sélectionner le premier élément de la liste
         const firstFile = document.querySelector('.file-item');
         if (firstFile) {
-            // Appliquer le style 'active' pour montrer la sélection initiale
             firstFile.classList.add('active');
         }
     });
-
 </script>
+
 {% endblock %}
