@@ -1,39 +1,26 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_connexion.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
 {% endblock %}
 
 {% block main %}
-<form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('connexion') }}">
-{{ form.hidden_tag() }}
-<section class="block">
-    <img src="{{ url_for('static', filename='img/fossiles/dinosaure.png') }}" alt="">
-    <section>
-        <h2>Se Connecter</h2>
-        
-            <input 
-            type="text" 
-            id="{{ form.Login.id }}" 
-            name="{{ form.Login.name }}" 
-            placeholder="ID ..." 
-            required
-            >
-            
-            <input 
-            type="password" 
-            id="{{ form.Password.id }}" 
-            name="{{ form.Password.name }}" 
-            placeholder="Mot de passe ..." 
-            required
-            >
 
-            <div class="bas">
-                <button type="submit">Se connecter</button>
-            </div>
-        
+<section style="margin-top: 3em;" class="block">
+    <section>
+        <img class="img_dinosaure" src="{{ url_for('static', filename='img/fossiles/dinosaure.png') }}" alt="">
+        <form class="form-horizontal" role="form" method ="POST" action ="{{ url_for ('connexion') }}">
+        {{ form.hidden_tag() }}
+            <h1 style="font-size: 4em;">Se Connecter</h1>
+            <article class="sous_block">
+                <input style="flex-basis: 100%;" class="input_moitie" type="text" id="{{ form.Login.id }}" name="{{ form.Login.name }}" placeholder="ID ..." required>     
+                <input style="flex-basis: 100%;" class="input_moitie" type="password" id="{{ form.Password.id }}" name="{{ form.Password.name }}" placeholder="Mot de passe ..." required>
+            </article>
+            <div class="block_boutons" style="justify-content: center;">
+                <button type="submit" class="boutons_fonctionnels">Se connecter</button>
+            </div> 
+        </form>
     </section>
 </section>
-</form>
 
 {% endblock %}

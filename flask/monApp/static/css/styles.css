@@ -100,17 +100,20 @@ header li a:hover {
     width: 80%;
     margin: 1em auto;
 }
+
 .flash {
     padding: 1em;
     margin-bottom: 0.5em;
     border-radius: 5px;
     border: 1px solid transparent;
 }
+
 .flash.success {
     background-color: #d4edda;
     color: #155724;
     border-color: #c3e6cb;
 }
+
 .flash.error {
     background-color: #f8d7da;
     color: #721c24;

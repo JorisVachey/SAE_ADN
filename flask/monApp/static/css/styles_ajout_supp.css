@@ -146,3 +146,11 @@ form {
     text-align: left;
     overflow-x: auto;
 }
+
+.img_dinosaure {
+    width: 50em;
+    height: auto;
+    position: relative;
+    margin-left: 9em;
+    margin-bottom: -8.5em;
+}
