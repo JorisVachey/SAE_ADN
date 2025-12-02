@@ -24,7 +24,6 @@ class PlateformeForm(FlaskForm):
     nbPersonnes = IntegerField('nb personnes', validators=[DataRequired(message="Cette option est obligatoire")])
     Cout = IntegerField('cout', validators=[DataRequired(message="Cette option est obligatoire")])
     IntervalleMaintenance  = IntegerField('nb jours entre maintenances', validators=[DataRequired(message="Cette option est obligatoire")])
-    Lieu = StringField('lieu')
     ProchaineMaintenance = DateField('ProchaineMaintenance')
 
 class HabilitationForm(FlaskForm):
@@ -69,6 +68,7 @@ class CampagneForm(FlaskForm):
     numCampagne = IntegerField('num')
     date  = DateField('date début', validators=[DataRequired(message="Cette option est obligatoire")])
     duree = IntegerField('nb jours', validators=[DataRequired(message="Cette option est obligatoire")])
+    lieu = StringField('lieu',  validators=[DataRequired(message="Cette option est obligatoire")])
 
 class MutationForm(FlaskForm):
     proba_r = IntegerField('Pourcentage Remplacement', default=0)

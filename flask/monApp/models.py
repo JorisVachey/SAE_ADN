@@ -26,19 +26,17 @@ class Plateforme(db.Model):
     nbPersonnes = db.Column( db.Integer)
     cout = db.Column( db.Integer)
     intervalleMaintenance = db.Column( db.Integer)
-    lieu = db.Column( db.String(255))
     derniereMaintenance = db.Column( db.String(10))
     prochaineMaintenance = db.Column(db.String(10))
     lab_id = db.Column (db.String(255), db.ForeignKey ("laboratoire.nomLab") )
     laboratoire = db.relationship ("Laboratoire", backref =db.backref ("plateformes", lazy="dynamic") )
 
 
-    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,derniereMaintenance,prochaineMaintenance,lieu):
+    def __init__(self,nomPlateforme,nbPersonnes,cout,intervalleMaintenance,derniereMaintenance,prochaineMaintenance):
         self.nomPlateforme= nomPlateforme
         self.nbPersonnes= nbPersonnes
         self.cout= cout
         self.intervalleMaintenance= intervalleMaintenance
-        self.lieu= lieu
 
         if derniereMaintenance is None:
             self.derniereMaintenance = date.today().strftime('%Y-%m-%d')
@@ -89,13 +87,15 @@ class Campagne(db.Model):
     numCampagne = db.Column( db.Integer, primary_key=True )
     date = db.Column( db.String(10))
     duree = db.Column(db.Integer)
+    lieu = db.Column( db.String(255))
     nomPlateforme = db.Column( db.String(255), db.ForeignKey ("plateforme.nomPlateforme"))
     plateforme = db.relationship ("Plateforme", backref =db.backref ("campagnes", lazy="dynamic") )
 
-    def __init__(self,date,duree,nomPlateforme):
+    def __init__(self,date,duree,nomPlateforme,lieu):
         self.date= date
         self.duree= duree
         self.nomPlateforme= nomPlateforme
+        self.lieu=lieu
 
 
     def __repr__(self):

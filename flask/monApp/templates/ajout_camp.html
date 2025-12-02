@@ -23,7 +23,7 @@
             <input id="date_input" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." required
                 onchange="updateDisponibilites()" />
 
-            <input id="" type="text" name="lieu" placeholder="Lieu de la campagne...">
+            <input id="nom_input" type="text" name="{{form.lieu.name}}" placeholder="Lieu de la campagne..." required>
 
             <input id="duree_input" type="number" name="{{form.duree.name}}" placeholder="Durée en jour..." required
                 min="1" oninput="updateDisponibilites()" value="{{ form.duree.data or 1 }}" />
@@ -35,7 +35,7 @@
         </div>
 
         <div id="personnes_disponibles_container" class="my-4 p-4 border rounded-lg bg-gray-50">
-            <p>Veuillez choisir la plateforme, la date et la durée pour voir les personnes disponibles.</p>
+            <p>Veuillez choisir la plateforme, le lieu, la date et la durée pour voir les personnes disponibles.</p>
         </div>
 
         <div class="boutons_form">

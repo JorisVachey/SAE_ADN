@@ -10,10 +10,6 @@
     <section class="plateforme">
         <article class="info">
             <h1>Plateforme de Fouille : {{plateforme["nom"]}}</h1>
-            <div>
-                <img class="position" src="{{ url_for('static', filename='img/position.png') }}" alt="">
-                <p>{{plateforme["lieu"]}}</p>
-            </div>
             <p>Nombre de personnes : {{plateforme["pers"]}}</p>
             <p>Intervalle de maintenance : {{plateforme["intervalle"]}} jours</p>
             <p>Dernière maintenance : {{plateforme["maint"]}} </p>

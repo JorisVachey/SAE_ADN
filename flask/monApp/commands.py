@@ -43,10 +43,10 @@ def seed_db():
         db.session.add_all([lab1, lab2])
 
         # --- 2. Plateformes ---
-        pf1 = Plateforme(nomPlateforme="NanoFab", nbPersonnes=5, cout=5000, intervalleMaintenance=90,derniereMaintenance = "2025-10-01",prochaineMaintenance="2025-11-02", lieu="Bâtiment A")
+        pf1 = Plateforme(nomPlateforme="NanoFab", nbPersonnes=5, cout=5000, intervalleMaintenance=90,derniereMaintenance = "2025-10-01",prochaineMaintenance="2025-11-02")
         pf1.laboratoire = lab1 
         
-        pf2 = Plateforme(nomPlateforme="RoboTest", nbPersonnes=3, cout=2000, intervalleMaintenance=30, derniereMaintenance=None, prochaineMaintenance=None, lieu="Halle Ouest")
+        pf2 = Plateforme(nomPlateforme="RoboTest", nbPersonnes=3, cout=2000, intervalleMaintenance=30, derniereMaintenance=None, prochaineMaintenance=None)
         pf2.laboratoire = lab2
 
         db.session.add_all([pf1, pf2])
@@ -81,8 +81,8 @@ def seed_db():
         db.session.add(n3)
         
         # --- 7. Campagnes ---
-        camp1 = Campagne(date="2025-12-01", duree=7,nomPlateforme = pf1.nomPlateforme)
-        camp2 = Campagne(date="2026-01-15", duree=3,nomPlateforme = pf2.nomPlateforme)
+        camp1 = Campagne(date="2025-12-01", duree=7,nomPlateforme = pf1.nomPlateforme,lieu="Orléans")
+        camp2 = Campagne(date="2026-01-15", duree=3,nomPlateforme = pf2.nomPlateforme,lieu="Forêt")
         
         db.session.add_all([camp1, camp2])
         db.session.commit() 

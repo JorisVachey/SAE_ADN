@@ -142,7 +142,6 @@ def accueil():
         infos = dict()
         infos['nom'] = plat.nomPlateforme
         infos["maint"] = plat.derniereMaintenance
-        infos["lieu"] = plat.lieu
         infos_plat.append(infos)
 
     nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
@@ -156,6 +155,7 @@ def accueil():
         infos["date"] = camp.date
         infos["duree"] = camp.duree
         infos["plat"] = camp.nomPlateforme
+        infos["lieu"] = camp.lieu
         infos_camp.append(infos)
     return render_template('accueil.html',
                            campagnes=infos_camp,
@@ -199,13 +199,11 @@ def ajouter_plateforme():
             nbPersonnes = unForm.nbPersonnes.data
             Cout = unForm.Cout.data
             IntervalleMaintenance = unForm.IntervalleMaintenance.data
-            Lieu = unForm.Lieu.data
             plateforme = Plateforme(
                 nomPlateforme=Nom,
                 nbPersonnes=nbPersonnes,
                 cout=Cout,
                 intervalleMaintenance=IntervalleMaintenance,
-                lieu=Lieu,
                 derniereMaintenance=None,
                 prochaineMaintenance=None)
             plateforme.laboratoire = lab
@@ -393,6 +391,7 @@ def ajouter_campagne():
     if unForm.validate_on_submit():
         date_debut = unForm.date.data
         duree = unForm.duree.data
+        Lieu = unForm.lieu.data
         nomPlateforme = request.form.get('plateforme')
         personnes_ids = request.form.getlist('personnes_choisies')
         date_fin = date_debut + timedelta(days=duree)
@@ -432,6 +431,7 @@ def ajouter_campagne():
         if len(personnes_ids) >= plateforme_cible.nbPersonnes:
             campagne = Campagne(date=date_debut.strftime('%Y-%m-%d'),
                                 duree=duree,
+                                lieu=Lieu,
                                 nomPlateforme=nomPlateforme)
             db.session.add(campagne)
             db.session.commit()
@@ -477,7 +477,6 @@ def detail_plateforme(nomPlateforme):
             Plateforme.nomPlateforme == nomPlateforme).first()
         infos = dict()
         infos['nom'] = plat.nomPlateforme
-        infos["lieu"] = plat.lieu
         infos["pers"] = plat.nbPersonnes
         infos["intervalle"] = plat.intervalleMaintenance
         infos["maint"] = plat.derniereMaintenance
@@ -519,6 +518,7 @@ def detail_campagne(numCampagne):
         infos['numCampagne'] = camp.numCampagne
         infos["date"] = camp.date
         infos["duree"] = camp.duree
+        infos['lieu'] = camp.lieu
         infos["nomPlateforme"] = camp.nomPlateforme
         personnes = []
         for pers in Participer.query.filter(
@@ -783,8 +783,8 @@ def gerer_plateforme(nomPlateforme):
         Nom=nomPlateforme,
         nbPersonnes=plateforme.nbPersonnes,
         Cout=plateforme.cout,
-        IntervalleMaintenance=plateforme.intervalleMaintenance,
-        Lieu=plateforme.lieu)
+        IntervalleMaintenance=plateforme.intervalleMaintenance
+        )
     hab = HabilitationForm(habilitation_selectionnee=habilitations)
     equipements = EquipementForm(objets_selectionnes=contenir_id)
     if unForm.validate_on_submit():
@@ -792,7 +792,6 @@ def gerer_plateforme(nomPlateforme):
         plateforme.nbPersonnes = unForm.nbPersonnes.data
         plateforme.cout = unForm.Cout.data
         plateforme.intervalleMaintenance = unForm.IntervalleMaintenance.data
-        plateforme.lieu = unForm.Lieu.data
         db.session.commit()
         Necessite.query.filter_by(nomPlateforme=nomPlateforme).delete()
         for type_hab in hab.habilitation_selectionnee.data:
@@ -829,6 +828,7 @@ def gerer_plateforme(nomPlateforme):
 def deleteCampagne(numCampagne):
     campagne = Campagne.query.get(numCampagne)
     unForm = CampagneForm(numCampagne=campagne.numCampagne,
+                          lieu= campagne.lieu,
                           date=campagne.date,
                           duree=campagne.duree)
     return render_template("modif_campagne.html",
