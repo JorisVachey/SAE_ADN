@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from wtforms import *
 from wtforms import FileField, SelectMultipleField, StringField, HiddenField, SelectField, IntegerField, RadioField, PasswordField, DateField
 from wtforms.validators import DataRequired
 from .models import *
@@ -77,3 +78,7 @@ class MutationForm(FlaskForm):
 
 class ComparaisonForm(FlaskForm):
     methode = RadioField('Méthode', choices=[('levenshtein', 'Levenshtein')], default='levenshtein')
+
+class LaboratoireForm(FlaskForm):
+    nom=StringField('nom') 
+    budget = IntegerField('budget', validators=[DataRequired(message="Cette option est obligatoire")])

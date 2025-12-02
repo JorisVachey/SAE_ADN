@@ -854,3 +854,25 @@ def eraseCampagne():
     else:
         flash("Campagne introuvable.", "error")
     return redirect(url_for('accueil'))
+
+
+@app.route('/budget/', methods=['GET', 'POST'])
+def budget():
+    user = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == user.idP).first()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).first()
+    plat = Plateforme.query.filter(
+        Plateforme.nomPlateforme == camp.nomPlateforme).first()
+    lab = Laboratoire.query.filter(Laboratoire.nomLab == plat.lab_id).first()
+    if not lab:
+        return redirect(url_for('accueil'))
+    unForm = LaboratoireForm(
+        nom=lab.nomLab,
+        budget=lab.budget
+        )
+    if unForm.validate_on_submit():
+        lab.budget=unForm.budget.data
+        db.session.commit()
+        return redirect(url_for('accueil'))
+    return render_template('budget.html', unForm=unForm)

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block styles_additionnels %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
+{% endblock %}
+
+{% block main %}
+<section id="ajout">
+    <form class="form-horizontal" role="form" method="POST" action="{{ url_for ('budget') }}">
+        {{ unForm.hidden_tag() }}
+        <div id=zone1>
+            <label>Modifier le budget du laboratoire {{unForm.nom.data}}</label>
+            <input id="nom" type="text" name="{{ unForm.budget.name }}" placeholder="Saisir le budget du laboratoire..." value="{{ unForm.budget.data }}"
+                required>
+            <div class="boutons_form">
+                <a href="{{ url_for('accueil') }}" class="boutons_plat">Annuler</a>
+                <button type="submit" class="boutons_plat">Modifier</button>
+            </div>
+    </form>
+</section>
+
+{% endblock %}
