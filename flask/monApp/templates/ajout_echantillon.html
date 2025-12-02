@@ -1,37 +1,27 @@
 {% extends "base.html" %}
 
 {% block styles_additionnels %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajout_echantillon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
 {% endblock %}
 
 {% block main %}
-<section id="ajout">
-    <h2>Ajouter un échantillon à la campagne {{ campagne.numCampagne }}</h2>
-    <form class="form-horizontal" role="form" method="POST" enctype="multipart/form-data">
+<section class="block">
+    <form role="form" method="POST" enctype="multipart/form-data">
+        
+        <h1>Ajouter un échantillon à la campagne n°{{ campagne.numCampagne }}</h1>
         {{ form.hidden_tag() }}
         {{ fichier_form.hidden_tag() }}
         
-        <div class="form-group">
-            {{ form.typeE.label }}
-            {{ form.typeE(class="form-control", placeholder="Type d'espèce") }}
-        </div>
-        <div class="form-group">
-            {{ form.nomSpecifique.label }}
-            {{ form.nomSpecifique(class="form-control", placeholder="Nom spécifique") }}
-        </div>
-        <div class="form-group">
-            {{ form.commentaire.label }}
-            {{ form.commentaire(class="form-control", placeholder="Commentaire") }}
-        </div>
-        
-        <div class="form-group">
-            {{ fichier_form.nomFichier.label }}
-            {{ fichier_form.nomFichier(class="form-control") }}
-        </div>
+        <article class="sous_block">
+            {{ form.typeE(class="input_moitie", placeholder="Type d'espèce") }}
+            {{ form.nomSpecifique(class="input_moitie", placeholder="Nom spécifique") }}
+            {{ form.commentaire(class="input_moitie", style="flex-basis:100%;", placeholder="Commentaire") }}
+            {{ fichier_form.nomFichier(class="input_moitie") }}
+        </article>
 
-        <div class="boutons_form">
-            <a href="{{ url_for('echantillons', numCampagne=campagne.numCampagne) }}" class="annuler">Annuler</a>
-            <button type="submit" class="boutons_plat">Ajouter</button>
+        <div class="block_boutons">
+            <a href="{{ url_for('echantillons', numCampagne=campagne.numCampagne) }}" class="boutons_fonctionnels">Annuler</a>
+            <button type="submit" class="boutons_fonctionnels">Ajouter</button>
         </div>
     </form>
 </section>
