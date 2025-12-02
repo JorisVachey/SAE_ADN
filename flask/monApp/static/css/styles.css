@@ -1,3 +1,9 @@
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+/* ----------------- Communs ------------------ */
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+
 html, body {
     height: 100%;
     margin: 0;
@@ -118,4 +124,559 @@ header li a:hover {
     background-color: #f8d7da;
     color: #721c24;
     border-color: #f5c6cb;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 10em;
+}
+
+main h1 {
+    font-family: 'Old Standard TT', serif;
+}
+
+.plus {
+    margin-bottom: 2em;
+    border-radius: 1.2em;
+    background-color: #F9F7F2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.3em 0;
+    transition: 0.4s;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+}
+
+.plus img {
+    width: 3em;
+    height: auto;
+}
+
+.plus a {
+    width: 100%;
+    text-align: center;
+}
+
+.plus:hover {
+    transform: scale(1.04);
+}
+
+.fossile {
+    width: auto;
+    height: 10em;
+    border-radius: 1.4em 0 0 1.4em;
+}
+
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+/* ------------------ Forms ------------------- */
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+
+form {
+    width: 50em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    padding: 2em;
+}
+
+.menu_deroulant {
+    background-color: #dccca5;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    border: none;
+    border-radius: 1.2em;
+    padding: 15px 50px;
+    color: black;
+    font-weight: bold;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.menu_deroulant::placeholder {
+    color: rgba(59, 59, 59, 0.8);
+    font-weight: bold;
+}
+
+.block_boutons {
+    width: 100%;
+    display: flex;
+    justify-content: right;
+    gap: 2em;
+    margin-top: 2em;
+}
+
+.boutons_fonctionnels,
+.input_moitie {
+    color: #000;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: none;
+    padding: 15px 50px;
+    cursor: pointer;
+    background-color: #dccca5;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.boutons_fonctionnels:hover {
+    transform: scale(1.05);
+}
+
+.sous_block {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+}
+
+.input_moitie {
+    flex-basis: 30%;
+    flex-grow: 1;
+}
+
+.input_moitie::placeholder {
+    color: #181818;
+}
+
+.custom-check {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2em;
+}
+
+.custom-check input {
+    position: absolute;
+    opacity: 0;
+}
+
+.custom-check label::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background-color: #dccca5;
+    border-radius: 0.125em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.custom-check input:checked + label::before {
+    background-color: #dccca5;
+}
+
+.custom-check input:checked + label::before {
+    content: "✔";
+    color: rgb(0, 0, 0);
+    text-align: center;
+    line-height: 18px;
+}
+
+.proba,
+.commentaire,
+.la_plateforme .maintenance {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
+}
+
+.block_echantillons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-basis: 18%;
+}
+
+.arbre {
+    text-align: left;
+    overflow-x: auto;
+}
+
+.img_dinosaure {
+    width: 50em;
+    height: auto;
+    position: relative;
+    margin-left: 9em;
+    margin-bottom: -8.5em;
+}
+
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+/* ----------------- Accueil ------------------ */
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+
+.plateforme,
+.campagne {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-basis: 45%;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 2em;
+    align-self: flex-start;
+    margin: 0 3em;
+}
+
+.une_plat_camp {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    background-color: #F9F7F2;
+    margin-bottom: 2em;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+}
+
+.une_plat_camp .infos {
+    width: 100%;
+    padding: 0 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.une_plat_camp .position {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.8em;
+}
+
+.une_plat_camp .position div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.une_plat_camp .position a {
+    background-color: #dfcc9a;
+    padding: 0.5em 2em;
+    border-radius: 2em;
+    margin-right: 1em;
+    color: black;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+}
+
+.une_plat_camp .position a:hover {
+    transform: scale(1.05);
+}
+
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+/* ----------- Plateforme / Fouille ----------- */
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+
+.la_plateforme,
+.la_campagne {
+    align-self: flex-start;
+    flex-basis: 65%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5em;
+    margin-left: 8em;
+}
+
+.la_plateforme p,
+.la_plateforme a,
+.la_campagne p,
+.la_campagne a {
+    font-size: 1.5em;
+    color: black;
+    margin: 0;
+}
+
+.la_plateforme .info,
+.la_campagne .info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    padding: 2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    gap: 1em;
+}
+
+.la_plateforme .info div,
+.la_campagne .info div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.la_plateforme .maintenance {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 3em;
+    align-items: center;
+}
+
+.la_plateforme .form_invisible {
+    width: 100%;
+    background-color: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.la_plateforme .planifier {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    padding: 1.3em 0.5em;
+    width: 100%;
+}
+
+.la_plateforme .planifier div {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10em;
+}
+
+.la_plateforme .planifier input {
+    background-color: #dfcc9a;
+    border: none;
+    border-radius: 1.2em;
+    padding: 1em 1em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    margin-left: 1em;
+    transition: 0.3s;
+}
+
+.la_plateforme .planifier input:hover {
+    transform: scale(1.05);
+}
+
+
+.la_plateforme .planifier button {
+    background-color: #dfcc9a;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.3s;
+    border: none;
+    padding: 0.5em 4em;
+}
+
+.la_plateforme .planifier button:hover {
+    transform: scale(1.05);
+}
+
+.la_plateforme img {
+    width: 3em;
+    height: auto;
+}
+
+.la_campagne .position {
+    height: 2.5em;
+    width: auto;
+}
+
+.la_campagne .gestion {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 3em;
+}
+
+.la_campagne .gestion article {
+    text-align: center;
+    flex-basis: 45%;
+    flex-grow: 1;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    background-color: #F9F7F2;
+    transition: 0.4s;
+}
+
+.la_campagne .gestion article:hover {
+    transform: scale(1.04);
+}
+
+.la_campagne .gestion article a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 1.1em 0;
+}
+
+.la_plateforme .gros_bouton,
+.la_campagne .gros_bouton {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    gap: 1em;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+}
+
+.la_plateforme .gros_bouton a,
+.la_campagne .gros_bouton a {
+    text-align: center;
+    background-color: #F9F7F2;
+    flex-grow: 1;
+    border-radius: 0.9em;
+    padding: 1.3em;
+    color: black;
+    text-decoration: none;
+}
+
+.la_plateforme .gros_bouton:hover,
+.la_campagne .gros_bouton:hover {
+    transform: scale(1.02);
+}
+
+.equipemment,
+.personnes {
+    align-self: flex-start;
+    flex-basis: 35%;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    padding: 2em;
+    margin-right: 8em;
+}
+
+.equipemment article,
+.personnes article {
+    margin-top: 3em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+.equipemment .case,
+.personnes .case {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+    gap: 2em;
+}
+
+.equipemment .case:hover, 
+.personnes .case:hover {
+    transform: scale(1.03);
+}
+
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+/* -------------- Echantillons ---------------- */
+/* -------------------------------------------- */
+/* -------------------------------------------- */
+
+.detail_sequence {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5em;
+    width: 100%;
+}
+
+.lstFichier {
+    margin-left: 5em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+    flex-basis: 55%;
+    flex-grow: 1;
+    background-color: #F9F7F2;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    align-self: flex-start;
+    height: 60dvh;
+    overflow-y: auto;
+    border: 0.125em solid var(--header);
+    padding: 2.5em 4em 0 4em;
+}
+
+.lstFichier p {
+    margin: 0 2em;
+    padding: 1em 0;
+    transition: 0.3s;
+}
+
+.lstFichier .case {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 1.2em;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    transition: 0.4s;
+    gap: 2em;
+    transition: 0.4s;
+}
+
+.lstFichier .case:hover {
+    transform: scale(1.02);
+    background-color: #dfcc9a;
+}
+
+.lstFichier .file-item.active {
+    background-color: #dfcc9a;
+    transition: 0.3s;
+}
+
+.detailFichier {
+    margin-right: 5em;
+    flex-basis: 35%;
+    background-color: #F9F7F2;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    box-shadow: 0px 0px 4px 0px rgb(0, 0, 0);
+    align-items: center;
+    padding-bottom: 2em;
+}
+
+.detailFichier .trait_horizontal {
+    width: 95%;
+    background-color: black;
+    height: 0.125em;
 }
