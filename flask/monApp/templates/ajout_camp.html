@@ -2,33 +2,27 @@
 
 {% block styles_additionnels %}
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style_ajouter_plate_fouille.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles_ajout_supp.css') }}">
 {% endblock %}
 
 {% block main %}
 
-<section id="ajout">
+<section class="block">
     <form class="form-horizontal" role="form" method="POST" action="{{ url_for ('ajouter_campagne') }}">
         {{ form.hidden_tag() }}
-        <div id=zone1>
-            <label>Créer une Campagne</label>
-
-            <select class="select_pla" name="plateforme" id="plateforme_select" required
-                onchange="updateDisponibilites()">{%for plat in plateformes%} <option value="{{ plat.nomPlateforme }}">
-                    {{plat.nomPlateforme}}</option>
+        <h1>Créer une Campagne</h1>
+        <article class="sous_block">
+            <select style="flex-basis: 43%; flex-grow: 1;" class="menu_deroulant" name="plateforme" id="plateforme_select" requiredonchange="updateDisponibilites()">
+                {%for plat in plateformes%} 
+                <option value="{{ plat.nomPlateforme }}">
+                    {{plat.nomPlateforme}}
+                </option>
                 {%endfor%}
-
             </select>
-
-            <input id="date_input" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." required
-                onchange="updateDisponibilites()" />
-
-            <input id="nom_input" type="text" name="{{form.lieu.name}}" placeholder="Lieu de la campagne..." required>
-
-            <input id="duree_input" type="number" name="{{form.duree.name}}" placeholder="Durée en jour..." required
-                min="1" oninput="updateDisponibilites()" value="{{ form.duree.data or 1 }}" />
-
-        </div>
+            <input class="input_moitie" id="date_input" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." requiredonchange="updateDisponibilites()" />
+            <input class="input_moitie" id="nom_input" type="text" name="{{form.lieu.name}}" placeholder="Lieu de la campagne..." required>
+            <input class="input_moitie" id="duree_input" type="number" name="{{form.duree.name}}" placeholder="Durée en jour..." required min="1" oninput="updateDisponibilites()" value="{{ form.duree.data or 1 }}" />
+        </article>
 
         <div id="loading_indicator" style="display:none; color: blue; margin-top: 10px;">
             Chargement des disponibilités...
@@ -38,9 +32,9 @@
             <p>Veuillez choisir la plateforme, le lieu, la date et la durée pour voir les personnes disponibles.</p>
         </div>
 
-        <div class="boutons_form">
-            <a href="{{ url_for('accueil') }}" class="boutons_plat">Annuler</a>
-            <button type="submit" class="boutons_plat">Ajouter</button>
+        <div class="block_boutons">
+            <a href="{{ url_for('accueil') }}" class="boutons_fonctionnels">Annuler</a>
+            <button type="submit" class="boutons_fonctionnels">Ajouter</button>
         </div>
     </form>
 
