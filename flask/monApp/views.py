@@ -15,7 +15,11 @@ from monApp.utils import adn, fonctions_utiles, phylogenie
 
 
 def admin(f):
+    """
+    Crée une décoration pour les admin
 
+    returns : la décoration
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -32,7 +36,11 @@ def admin(f):
 
 
 def chercheur(f):
+    """
+    Crée une décoration pour les chercheurs
 
+    returns : la décoration
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -49,7 +57,11 @@ def chercheur(f):
 
 
 def directeur(f):
+    """
+    Crée une décoration pour les directeurs
 
+    returns : la décoration
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -66,7 +78,11 @@ def directeur(f):
 
 
 def technicien(f):
+    """
+    Crée une décoration pour les techniciens
 
+    returns : la décoration
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -82,10 +98,7 @@ def technicien(f):
     return decorated_function
 
 
-@app.route('/connexion/', methods=(
-    'GET',
-    'POST',
-))
+@app.route('/connexion/', methods=('GET', 'POST'))
 def connexion():
     """
     Gère la connexion des utilisateurs.
@@ -125,6 +138,11 @@ def deconnexion():
 @app.route('/')
 @login_required
 def accueil():
+    """
+    Affiche l'accueil contenant toutes les plateformes et les campagnes du laboratoire 
+
+    :returns: Redirection vers l'accueil.
+    """
     pers = Personne.query.get_or_404(current_user.idP)
     participer = Participer.query.filter(Participer.idP == pers.idP).first()
     camp = Campagne.query.filter(
@@ -166,6 +184,11 @@ def accueil():
 @app.route('/plateforme/', methods=['GET', 'POST'])
 @login_required
 def create_plateforme():
+    """
+    Prépare les formulaires pour ajouter une plateforme au laboratoire
+
+    :returns: Redirection vers la page d'ajout d'une plateforme.
+    """
     unForm = PlateformeForm()
     habForm = HabilitationForm()
     equipForm = EquipementForm()
@@ -178,6 +201,11 @@ def create_plateforme():
 @app.route('/plateformes/ajouter-plateforme/', methods=['GET', 'POST'])
 @login_required
 def ajouter_plateforme():
+    """
+    Ajoute une plateforme au laboratoire si le nom n'est pas déjà utilisé
+
+    :returns: Redirection vers la page de connexion ('connexion').
+    """
     pers = Personne.query.get_or_404(current_user.idP)
     participer = Participer.query.filter(Participer.idP == pers.idP).first()
     camp = Campagne.query.filter(
@@ -228,6 +256,15 @@ def ajouter_plateforme():
 
 
 def get_date_fin(date_debut_str, duree_jours):
+    """
+    Calcule la date de fin à partir d'une date de début et d'une durée
+
+    Args : 
+    date_debut_str : date de début en str
+    duree_jours : la durée en nombre de jours 
+
+    :returns: la date de fin, None si il y a une erreur.
+    """
     try:
         date_debut = datetime.strptime(date_debut_str, '%Y-%m-%d').date()
         return date_debut + timedelta(days=int(duree_jours))
@@ -236,6 +273,15 @@ def get_date_fin(date_debut_str, duree_jours):
 
 
 def check_personne_qualification(personne_id, nomPlateforme):
+    """
+    Vérifie qu'une personne ait toutes les habilitations nécessaires à la plateforme
+
+    Args : 
+    personne_id : numéro de la personne
+    nomPlateforme : nom de la plateforme
+
+    :returns: True si la personne a toutes les habilitations, False sinon
+    """
     required_types = [
         n.type
         for n in Necessite.query.filter_by(nomPlateforme=nomPlateforme).all()
@@ -251,7 +297,12 @@ def check_personne_qualification(personne_id, nomPlateforme):
     return True
 
 
-def get_personnes_du_laboratoire_de_la_campagne_actuelle():
+def get_personnes_du_laboratoire():
+    """
+    Récupère toutes les personnes du laboratoire de la personne connectée
+
+    :returns: une liste d'objets Personne
+    """
     pers_connectee = Personne.query.get_or_404(current_user.idP)
     participation = Participer.query.filter(
         Participer.idP == pers_connectee.idP).first()
@@ -274,6 +325,16 @@ def get_personnes_du_laboratoire_de_la_campagne_actuelle():
 
 
 def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
+    """
+    Vérifie les personnes disponibles pendant un laps de temps et sur une plateforme
+
+    Args :
+    nomPlateforme : nom de la plateforme
+    date_debut_str : date de début de la campagne
+    duree_jours : durée de la campagne
+
+    :returns: une liste d'objets Personne
+    """
     if not date_debut_str or not duree_jours or int(duree_jours) <= 0:
         return []
     date_debut = datetime.strptime(date_debut_str, '%Y-%m-%d').date()
@@ -281,8 +342,7 @@ def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
     if not date_fin:
         return []
     personnes_disponibles = []
-    toutes_les_personnes = get_personnes_du_laboratoire_de_la_campagne_actuelle(
-    )
+    toutes_les_personnes = get_personnes_du_laboratoire()
     for personne in toutes_les_personnes:
         personne_id = personne.idP
         if not check_personne_qualification(personne_id, nomPlateforme):
@@ -312,6 +372,11 @@ def get_personnes_disponibles(nomPlateforme, date_debut_str, duree_jours):
 
 @app.route('/api/get_disponibilites', methods=['POST'])
 def api_get_disponibilites():
+    """
+    Crée un fichier json contenant les personnes disponibles pour une campagne
+
+    returns : un fichier json
+    """
     if not request.is_json:
         return jsonify({'error': 'Le contenu doit être de type JSON'}), 415
     data = request.get_json()
@@ -345,6 +410,11 @@ def api_get_disponibilites():
 @login_required
 @chercheur
 def create_campagne():
+    """
+    Prépare la création d'une campagne, accèssible seulement par les chercheurs.
+
+    returns : Redirection vers la page d'ajout d'une campagne
+    """
     try:
         pers = Personne.query.get_or_404(current_user.idP)
         participer = Participer.query.filter(
@@ -371,7 +441,11 @@ def create_campagne():
 @login_required
 def ajouter_campagne():
     unForm = CampagneForm()
+    """
+    Ajoute une campagne au laboratoire
 
+    returns : Redirection vers la page d'accueil une fois la campagne ajoutée
+    """
     try:
         pers = Personne.query.get_or_404(current_user.idP)
         participer = Participer.query.filter(
@@ -456,6 +530,14 @@ def ajouter_campagne():
 @app.route('/plateformes/<nomPlateforme>/', methods=['GET', 'POST'])
 @login_required
 def detail_plateforme(nomPlateforme):
+    """
+    Affiche toutes les informations liées à la plateforme
+
+    Args :
+    nomPlateforme : la plateforme
+
+    returns : Redirection vers la page de détails de la plateforme
+    """
     user = Personne.query.get_or_404(current_user.idP)
     unForm = PlateformeForm()
     try:
@@ -508,6 +590,14 @@ def detail_plateforme(nomPlateforme):
 @app.route('/campagnes/<numCampagne>/')
 @login_required
 def detail_campagne(numCampagne):
+    """
+    Affiche toutes les informations liées à la campagne
+
+    Args :
+    numCampagne : la campagne
+
+    returns : Redirection vers la page de détails de la campagne
+    """
     user = Personne.query.get_or_404(current_user.idP)
     camp = Campagne.query.filter(Campagne.numCampagne == numCampagne).first()
     try:
@@ -537,6 +627,14 @@ def detail_campagne(numCampagne):
 @app.route('/echantillons/<int:numCampagne>/')
 @login_required
 def echantillons(numCampagne):
+    """
+    Récupère tout les échantillions et leurs fichiers d'une campagne
+
+    Args :
+    numCampagne : la campagne
+
+    returns : Redirection vers la page de détails des échantillions de la campagne
+    """
     campagne = Campagne.query.filter(
         Campagne.numCampagne == numCampagne).first_or_404()
     echantillons = Echantillon.query.filter(
@@ -579,6 +677,14 @@ def echantillons(numCampagne):
 @login_required
 @chercheur
 def ajouter_echantillon(numCampagne):
+    """
+    Ajoute un échantillon et son fichier à la campagne
+
+    Args :
+    numCampagne : la campagne
+
+    returns : Redirection vers la page de détails des échantillions de la campagne une fois que l'échantillion est ajouté
+    """
     campagne = Campagne.query.get_or_404(numCampagne)
     form = EchantillonForm()
     fichier_form = FichierForm()
@@ -618,17 +724,22 @@ def ajouter_echantillon(numCampagne):
 @app.route('/exploitation', methods=['GET'])
 @login_required
 def exploit():
+    """
+    Récupère tout les fichiers .adn afin de pouvoir les exploiter
+
+    returns : Redirection vers la page d'exploitation
+    """
     form_mutation = MutationForm()
     form_comparaison = ComparaisonForm()
     # On récupère tous les fichiers .adn, qu'ils soient dans la BDD ou non
     upload_dir = os.path.join(app.root_path, 'static', 'uploads')
     fichiers_disponibles = []
-    
+
     # 1. Fichiers en BDD
     fichiers_bdd = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
     noms_bdd = [f.nomFichier for f in fichiers_bdd]
     fichiers_disponibles.extend(fichiers_bdd)
-    
+
     # 2. Fichiers physiques non présents en BDD (synchronisation)
     if os.path.exists(upload_dir):
         for filename in os.listdir(upload_dir):
@@ -638,7 +749,7 @@ def exploit():
                 db.session.add(nouveau_fichier)
                 fichiers_disponibles.append(nouveau_fichier)
         db.session.commit()
-    
+
     return render_template("exploitation.html",
                            form_mutation=form_mutation,
                            form_comparaison=form_comparaison,
@@ -649,6 +760,11 @@ def exploit():
 @app.route('/mutation', methods=['POST'])
 @login_required
 def mutation():
+    """
+    Permet d'appliquer des mutations à un fichier choisi et de créer le fichier muté
+
+    returns : Redirection vers la page d'exploitation
+    """
     form = MutationForm()
     if form.validate_on_submit():
         id_fichier = request.form.get('fichier_source')
@@ -695,6 +811,11 @@ def mutation():
 @app.route('/comparaison', methods=['POST'])
 @login_required
 def comparaison():
+    """
+    Permet de troouver la distance de levenshtein entre deux fichier.adn et de l'afficher
+
+    returns : Redirection vers la page d'exploitation
+    """
     form = ComparaisonForm()
     resultat = None
     if form.validate_on_submit():
@@ -721,6 +842,11 @@ def comparaison():
 @app.route('/phylogenie', methods=['POST'])
 @login_required
 def arbre_phylogenetique():
+    """
+    Affiche l'arbre phylogenetique de tout les fichiers .adn présents à condition qu'il y en ait au moins deux
+
+    returns : Redirection vers la page d'exploitation
+    """
     fichiers_db = Fichier.query.filter(Fichier.nomFichier.like('%.adn')).all()
     upload_dir = os.path.join(app.root_path, 'static', 'uploads')
 
@@ -757,6 +883,15 @@ def arbre_phylogenetique():
 @app.route('/plateforme/<nomPlateforme>/', methods=['GET', 'POST'])
 @login_required
 def gerer_plateforme(nomPlateforme):
+    """
+    Modifie les informations d'une plateforme, si le nom est modifié sur la plateforme il est aussi 
+    modifié dans toutes les tables qui possèdent le nom de cette plateforme en clé étrangère
+
+    Args :
+    nomPlateforme : la plateforme à modifier
+
+    returns : Redirection vers la page d'accueil une fois les modifications faites
+    """
     user = Personne.query.get_or_404(current_user.idP)
     unForm = PlateformeForm()
     participer = Participer.query.filter(Participer.idP == user.idP).first()
@@ -784,8 +919,7 @@ def gerer_plateforme(nomPlateforme):
         Nom=nomPlateforme,
         nbPersonnes=plateforme.nbPersonnes,
         Cout=plateforme.cout,
-        IntervalleMaintenance=plateforme.intervalleMaintenance
-        )
+        IntervalleMaintenance=plateforme.intervalleMaintenance)
     hab = HabilitationForm(habilitation_selectionnee=habilitations)
     equipements = EquipementForm(objets_selectionnes=contenir_id)
     if unForm.validate_on_submit():
@@ -827,9 +961,17 @@ def gerer_plateforme(nomPlateforme):
 @app.route('/campagnes/<numCampagne>/delete/')
 @login_required
 def deleteCampagne(numCampagne):
+    """
+    Prépare la suppression de la campagne
+
+    Args : 
+    numCampagne : la campagne à supprimer
+
+    returns : Redirection vers la page de suppression de la campagne
+    """
     campagne = Campagne.query.get(numCampagne)
     unForm = CampagneForm(numCampagne=campagne.numCampagne,
-                          lieu= campagne.lieu,
+                          lieu=campagne.lieu,
                           date=campagne.date,
                           duree=campagne.duree)
     return render_template("modif_campagne.html",
@@ -839,6 +981,11 @@ def deleteCampagne(numCampagne):
 
 @app.route('/campagne/erase/', methods=("POST", ))
 def eraseCampagne():
+    """
+    Supprime la campagne à condition qu'elle ne soit pas la seule dans le laboratoire
+
+    returns : Redirection vers la page d'accueil
+    """
     deletedCampagne = None
     unForm = CampagneForm()
     idA = int(unForm.numCampagne.data)
@@ -860,7 +1007,7 @@ def eraseCampagne():
     toutesCamp = Campagne.query.filter(
         Campagne.nomPlateforme.in_(nomsPlat)).all()
     if deletedCampagne:
-        if len(toutesCamp)>1 :
+        if len(toutesCamp) > 1:
             Participer.query.filter(Participer.numCampagne == idA).delete()
 
             Echantillon.query.filter(Echantillon.numCampagne == idA).delete()
@@ -868,8 +1015,8 @@ def eraseCampagne():
             db.session.delete(deletedCampagne)
             db.session.commit()
             flash("La campagne et ses données associées ont été supprimées.",
-                "success")
-        else: 
+                  "success")
+        else:
             flash("Il faut garder au moins une campagne", "error")
             return redirect(url_for('accueil'))
     else:
@@ -878,7 +1025,14 @@ def eraseCampagne():
 
 
 @app.route('/budget/', methods=['GET', 'POST'])
+@login_required
+@directeur
 def budget():
+    """
+    Permet de modifier le budget annuel de laboratoire, accessible seulement par le directeur du laboratoire
+
+    returns : Redirection vers la page d'accueil une fois le budget modifié
+    """
     user = Personne.query.get_or_404(current_user.idP)
     participer = Participer.query.filter(Participer.idP == user.idP).first()
     camp = Campagne.query.filter(
@@ -888,12 +1042,9 @@ def budget():
     lab = Laboratoire.query.filter(Laboratoire.nomLab == plat.lab_id).first()
     if not lab:
         return redirect(url_for('accueil'))
-    unForm = LaboratoireForm(
-        nom=lab.nomLab,
-        budget=lab.budget
-        )
+    unForm = LaboratoireForm(nom=lab.nomLab, budget=lab.budget)
     if unForm.validate_on_submit():
-        lab.budget=unForm.budget.data
+        lab.budget = unForm.budget.data
         db.session.commit()
         return redirect(url_for('accueil'))
     return render_template('budget.html', unForm=unForm)
