@@ -2,26 +2,30 @@
 SAE 1 du premier semestre de la 2e année
 
 # Membres
-Nolan — chef de projet 
+Nolan Morain — chef de projet 
 
-Tifany 
+Tifany Meunier
 
-Joris
+Joris Vachey
 
 # Changement entre rendu 1 et rendu 3 sur le cahier des charges:
-la bd a légèrement changé pour faciliter la gestion des echantillons et du lieu de la campagne.
-Les maquettes ont été changées pour être en rapport avec l'hestétique final de notre app.
+la base de données a légèrement été changée pour faciliter la gestion des échantillons et du lieu de la campagne.
+Les maquettes ont été changées pour être en rapport avec l'esthétique finale de notre app.
 
 # Fonctionnalitées:
 Gestion des plateformes de fouille
 
-Planification des campagnes (dates, lieux, personnel, plateforme)
+Gestion des campagnes de fouille
 
-Gestion des habilitations et maintenance
+Planification des campagnes (date, lieu, personnel, plateforme)
+
+Gestion des habilitations et maintenances
 
 Upload des échantillons ADN
 
 Analyse des séquences (Levenshtein, mutations, comparaisons)
+
+Gestion du budget annuel du laboratoire
 
 # Installation
 git clone https://github.com/.../SAE_ADN
