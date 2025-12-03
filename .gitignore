@@ -5,3 +5,4 @@ __pycache__/
 .nfs*
 flask/monApp.db
 Exploitation/*.adn
+*.pdf
