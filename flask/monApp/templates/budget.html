@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block main %}
+<section class="block">
+    <form role="form" method="POST" action="{{ url_for ('budget') }}">
+        {{ unForm.hidden_tag() }}
+        <article class="sous_block">
+            <h1>Modifier le budget du laboratoire {{unForm.nom.data}}</h1>
+            <input class="input_moitie" id="nom" type="text" name="{{ unForm.budget.name }}" placeholder="Saisir le budget du laboratoire..." value="{{ unForm.budget.data }}" required>
+            <span style="flex-basis: 1%; flex-grow: 0;" class="input_moitie">€</span>
+        </article>
+        <div class="block_boutons">
+            <a href="{{ url_for('accueil') }}" class="boutons_fonctionnels">Annuler</a>
+            <button type="submit" class="boutons_fonctionnels">Modifier</button>
+        </div>
+    </form>
+</section>
+
+{% endblock %}

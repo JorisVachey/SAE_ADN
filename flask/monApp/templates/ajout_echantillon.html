@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+<section class="block">
+    <form role="form" method="POST" enctype="multipart/form-data">
+        
+        <h1>Ajouter un échantillon à la campagne n°{{ campagne.numCampagne }}</h1>
+        {{ form.hidden_tag() }}
+        {{ fichier_form.hidden_tag() }}
+        
+        <article class="sous_block">
+            {{ form.typeE(class="input_moitie", placeholder="Type d'espèce") }}
+            {{ form.nomSpecifique(class="input_moitie", placeholder="Nom spécifique") }}
+            {{ form.commentaire(class="input_moitie", style="flex-basis:100%;", placeholder="Commentaire") }}
+            {{ fichier_form.nomFichier(class="input_moitie") }}
+        </article>
+
+        <div class="block_boutons">
+            <a href="{{ url_for('echantillons', numCampagne=campagne.numCampagne) }}" class="boutons_fonctionnels">Annuler</a>
+            <button type="submit" class="boutons_fonctionnels">Ajouter</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

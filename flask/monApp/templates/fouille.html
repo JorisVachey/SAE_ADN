@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<section  style="flex-direction: row; gap: 8em;" class="block">
+    <section class="la_campagne">
+        <article class="info">
+            <h1>Campagne de Fouille numéro {{campagne["numCampagne"]}}</h1>
+            <div>
+                <img class="position" src="{{ url_for('static', filename='img/position.png') }}" alt="">
+                <p>{{campagne["lieu"]}}</p>
+            </div>
+            <p> Plateforme : {{campagne['nomPlateforme']}}</p>
+            <p>date de début : {{campagne["date"]}}</p>
+            <p>durée : {{campagne["duree"]}} jours</p>
+        </article>
+        <article class="gros_bouton">
+            <a href="{{ url_for('echantillons', numCampagne=campagne['numCampagne'] ) }}">Accéder aux échantillons de la campagne</a>
+        </article>
+        <div class="gestion">
+            <article>
+                <a href="{{ url_for('detail_plateforme', nomPlateforme =campagne['nomPlateforme'] ) }}">Voir la plateforme associée</a>
+            </article>
+            <article>
+                <a href="{{ url_for('deleteCampagne', numCampagne = campagne['numCampagne']) }}">Supprimer la campagne</a>
+            </article>
+        </div>
+    </section>
+    <section class="personnes">
+        <h1>Liste des personnes sur la Campagne</h1>
+        <article>
+            {% for pers in personnes %}
+            <div class="case">
+                {% set nb = random.randint(1,14) %}
+                <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                <p>{{pers.nom}} {{pers.prenom}}</p>
+            </div>
+            {%endfor%}
+        </article>
+    </section>
+</section>
+{% endblock %}

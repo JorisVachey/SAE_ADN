@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SAE Web</title>
+    <link rel="stylesheet" href="{{url_for ('static', filename='css/styles.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+{%block header%}
+    <header>
+        <div>
+            <img id="logo" src="{{url_for ('static', filename='img/logo.png')}}" alt="logo_app">
+            <h3>Paleonth'Orléans</h3>
+        </div>
+        <ul>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('accueil') }}">Home</a></li>
+            <li><a href="{{ url_for('exploit') }}">Laboratoire</a></li>
+            {%endif %}
+            {%if current_user.poste == "directeur" %}
+            <li><a href="{{url_for('budget')}}">Budget</a></li>
+            {%endif %}
+            {% if not current_user.is_authenticated %}
+            <li><a href="{{ url_for('connexion') }}">Se connecter</a></li>
+            {%endif %}
+            {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('deconnexion') }}">Se déconnecter</a></li>
+            <li><a href="" id="profil">Profil</a></li>
+            {% endif %}
+        </ul>
+    </header>
+    <section class="profil">
+        <img src="{{url_for ('static', filename='img/profil.png')}}" alt="">
+        <div>
+            {% if current_user.is_authenticated %}
+                <p>Prénom : {{ current_user.prenom }}</p>
+                <p>Nom : {{ current_user.nom }}</p>
+                <p>Poste : {{ current_user.poste }}</p>
+            {% else %}
+                <p>Utilisateur non connecté</p>
+            {% endif %}
+        </div>
+    </section>
+{%endblock%}
+
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+{% block main %}
+
+{% endblock %}
+</main>
+<script>
+    const aProfil = document.getElementById('profil');
+    const profil = document.querySelector('.profil');
+
+    aProfil.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (profil.style.display === 'none' || profil.style.display === '') {
+            profil.style.display = 'block';
+        } else {
+            profil.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

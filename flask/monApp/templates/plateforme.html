@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<section style="flex-direction: row; gap: 8em;" class="block">
+    <section class="la_plateforme">
+        <article class="info">
+            <h1>Plateforme de Fouille : {{plateforme["nom"]}}</h1>
+            <p>Nombre de personnes : {{plateforme["pers"]}}</p>
+            <p>Intervalle de maintenance : {{plateforme["intervalle"]}} jours</p>
+            <p>Dernière maintenance : {{plateforme["maint"]}} </p>
+            <p>Prochiane maintenance : {{plateforme["pro"]}} </p>
+            <p>Coût journalier : {{plateforme["cout"]}} €</p>
+        </article>
+        {%if current_user.poste == "technicien" %}
+            <article class="maintenance">
+                <form class="form_invisible" role="form" method ="POST" action ="">
+                    {{ maintenance.hidden_tag() }}
+                    <div class="planifier">
+                        <div>
+                            <p>Planifier une maintenance : </p>
+                            {{maintenance.ProchaineMaintenance}}
+                        </div>
+                        <button id="submit"><img src="{{ url_for('static', filename='img/valider.png') }}" alt=""></button>
+                    </div>
+                </form>
+            </article>
+        {%endif%}
+        <article class="gros_bouton">
+            <a href="{{ url_for('gerer_plateforme', nomPlateforme=plateforme['nom']) }}">Modifier les informations</a>
+        </article>
+    </section>
+    <section class="equipemment">
+        <h1>Liste des équipements sur la Plateforme</h1>
+        <article>
+            {% for obj in objets %}
+                <div class="case">
+                    {% set nb = random.randint(1,14) %}
+                    <img class="fossile" src="{{ url_for('static', filename='img/fossiles/image' ~ nb ~ '.png') }}" alt="">
+                    <p>{{obj.nomEquipement}}</p>
+                </div>
+            {%endfor%}
+        </article>
+    </section>
+</section>
+
+{% endblock %}

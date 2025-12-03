@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block main %}
+<section class="block">
+    <form role="form" method ="POST" action ="{{ url_for ('ajouter_plateforme') }}">
+        {{ form.hidden_tag() }}
+        <h1>Créer une plateforme</h1>
+        <article class="sous_block">
+            <input class="input_moitie" id="nom" type="text" name="{{ form.Nom.name }}" placeholder="Saisir le nom de la plateforme..."required>
+            <input class="input_moitie" id="nomPlateforme" type="number" name="{{ form.nbPersonnes.name }}" placeholder="Nombre de personnes minimal..."required>
+            <input class="input_moitie" id="cout" type="number" name="{{ form.Cout.name }}" placeholder="Cout journalier..."required>
+            <input class="input_moitie" id="interv" type="number" name="{{ form.IntervalleMaintenance.name }}" placeholder="Intervalle de maintenace en jour..." required>
+        </article>
+        <h2>Type d'habilitations requises</h2>
+        <article class="sous_block">
+            {{ hab.habilitation_selectionnee(class="custom-check") }}
+        </article>
+        <h2>Équipemments disponibles</h2>
+        <article class="sous_block">
+            {{ equipements.objets_selectionnes(class="custom-check") }}
+        </article>
+        <div class="block_boutons">
+            <a href="{{ url_for('accueil') }}" class="boutons_fonctionnels" >Annuler</a>
+            <button type="submit" class="boutons_fonctionnels" >Ajouter</button>
+        </div>
+    </form>
+</section>
+
+{% endblock %}
