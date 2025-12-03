@@ -282,17 +282,17 @@ def check_personne_qualification(personne_id, nomPlateforme):
 
     :returns: True si la personne a toutes les habilitations, False sinon
     """
-    required_types = [
+    hab_necessaires = [
         n.type
         for n in Necessite.query.filter_by(nomPlateforme=nomPlateforme).all()
     ]
-    if not required_types:
+    if not hab_necessaires:
         return True
-    possessed_types = [
+    habs = [
         p.type for p in Posseder.query.filter_by(idP=personne_id).all()
     ]
-    for req_type in required_types:
-        if req_type not in possessed_types:
+    for hab in hab_necessaires:
+        if hab not in habs:
             return False
     return True
 
