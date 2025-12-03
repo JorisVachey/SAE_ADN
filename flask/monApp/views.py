@@ -739,6 +739,7 @@ def arbre_phylogenetique():
     try:
         racine = phylogenie.reconstruire_arbre_phylogenetique(especes)
         arbre_visuel = phylogenie.visualiser_arbre(racine)
+        flash("Arbre créé !", "success")
     except Exception as e:
         flash(f"Erreur lors de la reconstruction : {e}", "error")
         return redirect(url_for('exploit'))
@@ -842,15 +843,35 @@ def eraseCampagne():
     unForm = CampagneForm()
     idA = int(unForm.numCampagne.data)
     deletedCampagne = Campagne.query.get(idA)
+
+    pers = Personne.query.get_or_404(current_user.idP)
+    participer = Participer.query.filter(Participer.idP == pers.idP).first()
+    camp = Campagne.query.filter(
+        Campagne.numCampagne == participer.numCampagne).first()
+    lab = Laboratoire.query.filter(
+        Laboratoire.nomLab == Plateforme.query.filter(
+            Plateforme.nomPlateforme ==
+            camp.nomPlateforme).first().lab_id).first()
+
+    toutesPlat = Plateforme.query.filter(
+        Plateforme.lab_id == lab.nomLab).order_by(
+            Plateforme.nomPlateforme).all()
+    nomsPlat = [plat.nomPlateforme for plat in toutesPlat]
+    toutesCamp = Campagne.query.filter(
+        Campagne.nomPlateforme.in_(nomsPlat)).all()
     if deletedCampagne:
-        Participer.query.filter(Participer.numCampagne == idA).delete()
+        if len(toutesCamp)>1 :
+            Participer.query.filter(Participer.numCampagne == idA).delete()
 
-        Echantillon.query.filter(Echantillon.numCampagne == idA).delete()
+            Echantillon.query.filter(Echantillon.numCampagne == idA).delete()
 
-        db.session.delete(deletedCampagne)
-        db.session.commit()
-        flash("La campagne et ses données associées ont été supprimées.",
-              "success")
+            db.session.delete(deletedCampagne)
+            db.session.commit()
+            flash("La campagne et ses données associées ont été supprimées.",
+                "success")
+        else: 
+            flash("Il faut garder au moins une campagne", "error")
+            return redirect(url_for('accueil'))
     else:
         flash("Campagne introuvable.", "error")
     return redirect(url_for('accueil'))
