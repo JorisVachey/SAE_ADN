@@ -7,14 +7,14 @@
         {{ form.hidden_tag() }}
         <h1>Créer une Campagne</h1>
         <article class="sous_block">
-            <select style="flex-basis: 43%; flex-grow: 1;" class="menu_deroulant" name="plateforme" id="plateforme_select" requiredonchange="updateDisponibilites()">
+            <select style="flex-basis: 43%; flex-grow: 1;" class="menu_deroulant" name="plateforme" id="plateforme_select" required onchange="updateDisponibilites()">
                 {%for plat in plateformes%} 
                 <option value="{{ plat.nomPlateforme }}">
                     {{plat.nomPlateforme}}
                 </option>
                 {%endfor%}
             </select>
-            <input class="input_moitie" id="date_input" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." requiredonchange="updateDisponibilites()" />
+            <input class="input_moitie" id="date_input" type="date" name="{{form.date.name}}" placeholder="Date de la campagne..." required onchange="updateDisponibilites()" />
             <input class="input_moitie" id="nom_input" type="text" name="{{form.lieu.name}}" placeholder="Lieu de la campagne..." required>
             <input class="input_moitie" id="duree_input" type="number" name="{{form.duree.name}}" placeholder="Durée en jour..." required min="1" oninput="updateDisponibilites()" value="{{ form.duree.data or 1 }}" />
         </article>
