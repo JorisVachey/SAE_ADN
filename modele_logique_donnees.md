@@ -22,9 +22,7 @@
 
 - PARTICIPER [#<span style="color:red">idPers</span>, #<span style="color:red">numCamp</span>]
 
-- LIEU [<span style="color:red">nomL</span>]
-
-- CAMPAGNEFOUILLE [<span style="color:red">numCamp</span>, dateCamp, duree, #nomPlat, #nomL]
+- CAMPAGNEFOUILLE [<span style="color:red">numCamp</span>, dateCamp, duree, lieu, #nomPlat, #nomL]
 
 - FICHIER [<span style="color:red">idFichier</span>, #numEchant]
 
